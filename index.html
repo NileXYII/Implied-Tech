@@ -1,29 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en" class="light scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ImpliedTech PH - Your premier source for technology news and Filipino innovation">
     <title>ImpliedTech PH</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/3.3.3/tailwind.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/inter-font/3.19.3/Inter-roman.var.woff2');
         
+        :root {
+            --gradient-start: rgb(59 130 246);
+            --gradient-end: rgb(16 185 129);
+            color-scheme: light dark;
+        }
+
         * {
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            font-family: 'Inter', system-ui, sans-serif;
         }
 
         .hero-text {
-            animation: fadeIn 1s ease-out;
-        }
-
-        .card {
-            transition: transform 0.3s ease, background-color 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
+            animation: fade-up 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .gradient-bg {
@@ -41,17 +38,17 @@
         }
 
         .theme-switch {
-            width: 50px;
-            height: 25px;
-            background-color: #1d2737;
-            border-radius: 25px;
+            width: 48px;
+            height: 24px;
+            background-color: #374151;
+            border-radius: 24px;
             position: relative;
             cursor: pointer;
         }
 
         .switch-handle {
-            width: 21px;
-            height: 21px;
+            width: 20px;
+            height: 20px;
             background-color: white;
             border-radius: 50%;
             position: absolute;
@@ -61,10 +58,18 @@
         }
 
         html.dark .switch-handle {
-            transform: translateX(25px);
+            transform: translateX(24px);
         }
 
-        @keyframes fadeIn {
+        .card {
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        @keyframes fade-up {
             from {
                 opacity: 0;
                 transform: translateY(20px);
@@ -74,13 +79,9 @@
                 transform: translateY(0);
             }
         }
-
-        html.dark {
-            color-scheme: dark;
-        }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 transition-colors">
+<body class="bg-gray-50 dark:bg-gray-900 antialiased">
     <nav class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-sm fixed w-full z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
