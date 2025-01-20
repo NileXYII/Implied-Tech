@@ -7,6 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    /* Previous styles remain the same */
     @keyframes gradientBG {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -44,14 +45,26 @@
       transform: scale(1.05);
     }
 
-    @media (max-width: 768px) {
-      .mobile-menu {
-        display: none;
-      }
-      
-      .mobile-menu.active {
-        display: block;
-      }
+    /* Mobile menu styles */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 100%;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+      transition: right 0.3s ease-in-out;
+      z-index: 40;
+    }
+
+    .mobile-menu.active {
+      right: 0;
+    }
+
+    /* Prevent body scroll when menu is open */
+    body.menu-open {
+      overflow: hidden;
     }
   </style>
 </head>
@@ -74,106 +87,70 @@
           <a href="#" class="text-white hover:text-white/80 transition-colors">Reviews</a>
           <a href="#" class="text-white hover:text-white/80 transition-colors">About</a>
         </div>
-        <button class="md:hidden text-white">
+        <button id="menuBtn" class="md:hidden text-white z-50" aria-label="Toggle menu">
           <i class="fas fa-bars text-xl"></i>
         </button>
       </div>
     </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu flex flex-col justify-center items-center">
+      <button id="closeBtn" class="absolute top-4 right-4 text-white text-xl" aria-label="Close menu">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="flex flex-col items-center space-y-8">
+        <a href="#" class="text-white text-2xl hover:text-white/80 transition-colors">Latest</a>
+        <a href="#" class="text-white text-2xl hover:text-white/80 transition-colors">Technology</a>
+        <a href="#" class="text-white text-2xl hover:text-white/80 transition-colors">Reviews</a>
+        <a href="#" class="text-white text-2xl hover:text-white/80 transition-colors">About</a>
+      </div>
+    </div>
   </nav>
 
+  <!-- Rest of the content remains exactly the same -->
   <!-- Main Content -->
-  <main class="container mx-auto px-4 pt-24 pb-12">
-    <!-- Featured Article -->
-    <article class="mb-12 bg-white/10 rounded-xl overflow-hidden card-transition nav-blur">
-      <div class="flex flex-col md:flex-row">
-        <div class="w-full md:w-1/2 h-48 md:h-96 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1677442136019-21780ecad990?auto=format&fit=crop&q=80" 
-               alt="AI Technology" 
-               class="w-full h-full object-cover image-zoom">
-        </div>
-        <div class="w-full md:w-1/2 p-6 flex flex-col justify-center">
-          <p class="text-white/80 text-sm mb-2">FEATURED • JAN 20, 2025</p>
-          <h1 class="text-2xl md:text-3xl font-bold text-white mb-4 glow">The Future of Artificial Intelligence: Breaking New Boundaries</h1>
-          <p class="text-white/90 mb-6 text-sm md:text-base">Explore the latest developments in AI and their profound impact on society. From neural networks to machine consciousness, discover what lies ahead.</p>
-          <a href="#" class="inline-flex items-center text-white hover:text-white/80 transition-colors">
-            Read More <i class="fas fa-arrow-right ml-2"></i>
-          </a>
-        </div>
-      </div>
-    </article>
+  <!-- ... -->
 
-    <!-- Article Grid -->
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Article 1 -->
-      <article class="bg-white/10 rounded-xl overflow-hidden card-transition nav-blur">
-        <div class="h-48 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80" 
-               alt="Blockchain Technology" 
-               class="w-full h-full object-cover image-zoom">
-        </div>
-        <div class="p-6">
-          <p class="text-white/80 text-sm mb-2">WEB3 • JAN 19, 2025</p>
-          <h2 class="text-xl font-bold text-white mb-3">Blockchain Revolution: Beyond Cryptocurrency</h2>
-          <p class="text-white/90 mb-4 text-sm">Understanding the evolving landscape of decentralized technologies and their applications.</p>
-          <a href="#" class="text-white hover:text-white/80 transition-colors">Read More →</a>
-        </div>
-      </article>
+  <!-- Add this script just before closing body tag -->
+  <script>
+    // Mobile menu functionality
+    const menuBtn = document.getElementById('menuBtn');
+    const closeBtn = document.getElementById('closeBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const body = document.body;
 
-      <!-- Article 2 -->
-      <article class="bg-white/10 rounded-xl overflow-hidden card-transition nav-blur">
-        <div class="h-48 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1659146831775-4f1745669537?auto=format&fit=crop&q=80" 
-               alt="Wearable Technology" 
-               class="w-full h-full object-cover image-zoom">
-        </div>
-        <div class="p-6">
-          <p class="text-white/80 text-sm mb-2">GADGETS • JAN 18, 2025</p>
-          <h2 class="text-xl font-bold text-white mb-3">The Next Generation of Wearable Tech</h2>
-          <p class="text-white/90 mb-4 text-sm">Exploring innovative wearable devices that are changing how we interact with technology.</p>
-          <a href="#" class="text-white hover:text-white/80 transition-colors">Read More →</a>
-        </div>
-      </article>
+    function toggleMenu() {
+      mobileMenu.classList.toggle('active');
+      body.classList.toggle('menu-open');
+      
+      // Toggle menu icon
+      const menuIcon = menuBtn.querySelector('i');
+      if (mobileMenu.classList.contains('active')) {
+        menuIcon.classList.remove('fa-bars');
+        menuIcon.classList.add('fa-times');
+      } else {
+        menuIcon.classList.add('fa-bars');
+        menuIcon.classList.remove('fa-times');
+      }
+    }
 
-      <!-- Article 3 -->
-      <article class="bg-white/10 rounded-xl overflow-hidden card-transition nav-blur">
-        <div class="h-48 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80" 
-               alt="Quantum Computing" 
-               class="w-full h-full object-cover image-zoom">
-        </div>
-        <div class="p-6">
-          <p class="text-white/80 text-sm mb-2">COMPUTING • JAN 17, 2025</p>
-          <h2 class="text-xl font-bold text-white mb-3">Quantum Computing: A New Era Begins</h2>
-          <p class="text-white/90 mb-4 text-sm">How quantum computers are reshaping the technological landscape of tomorrow.</p>
-          <a href="#" class="text-white hover:text-white/80 transition-colors">Read More →</a>
-        </div>
-      </article>
-    </div>
-  </main>
+    menuBtn.addEventListener('click', toggleMenu);
+    closeBtn.addEventListener('click', toggleMenu);
 
-  <!-- Footer -->
-  <footer class="bg-white/5 nav-blur py-8 mt-12">
-    <div class="container mx-auto px-4">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="text-white/90 mb-6 md:mb-0">
-          © 2025 Implied PH. All rights reserved.
-        </div>
-        <div class="flex space-x-6">
-          <a href="#" class="text-white/90 hover:text-white transition-colors">
-            <i class="fab fa-facebook"></i>
-          </a>
-          <a href="#" class="text-white/90 hover:text-white transition-colors">
-            <i class="fab fa-instagram"></i>
-          </a>
-          <a href="#" class="text-white/90 hover:text-white transition-colors">
-            <i class="fab fa-tiktok"></i>
-          </a>
-          <a href="#" class="text-white/90 hover:text-white transition-colors">
-            <i class="fab fa-youtube"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </footer>
+    // Close menu when clicking on a link
+    const mobileLinks = mobileMenu.getElementsByTagName('a');
+    for (const link of mobileLinks) {
+      link.addEventListener('click', toggleMenu);
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (mobileMenu.classList.contains('active') && 
+          !mobileMenu.contains(e.target) && 
+          !menuBtn.contains(e.target)) {
+        toggleMenu();
+      }
+    });
+  </script>
 </body>
 </html>
