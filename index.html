@@ -1,328 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Implied Tech PH</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Implied</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .splash-screen {
+      opacity: 0;
+      transform: scale(0.9);
+    }
 
-        :root {
-            --primary-color: #00ffff;
-            --secondary-color: #0099ff;
-            --accent-color: #ff00ff;
-            --text-size: clamp(2rem, 8vw, 5rem);
-            --subtext-size: clamp(0.875rem, 3vw, 1.5rem);
-        }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
-        body {
-            min-height: 100vh;
-            min-height: -webkit-fill-available;
-            background: #000;
-            overflow: hidden;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
+    .animated-bg {
+      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
 
-        html {
-            height: -webkit-fill-available;
-        }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
 
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1;
-            touch-action: none;
-        }
+    .float {
+      animation: float 3s ease-in-out infinite;
+    }
 
-        .content-wrapper {
-            position: relative;
-            z-index: 2;
-            height: 100vh;
-            height: -webkit-fill-available;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            padding: 2rem;
-            gap: 2rem;
-        }
+    .glow {
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+    }
 
-        .center-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 1.5rem;
-            transform: translateY(-2rem);
-        }
+    .social-icon {
+      transition: all 0.3s ease;
+    }
 
-        .logo-container {
-            position: relative;
-            text-align: center;
-            animation: scaleIn 1s cubic-bezier(0.3, 0, 0.3, 1);
-        }
+    .social-icon:hover {
+      transform: translateY(-5px) scale(1.1);
+      filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9));
+    }
 
-        .logo-text {
-            font-size: var(--text-size);
-            font-weight: 900;
-            color: #fff;
-            position: relative;
-            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-            letter-spacing: -0.02em;
-            transform-style: preserve-3d;
-            animation: float 6s ease-in-out infinite;
-        }
+    .loader {
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.2);
+      position: fixed;
+      bottom: 0;
+      left: 0;
+    }
 
-        .logo-outline {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            color: transparent;
-            -webkit-text-stroke: 2px var(--primary-color);
-            animation: glowPulse 2s ease-in-out infinite alternate;
-            opacity: 0.7;
-        }
+    .loader-bar {
+      height: 100%;
+      background: white;
+      width: 0%;
+      transition: width 0.5s ease;
+    }
 
-        .sub-text {
-            color: #fff;
-            font-size: var(--subtext-size);
-            font-weight: 500;
-            letter-spacing: 1em;
-            padding-left: 1em;
-            text-transform: uppercase;
-            opacity: 0;
-            animation: fadeInUp 0.8s cubic-bezier(0.3, 0, 0.3, 1) forwards 0.5s;
-            text-align: center;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-        }
+    .button-shine {
+      position: relative;
+      overflow: hidden;
+    }
 
-        .loader {
-            width: clamp(200px, 30vw, 300px);
-            height: 2px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            overflow: hidden;
-            position: relative;
-            animation: fadeIn 0.5s ease forwards 1s;
-            opacity: 0;
-        }
+    .button-shine::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to right,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+      );
+      transform: rotate(45deg);
+      transition: all 0.5s;
+    }
 
-        .loader-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            animation: loading 2.5s cubic-bezier(0.3, 0, 0.3, 1) forwards;
-            box-shadow: 0 0 30px var(--primary-color);
-            position: relative;
-        }
-
-        .loader-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            animation: shine 1.5s linear infinite;
-        }
-
-        .background-glow {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, rgba(0, 255, 255, 0.1) 0%, transparent 70%);
-            pointer-events: none;
-            animation: pulseGlow 4s ease-in-out infinite alternate;
-            z-index: 1;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotateX(0); }
-            50% { transform: translateY(-10px) rotateX(2deg); }
-        }
-
-        @keyframes glowPulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.7; }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes loading {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
-
-        @keyframes shine {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(100%); }
-        }
-
-        @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 0.8; }
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        .noise {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%" height="100%" filter="url(%23noise)" opacity="0.08"/%3E%3C/svg%3E');
-            pointer-events: none;
-            opacity: 0.08;
-            z-index: 3;
-        }
-
-        @media (max-width: 768px) {
-            .logo-outline {
-                -webkit-text-stroke: 1px var(--primary-color);
-            }
-            
-            .sub-text {
-                letter-spacing: 0.5em;
-                padding-left: 0.5em;
-            }
-        }
-    </style>
+    .button-shine:hover::after {
+      transform: rotate(45deg) translate(100%, 100%);
+    }
+  </style>
 </head>
-<body>
-    <canvas id="particle-canvas"></canvas>
-    <div class="background-glow"></div>
-    <div class="noise"></div>
-    <div class="content-wrapper">
-        <div class="center-container">
-            <div class="logo-container">
-                <h1 class="logo-text">Implied Tech</h1>
-                <h1 class="logo-text logo-outline" aria-hidden="true">Implied Tech</h1>
-            </div>
-            <div class="sub-text">PH</div>
-            <div class="loader">
-                <div class="loader-bar"></div>
-            </div>
+<body class="animated-bg min-h-screen flex items-center justify-center relative overflow-hidden">
+  <!-- Loading Bar -->
+  <div class="loader">
+    <div class="loader-bar" id="loader-bar"></div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="splash-screen" id="splash-content">
+    <div class="relative z-10 text-center p-8">
+      <!-- Logo Container -->
+      <div class="mb-12">
+        <div class="w-32 h-32 mx-auto bg-white/10 rounded-full backdrop-blur-lg p-6 float glow">
+          <svg class="w-full h-full text-white" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
         </div>
+      </div>
+
+      <!-- Title with Glowing Effect -->
+      <h1 class="text-6xl md:text-8xl font-black text-white mb-6 glow tracking-wider">
+        IMPLIED PH
+      </h1>
+
+      <!-- Animated Subtitle -->
+      <p class="text-xl md:text-3xl text-white/90 font-light mb-12 tracking-wide">
+        Where Creativity Meets Innovation
+      </p>
+
+      <!-- Interactive Button -->
+      <button class="button-shine bg-white/20 backdrop-blur-md text-white px-8 py-4 rounded-full 
+                     text-lg font-semibold transition-all duration-300 hover:bg-white/30 
+                     transform hover:scale-105 mb-16">
+        Begin Journey
+      </button>
+
+      <!-- Social Media Links -->
+      <div class="flex justify-center items-center space-x-8">
+        <a href="#" class="social-icon group">
+          <div class="p-4 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all">
+            <i class="fab fa-facebook text-2xl text-white group-hover:scale-110 transition-transform"></i>
+          </div>
+        </a>
+        <a href="#" class="social-icon group">
+          <div class="p-4 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all">
+            <i class="fab fa-instagram text-2xl text-white group-hover:scale-110 transition-transform"></i>
+          </div>
+        </a>
+        <a href="#" class="social-icon group">
+          <div class="p-4 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all">
+            <i class="fab fa-tiktok text-2xl text-white group-hover:scale-110 transition-transform"></i>
+          </div>
+        </a>
+        <a href="#" class="social-icon group">
+          <div class="p-4 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all">
+            <i class="fab fa-youtube text-2xl text-white group-hover:scale-110 transition-transform"></i>
+          </div>
+        </a>
+      </div>
     </div>
+  </div>
 
-    <script>
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({
-            canvas: document.getElementById('particle-canvas'),
-            alpha: true,
-            antialias: true
-        });
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Animate loading bar
+      const loaderBar = document.getElementById('loader-bar');
+      gsap.to(loaderBar, {
+        width: '100%',
+        duration: 2,
+        ease: 'power2.inOut',
+        onComplete: () => {
+          // Fade in main content
+          const splashContent = document.getElementById('splash-content');
+          gsap.to(splashContent, {
+            opacity: 1,
+            scale: 1,
+            duration: 1,
+            ease: 'power4.out'
+          });
 
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        camera.position.z = 5;
-
-        // Create particles with modern distribution
-        const createParticles = () => {
-            const particlesGeometry = new THREE.BufferGeometry();
-            const particleCount = window.innerWidth <= 768 ? 500 : 1000;
-            const positions = new Float32Array(particleCount * 3);
-            const scales = new Float32Array(particleCount);
-
-            for(let i = 0; i < particleCount; i++) {
-                const i3 = i * 3;
-                positions[i3] = (Math.random() - 0.5) * 10;
-                positions[i3 + 1] = (Math.random() - 0.5) * 10;
-                positions[i3 + 2] = (Math.random() - 0.5) * 10;
-                scales[i] = Math.random();
-            }
-
-            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            particlesGeometry.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
-
-            const particlesMaterial = new THREE.PointsMaterial({
-                size: window.innerWidth <= 768 ? 0.008 : 0.005,
-                color: '#00ffff',
-                transparent: true,
-                opacity: 0.8,
-                blending: THREE.AdditiveBlending
-            });
-
-            return new THREE.Points(particlesGeometry, particlesMaterial);
-        };
-
-        let particlesMesh = createParticles();
-        scene.add(particlesMesh);
-
-        // Smooth animation
-        const clock = new THREE.Clock();
-
-        function animate() {
-            requestAnimationFrame(animate);
-            const elapsedTime = clock.getElapsedTime();
-
-            particlesMesh.rotation.y = elapsedTime * 0.05;
-            particlesMesh.rotation.x = elapsedTime * 0.03;
-            
-            const positions = particlesMesh.geometry.attributes.position.array;
-            for(let i = 0; i < positions.length; i += 3) {
-                const x = positions[i];
-                const y = positions[i + 1];
-                const z = positions[i + 2];
-                
-                positions[i] = x + Math.sin(elapsedTime + x) * 0.001;
-                positions[i + 1] = y + Math.cos(elapsedTime + y) * 0.001;
-                positions[i + 2] = z + Math.sin(elapsedTime + z) * 0.001;
-            }
-            particlesMesh.geometry.attributes.position.needsUpdate = true;
-
-            renderer.render(scene, camera);
+          // Hide loader
+          gsap.to('.loader', {
+            opacity: 0,
+            duration: 0.5,
+            delay: 0.5
+          });
         }
-        animate();
+      });
 
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      // Create particle effect
+      const createParticle = () => {
+        const particle = document.createElement('div');
+        particle.className = 'absolute w-1 h-1 bg-white/30 rounded-full';
+        particle.style.left = Math.random() * 100 + 'vw';
+        particle.style.top = '100vh';
+        document.body.appendChild(particle);
+
+        gsap.to(particle, {
+          y: -window.innerHeight - 10,
+          x: (Math.random() - 0.5) * 200,
+          duration: Math.random() * 2 + 1,
+          ease: 'none',
+          opacity: 0,
+          onComplete: () => {
+            particle.remove();
+            createParticle();
+          }
         });
+      };
 
-        // Redirect after animations
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 3500);
-    </script>
+      // Initialize particles
+      for (let i = 0; i < 30; i++) {
+        setTimeout(createParticle, i * 200);
+      }
+    });
+  </script>
 </body>
 </html>
