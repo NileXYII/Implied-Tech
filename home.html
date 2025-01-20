@@ -1,230 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Previous head content remains the same until style section -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    animation: {
-                        'blob': 'blob 7s infinite',
-                        'float': 'float 6s infinite',
-                        'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
-                    },
-                    keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0, 0) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0, 0) scale(1)' }
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' }
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        .blur-blob {
-            background: radial-gradient(circle at center, currentColor 0%, transparent 70%);
-            filter: blur(40px);
-        }
-        
-        .phone-screen {
-            position: absolute;
-            inset: 2px;
-            border-radius: 35px;
-            overflow: hidden;
-            background: linear-gradient(to bottom right, #1a1a1a, #2d2d2d);
-        }
-        
-        .social-widget {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .weather-widget {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(16, 185, 129, 0.2));
-            backdrop-filter: blur(12px);
-        }
-        
-        .bottom-nav {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    #particles-js {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
 
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            color: rgba(255, 255, 255, 0.6);
-            transition: color 0.3s ease;
-        }
+    .nav-item.active {
+      transform: translateY(-4px);
+    }
 
-        .nav-item:hover {
-            color: rgba(255, 255, 255, 1);
-        }
+    .nav-item {
+      transition: all 0.2s ease-in-out;
+    }
 
-        .app-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-    </style>
+    .nav-item .indicator {
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+    }
+
+    .nav-item.active .indicator {
+      opacity: 1;
+    }
+
+    .create-button {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .create-button::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(to right top, #ec4899, #3b82f6);
+      border-radius: 8px;
+      filter: blur(8px);
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+    }
+
+    .create-button.active::before {
+      opacity: 0.75;
+    }
+
+    .safe-bottom {
+      padding-bottom: env(safe-area-inset-bottom, 16px);
+    }
+  </style>
 </head>
-<body class="bg-gray-50 overflow-x-hidden">
-    <!-- Navigation -->
-    <nav class="p-4 lg:p-6 relative z-10 bg-white/80 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <div class="w-8 h-8 bg-gray-800 rounded-lg"></div>
-                <span class="text-xl font-bold">IMPLIED PH</span>
-            </div>
-            
-            <div class="hidden md:flex space-x-8">
-                <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">About</a>
-                <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Team</a>
-                <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Download</a>
-                <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Blog</a>
-            </div>
-        </div>
-    </nav>
+<body class="bg-black min-h-screen flex flex-col items-center justify-between relative overflow-hidden">
 
-    <!-- Main content -->
-    <main class="flex-grow max-w-7xl mx-auto px-4 lg:px-6 py-8 lg:py-12">
-        <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
-            <!-- Text content -->
-            <div class="lg:w-1/2 text-center lg:text-left">
-                <h1 class="text-4xl lg:text-5xl font-bold mb-6">Your App Name</h1>
-                <p class="text-lg lg:text-xl text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0">
-                    An amazing experience for users with our powerful platform. 
-                    Enhanced performance and useful features to make your life easier.
-                </p>
-                <button class="bg-gray-900 text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-colors transform hover:scale-105 duration-200 ease-in-out">
-                     Start Reading
-                </button>
-            </div>
+  <!-- Particles.js Container -->
+  <div id="particles-js"></div>
 
-            <!-- Phone mockup -->
-            <div class="lg:w-1/2 flex justify-center">
-                <div class="relative w-[280px] h-[560px] md:w-[300px] md:h-[600px] animate-float">
-                    <div class="absolute inset-0 bg-gray-900 rounded-[40px] shadow-xl"></div>
-                    <div class="phone-screen">
-                        <!-- Status Bar -->
-                        <div class="flex justify-between items-center px-6 py-2 text-white text-opacity-80 text-sm">
-                            <span>9:41</span>
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="wifi" class="w-4 h-4"></i>
-                                <i data-lucide="battery-full" class="w-4 h-4"></i>
-                            </div>
-                        </div>
+  <!-- Main Content -->
+  <div class="text-center text-white z-10 px-6 mt-16">
+    <h1 class="text-4xl md:text-6xl font-extrabold mb-4">IMPLIED PH</h1>
+    <p class="text-lg md:text-xl font-light mb-6">Seamless design meets unparalleled performance</p>
+    <a href="#download" 
+       class="px-8 py-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-500 transition duration-300">
+     Start Reading
+    </a>
+  </div>
 
-                        <!-- Weather Widget -->
-                        <div class="weather-widget m-4 p-4 rounded-xl">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <div class="text-white text-lg font-medium">San Francisco</div>
-                                    <div class="text-white text-3xl font-bold mt-1">72°F</div>
-                                </div>
-                                <i data-lucide="sun" class="w-12 h-12 text-yellow-400"></i>
-                            </div>
-                        </div>
+  <!-- Widgets Section -->
+  <div class="z-10 text-white grid grid-cols-2 gap-4 p-4 w-full max-w-4xl md:grid-cols-4">
+    <div class="flex flex-col items-center bg-gray-800 p-6 rounded-lg shadow-lg">
+      <h2 class="text-xl font-bold">About Us</h2>
+      <p class="text-sm text-gray-300 mt-2">Learn more about our mission and team.</p>
+    </div>
+    <div class="flex flex-col items-center bg-gray-800 p-6 rounded-lg shadow-lg">
+      <h2 class="text-xl font-bold">Blog</h2>
+      <p class="text-sm text-gray-300 mt-2">Explore the latest updates and articles.</p>
+    </div>
+    <div class="flex flex-col items-center bg-gray-800 p-6 rounded-lg shadow-lg">
+      <h2 class="text-xl font-bold">Download</h2>
+      <p class="text-sm text-gray-300 mt-2">Get the latest version of Evolution X.</p>
+    </div>
+    <div class="flex flex-col items-center bg-gray-800 p-6 rounded-lg shadow-lg">
+      <h2 class="text-xl font-bold">Programming</h2>
+      <p class="text-sm text-gray-300 mt-2">Find resources and contribute to our project.</p>
+    </div>
+  </div>
 
-                        <!-- Social Media Widgets -->
-                        <div class="grid grid-cols-2 gap-3 p-4">
-                            <!-- Instagram -->
-                            <div class="social-widget p-3 rounded-xl">
-                                <div class="app-icon bg-gradient-to-tr from-purple-600 to-pink-500">
-                                    <i data-lucide="instagram" class="w-6 h-6"></i>
-                                </div>
-                                <div class="text-white text-xs mt-2">Instagram</div>
-                            </div>
+  <!-- Enhanced Bottom Navigation Bar -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-black bg-opacity-95 backdrop-blur-sm border-t border-gray-800 z-50 md:hidden safe-bottom">
+    <div class="flex justify-between items-center max-w-lg mx-auto px-2">
+      <a href="#home" class="nav-item flex flex-col items-center py-2 px-3 w-full">
+        <div class="indicator w-1 h-1 bg-white rounded-full mb-1"></div>
+        <span class="material-icons text-2xl text-gray-400">home</span>
+        <span class="text-xs text-gray-400 mt-1">Home</span>
+      </a>
+      
+      <a href="#discover" class="nav-item flex flex-col items-center py-2 px-3 w-full">
+        <div class="indicator w-1 h-1 bg-white rounded-full mb-1"></div>
+        <span class="material-icons text-2xl text-gray-400">explore</span>
+        <span class="text-xs text-gray-400 mt-1">Discover</span>
+      </a>
+      
+      
+      
+      <a href="#inbox" class="nav-item flex flex-col items-center py-2 px-3 w-full">
+        <div class="indicator w-1 h-1 bg-white rounded-full mb-1"></div>
+        <span class="material-icons text-2xl text-gray-400">chat</span>
+        <span class="text-xs text-gray-400 mt-1">Chat with us</span>
+      </a>
+      
+      <a href="#profile" class="nav-item flex flex-col items-center py-2 px-3 w-full">
+        <div class="indicator w-1 h-1 bg-white rounded-full mb-1"></div>
+        <span class="material-icons text-2xl text-gray-400">person</span>
+        <span class="text-xs text-gray-400 mt-1">About Me</span>
+      </a>
+    </div>
+  </nav>
 
-                            <!-- TikTok -->
-                            <div class="social-widget p-3 rounded-xl">
-                                <div class="app-icon bg-black">
-                                    <i data-lucide="music" class="w-6 h-6"></i>
-                                </div>
-                                <div class="text-white text-xs mt-2">TikTok</div>
-                            </div>
-
-                            <!-- YouTube -->
-                            <div class="social-widget p-3 rounded-xl">
-                                <div class="app-icon bg-red-600">
-                                    <i data-lucide="play" class="w-6 h-6"></i>
-                                </div>
-                                <div class="text-white text-xs mt-2">YouTube</div>
-                            </div>
-
-                            <!-- Facebook -->
-                            <div class="social-widget p-3 rounded-xl">
-                                <div class="app-icon bg-blue-600">
-                                    <i data-lucide="facebook" class="w-6 h-6"></i>
-                                </div>
-                                <div class="text-white text-xs mt-2">Facebook</div>
-                            </div>
-                        </div>
-
-                        <!-- Bottom Navigation -->
-                        <div class="bottom-nav absolute bottom-0 left-0 right-0 h-16 px-6 flex justify-between items-center">
-                            <div class="nav-item">
-                                <i data-lucide="home" class="w-6 h-6"></i>
-                                <span class="text-xs">Home</span>
-                            </div>
-                            <div class="nav-item">
-                                <i data-lucide="search" class="w-6 h-6"></i>
-                                <span class="text-xs">Search</span>
-                            </div>
-                            <div class="nav-item">
-                                <i data-lucide="plus-square" class="w-6 h-6"></i>
-                                <span class="text-xs">Post</span>
-                            </div>
-                            <div class="nav-item">
-                                <i data-lucide="bell" class="w-6 h-6"></i>
-                                <span class="text-xs">Notifications</span>
-                            </div>
-                            <div class="nav-item">
-                                <i data-lucide="user" class="w-6 h-6"></i>
-                                <span class="text-xs">Profile</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
-        
-        // GSAP animations
-        gsap.to(".blur-blob", {
-            scale: 1.2,
-            duration: 2.5,
-            ease: "power1.inOut",
-            yoyo: true,
-            repeat: -1,
-            stagger: {
-                amount: 1
-            }
+  <!-- Navigation Animation Script -->
+  <script>
+    // Handle navigation item clicks and animations
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        // Remove active class from all items
+        document.querySelectorAll('.nav-item').forEach(navItem => {
+          navItem.classList.remove('active');
+          navItem.querySelector('.material-icons').classList.remove('text-white');
+          navItem.querySelector('.text-xs').classList.remove('text-white');
         });
-    </script>
+        
+        // Add active class to clicked item
+        item.classList.add('active');
+        item.querySelector('.material-icons').classList.add('text-white');
+        item.querySelector('.text-xs').classList.add('text-white');
+      });
+    });
+
+    // Set home as active by default
+    document.querySelector('a[href="#home"]').classList.add('active');
+    document.querySelector('a[href="#home"] .material-icons').classList.add('text-white');
+    document.querySelector('a[href="#home"] .text-xs').classList.add('text-white');
+  </script>
+
+  <!-- Particles.js Configuration -->
+  <script>
+    particlesJS('particles-js', {
+      particles: {
+        number: {
+          value: 80,
+          density: {
+            enable: true,
+            value_area: 800,
+          },
+        },
+        color: {
+          value: "#ffffff",
+        },
+        shape: {
+          type: "circle",
+        },
+        opacity: {
+          value: 0.5,
+          random: false,
+          anim: {
+            enable: false,
+          },
+        },
+        size: {
+          value: 3,
+          random: true,
+        },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#ffffff",
+          opacity: 0.4,
+          width: 1,
+        },
+        move: {
+          enable: true,
+          speed: 4,
+          direction: "none",
+          random: false,
+          straight: false,
+          out_mode: "out",
+          bounce: false,
+        },
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: {
+            enable: true,
+            mode: "repulse",
+          },
+          onclick: {
+            enable: true,
+            mode: "push",
+          },
+        },
+        modes: {
+          repulse: {
+            distance: 100,
+          },
+          push: {
+            particles_nb: 4,
+          },
+        },
+      },
+      retina_detect: true,
+    });
+  </script>
 </body>
 </html>
