@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Implied Home Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'float': 'float 6s infinite'
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': {
+                                transform: 'translate(0, 0) scale(1)',
+                            },
+                            '33%': {
+                                transform: 'translate(30px, -50px) scale(1.1)',
+                            },
+                            '66%': {
+                                transform: 'translate(-20px, 20px) scale(0.9)',
+                            },
+                            '100%': {
+                                transform: 'translate(0, 0) scale(1)',
+                            },
+                        },
+                        float: {
+                            '0%, 100%': {
+                                transform: 'translateY(0)',
+                            },
+                            '50%': {
+                                transform: 'translateY(-20px)',
+                            },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .blur-blob {
+            background: radial-gradient(circle at center, currentColor 0%, transparent 70%);
+            filter: blur(40px);
+        }
+        
+        .phone-screen {
+            position: absolute;
+            inset: 2px;
+            border-radius: 35px;
+            overflow: hidden;
+            background: #000;
+        }
+        
+        .phone-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        
+        /* Optional: Add a subtle shadow to the inner edge of the phone frame */
+        .phone-frame::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 40px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 overflow-x-hidden">
+    <!-- Background decorations -->
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+        <div class="blur-blob animate-blob absolute top-0 -left-4 w-72 h-72 text-yellow-200 mix-blend-multiply opacity-70"></div>
+        <div class="blur-blob animate-blob absolute bottom-0 -right-4 w-72 h-72 text-green-200 mix-blend-multiply opacity-70 animation-delay-2000"></div>
+    </div>
+
+    <!-- Main content -->
+    <div class="min-h-screen flex flex-col">
+        <!-- Navigation -->
+        <nav class="p-4 lg:p-6 relative z-10">
+            <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gray-800 rounded-lg"></div>
+                    <span class="text-xl font-bold">IMPLIED PH</span>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-100" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+
+                <!-- Desktop menu -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">About</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Team</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Download</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Blog</a>
+                </div>
+
+                <!-- Mobile menu -->
+                <div id="mobile-menu" class="hidden w-full md:hidden mt-4">
+                    <div class="flex flex-col space-y-4">
+                        <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">About</a>
+                        <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Team</a>
+                        <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Download</a>
+                        <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Blog</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <main class="flex-grow max-w-7xl mx-auto px-4 lg:px-6 py-8 lg:py-12">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+                <!-- Text content -->
+                <div class="lg:w-1/2 text-center lg:text-left">
+                    <h1 class="text-4xl lg:text-5xl font-bold mb-6">Implied Tech PH</h1>
+                    <p class="text-lg lg:text-xl text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0">
+                        Amazing experience for users with our powerful platform. 
+                        Enhanced performance and useful features to make your life easier.
+                    </p>
+                    <button class="bg-gray-900 text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-colors transform hover:scale-105 duration-200 ease-in-out">
+                        Get Started
+                    </button>
+                </div>
+
+                <!-- Phone mockup -->
+                <div class="lg:w-1/2 flex justify-center">
+                    <div class="relative w-[280px] h-[560px] md:w-[300px] md:h-[600px] animate-float">
+                        <!-- Phone frame -->
+                        <div class="phone-frame absolute inset-0 bg-gray-900 rounded-[40px] shadow-xl"></div>
+                        <!-- Screen with your image -->
+                        <div class="phone-screen">
+                            <img src="LOG.png" alt="App Screenshot" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        gsap.to(".blur-blob", {
+            scale: 1.2,
+            duration: 2.5,
+            ease: "power1.inOut",
+            yoyo: true,
+            repeat: -1,
+            stagger: {
+                amount: 1
+            }
+        });
+    </script>
+</body>
+</html>
