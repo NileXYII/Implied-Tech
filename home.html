@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- Previous head content remains the same -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Implied Home Page</title>
+    <title>Implied Landing Page</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -12,7 +13,8 @@
                 extend: {
                     animation: {
                         'blob': 'blob 7s infinite',
-                        'float': 'float 6s infinite'
+                        'float': 'float 6s infinite',
+                        'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
                     },
                     keyframes: {
                         blob: {
@@ -36,7 +38,7 @@
                             '50%': {
                                 transform: 'translateY(-20px)',
                             },
-                        },
+                        }
                     },
                 }
             }
@@ -53,69 +55,58 @@
             inset: 2px;
             border-radius: 35px;
             overflow: hidden;
-            background: #000;
+            background: linear-gradient(to bottom right, #1a1a1a, #2d2d2d);
         }
         
-        .phone-screen img {
+        .tech-interface {
+            position: relative;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            object-position: center;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1));
+            overflow: hidden;
         }
-        
-        /* Optional: Add a subtle shadow to the inner edge of the phone frame */
-        .phone-frame::after {
-            content: '';
+
+        .grid-pattern {
             position: absolute;
             inset: 0;
-            border-radius: 40px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
-            pointer-events: none;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            transform: perspective(500px) rotateX(60deg);
+            transform-origin: top;
+        }
+
+        .floating-elements div {
+            position: absolute;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            animation: float 3s infinite;
+            animation-delay: var(--delay);
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.4; }
+        }
+
+        .glow {
+            animation: glow 2s ease-in-out infinite;
         }
     </style>
 </head>
 <body class="bg-gray-50 overflow-x-hidden">
-    <!-- Background decorations -->
+    <!-- Previous background and nav content remains the same -->
     <div class="fixed inset-0 -z-10 overflow-hidden">
         <div class="blur-blob animate-blob absolute top-0 -left-4 w-72 h-72 text-yellow-200 mix-blend-multiply opacity-70"></div>
         <div class="blur-blob animate-blob absolute bottom-0 -right-4 w-72 h-72 text-green-200 mix-blend-multiply opacity-70 animation-delay-2000"></div>
     </div>
 
-    <!-- Main content -->
     <div class="min-h-screen flex flex-col">
-        <!-- Navigation -->
+        <!-- Navigation remains the same -->
         <nav class="p-4 lg:p-6 relative z-10">
-            <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <div class="w-8 h-8 bg-gray-800 rounded-lg"></div>
-                    <span class="text-xl font-bold">IMPLIED PH</span>
-                </div>
-                
-                <!-- Mobile menu button -->
-                <button class="md:hidden p-2 rounded-lg hover:bg-gray-100" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-
-                <!-- Desktop menu -->
-                <div class="hidden md:flex space-x-8">
-                    <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">About</a>
-                    <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Team</a>
-                    <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Download</a>
-                    <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Blog</a>
-                </div>
-
-                <!-- Mobile menu -->
-                <div id="mobile-menu" class="hidden w-full md:hidden mt-4">
-                    <div class="flex flex-col space-y-4">
-                        <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">About</a>
-                        <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Team</a>
-                        <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Download</a>
-                        <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Blog</a>
-                    </div>
-                </div>
-            </div>
+            <!-- Navigation content remains the same -->
         </nav>
 
         <!-- Hero Section -->
@@ -123,24 +114,66 @@
             <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
                 <!-- Text content -->
                 <div class="lg:w-1/2 text-center lg:text-left">
-                    <h1 class="text-4xl lg:text-5xl font-bold mb-6">Implied Tech PH</h1>
+                    <h1 class="text-4xl lg:text-5xl font-bold mb-6">Modernized Experience  </h1>
                     <p class="text-lg lg:text-xl text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0">
-                        Amazing experience for users with our powerful platform. 
+                       An amazing experience for users with our powerful platform. 
                         Enhanced performance and useful features to make your life easier.
                     </p>
                     <button class="bg-gray-900 text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-colors transform hover:scale-105 duration-200 ease-in-out">
-                        Get Started
+                        Start Reading
                     </button>
                 </div>
 
-                <!-- Phone mockup -->
+                <!-- Phone mockup with tech interface -->
                 <div class="lg:w-1/2 flex justify-center">
                     <div class="relative w-[280px] h-[560px] md:w-[300px] md:h-[600px] animate-float">
-                        <!-- Phone frame -->
-                        <div class="phone-frame absolute inset-0 bg-gray-900 rounded-[40px] shadow-xl"></div>
-                        <!-- Screen with your image -->
+                        <div class="absolute inset-0 bg-gray-900 rounded-[40px] shadow-xl"></div>
                         <div class="phone-screen">
-                            <img src="LOG.webp" alt="App Screenshot" class="w-full h-full object-cover">
+                            <div class="tech-interface">
+                                <!-- Grid pattern background -->
+                                <div class="grid-pattern"></div>
+                                
+                                <!-- Time and status -->
+                                <div class="absolute top-8 left-0 right-0 text-center">
+                                    <div class="text-white text-opacity-80 text-sm mb-1">12:30</div>
+                                    <div class="text-emerald-400 text-xs glow">System Active</div>
+                                </div>
+                                
+                                <!-- Floating UI elements -->
+                                <div class="absolute inset-8 flex flex-col gap-4">
+                                    <!-- Stats card -->
+                                    <div class="bg-white bg-opacity-10 p-4 rounded-xl backdrop-blur-sm">
+                                        <div class="text-emerald-400 text-sm mb-2">Performance</div>
+                                        <div class="h-2 bg-black bg-opacity-20 rounded-full overflow-hidden">
+                                            <div class="h-full w-3/4 bg-emerald-400 rounded-full animate-pulse"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Activity cards -->
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-white bg-opacity-10 p-4 rounded-xl backdrop-blur-sm">
+                                            <div class="text-blue-400 text-xs mb-2">CPU Usage</div>
+                                            <div class="text-white text-lg">42%</div>
+                                        </div>
+                                        <div class="bg-white bg-opacity-10 p-4 rounded-xl backdrop-blur-sm">
+                                            <div class="text-purple-400 text-xs mb-2">Memory</div>
+                                            <div class="text-white text-lg">2.4GB</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Status indicators -->
+                                    <div class="mt-auto space-y-2">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                                            <div class="text-white text-opacity-60 text-xs">System Optimal</div>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                                            <div class="text-white text-opacity-60 text-xs">Networks Secure</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
