@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Previous head content remains the same -->
+<!-- Previous head content remains the same until style section -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Implied Landing Page</title>
+    <title>Home Page</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -18,28 +19,16 @@
                     },
                     keyframes: {
                         blob: {
-                            '0%': {
-                                transform: 'translate(0, 0) scale(1)',
-                            },
-                            '33%': {
-                                transform: 'translate(30px, -50px) scale(1.1)',
-                            },
-                            '66%': {
-                                transform: 'translate(-20px, 20px) scale(0.9)',
-                            },
-                            '100%': {
-                                transform: 'translate(0, 0) scale(1)',
-                            },
+                            '0%': { transform: 'translate(0, 0) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0, 0) scale(1)' }
                         },
                         float: {
-                            '0%, 100%': {
-                                transform: 'translateY(0)',
-                            },
-                            '50%': {
-                                transform: 'translateY(-20px)',
-                            },
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' }
                         }
-                    },
+                    }
                 }
             }
         }
@@ -58,130 +47,174 @@
             background: linear-gradient(to bottom right, #1a1a1a, #2d2d2d);
         }
         
-        .tech-interface {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1));
-            overflow: hidden;
+        .social-widget {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .weather-widget {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(16, 185, 129, 0.2));
+            backdrop-filter: blur(12px);
+        }
+        
+        .bottom-nav {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .grid-pattern {
-            position: absolute;
-            inset: 0;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 20px 20px;
-            transform: perspective(500px) rotateX(60deg);
-            transform-origin: top;
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: rgba(255, 255, 255, 0.6);
+            transition: color 0.3s ease;
         }
 
-        .floating-elements div {
-            position: absolute;
-            border-radius: 8px;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(5px);
-            animation: float 3s infinite;
-            animation-delay: var(--delay);
+        .nav-item:hover {
+            color: rgba(255, 255, 255, 1);
         }
 
-        @keyframes glow {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 0.4; }
-        }
-
-        .glow {
-            animation: glow 2s ease-in-out infinite;
+        .app-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
         }
     </style>
 </head>
 <body class="bg-gray-50 overflow-x-hidden">
-    <!-- Previous background and nav content remains the same -->
-    <div class="fixed inset-0 -z-10 overflow-hidden">
-        <div class="blur-blob animate-blob absolute top-0 -left-4 w-72 h-72 text-yellow-200 mix-blend-multiply opacity-70"></div>
-        <div class="blur-blob animate-blob absolute bottom-0 -right-4 w-72 h-72 text-green-200 mix-blend-multiply opacity-70 animation-delay-2000"></div>
-    </div>
+    <!-- Navigation -->
+    <nav class="p-4 lg:p-6 relative z-10 bg-white/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-gray-800 rounded-lg"></div>
+                <span class="text-xl font-bold">IMPLIED PH</span>
+            </div>
+            
+            <div class="hidden md:flex space-x-8">
+                <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">About</a>
+                <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Team</a>
+                <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Download</a>
+                <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Blog</a>
+            </div>
+        </div>
+    </nav>
 
-    <div class="min-h-screen flex flex-col">
-        <!-- Navigation remains the same -->
-        <nav class="p-4 lg:p-6 relative z-10">
-            <!-- Navigation content remains the same -->
-        </nav>
+    <!-- Main content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 lg:px-6 py-8 lg:py-12">
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+            <!-- Text content -->
+            <div class="lg:w-1/2 text-center lg:text-left">
+                <h1 class="text-4xl lg:text-5xl font-bold mb-6">Your App Name</h1>
+                <p class="text-lg lg:text-xl text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0">
+                    An amazing experience for users with our powerful platform. 
+                    Enhanced performance and useful features to make your life easier.
+                </p>
+                <button class="bg-gray-900 text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-colors transform hover:scale-105 duration-200 ease-in-out">
+                     Start Reading
+                </button>
+            </div>
 
-        <!-- Hero Section -->
-        <main class="flex-grow max-w-7xl mx-auto px-4 lg:px-6 py-8 lg:py-12">
-            <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
-                <!-- Text content -->
-                <div class="lg:w-1/2 text-center lg:text-left">
-                    <h1 class="text-4xl lg:text-5xl font-bold mb-6">Modernized Experience  </h1>
-                    <p class="text-lg lg:text-xl text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0">
-                       An amazing experience for users with our powerful platform. 
-                        Enhanced performance and useful features to make your life easier.
-                    </p>
-                    <button class="bg-gray-900 text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-colors transform hover:scale-105 duration-200 ease-in-out">
-                        Start Reading
-                    </button>
-                </div>
+            <!-- Phone mockup -->
+            <div class="lg:w-1/2 flex justify-center">
+                <div class="relative w-[280px] h-[560px] md:w-[300px] md:h-[600px] animate-float">
+                    <div class="absolute inset-0 bg-gray-900 rounded-[40px] shadow-xl"></div>
+                    <div class="phone-screen">
+                        <!-- Status Bar -->
+                        <div class="flex justify-between items-center px-6 py-2 text-white text-opacity-80 text-sm">
+                            <span>9:41</span>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="wifi" class="w-4 h-4"></i>
+                                <i data-lucide="battery-full" class="w-4 h-4"></i>
+                            </div>
+                        </div>
 
-                <!-- Phone mockup with tech interface -->
-                <div class="lg:w-1/2 flex justify-center">
-                    <div class="relative w-[280px] h-[560px] md:w-[300px] md:h-[600px] animate-float">
-                        <div class="absolute inset-0 bg-gray-900 rounded-[40px] shadow-xl"></div>
-                        <div class="phone-screen">
-                            <div class="tech-interface">
-                                <!-- Grid pattern background -->
-                                <div class="grid-pattern"></div>
-                                
-                                <!-- Time and status -->
-                                <div class="absolute top-8 left-0 right-0 text-center">
-                                    <div class="text-white text-opacity-80 text-sm mb-1">12:30</div>
-                                    <div class="text-emerald-400 text-xs glow">System Active</div>
+                        <!-- Weather Widget -->
+                        <div class="weather-widget m-4 p-4 rounded-xl">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-white text-lg font-medium">San Francisco</div>
+                                    <div class="text-white text-3xl font-bold mt-1">72°F</div>
                                 </div>
-                                
-                                <!-- Floating UI elements -->
-                                <div class="absolute inset-8 flex flex-col gap-4">
-                                    <!-- Stats card -->
-                                    <div class="bg-white bg-opacity-10 p-4 rounded-xl backdrop-blur-sm">
-                                        <div class="text-emerald-400 text-sm mb-2">Performance</div>
-                                        <div class="h-2 bg-black bg-opacity-20 rounded-full overflow-hidden">
-                                            <div class="h-full w-3/4 bg-emerald-400 rounded-full animate-pulse"></div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Activity cards -->
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <div class="bg-white bg-opacity-10 p-4 rounded-xl backdrop-blur-sm">
-                                            <div class="text-blue-400 text-xs mb-2">CPU Usage</div>
-                                            <div class="text-white text-lg">42%</div>
-                                        </div>
-                                        <div class="bg-white bg-opacity-10 p-4 rounded-xl backdrop-blur-sm">
-                                            <div class="text-purple-400 text-xs mb-2">Memory</div>
-                                            <div class="text-white text-lg">2.4GB</div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Status indicators -->
-                                    <div class="mt-auto space-y-2">
-                                        <div class="flex items-center gap-2">
-                                            <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                                            <div class="text-white text-opacity-60 text-xs">System Optimal</div>
-                                        </div>
-                                        <div class="flex items-center gap-2">
-                                            <div class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                                            <div class="text-white text-opacity-60 text-xs">Networks Secure</div>
-                                        </div>
-                                    </div>
+                                <i data-lucide="sun" class="w-12 h-12 text-yellow-400"></i>
+                            </div>
+                        </div>
+
+                        <!-- Social Media Widgets -->
+                        <div class="grid grid-cols-2 gap-3 p-4">
+                            <!-- Instagram -->
+                            <div class="social-widget p-3 rounded-xl">
+                                <div class="app-icon bg-gradient-to-tr from-purple-600 to-pink-500">
+                                    <i data-lucide="instagram" class="w-6 h-6"></i>
                                 </div>
+                                <div class="text-white text-xs mt-2">Instagram</div>
+                            </div>
+
+                            <!-- TikTok -->
+                            <div class="social-widget p-3 rounded-xl">
+                                <div class="app-icon bg-black">
+                                    <i data-lucide="music" class="w-6 h-6"></i>
+                                </div>
+                                <div class="text-white text-xs mt-2">TikTok</div>
+                            </div>
+
+                            <!-- YouTube -->
+                            <div class="social-widget p-3 rounded-xl">
+                                <div class="app-icon bg-red-600">
+                                    <i data-lucide="play" class="w-6 h-6"></i>
+                                </div>
+                                <div class="text-white text-xs mt-2">YouTube</div>
+                            </div>
+
+                            <!-- Facebook -->
+                            <div class="social-widget p-3 rounded-xl">
+                                <div class="app-icon bg-blue-600">
+                                    <i data-lucide="facebook" class="w-6 h-6"></i>
+                                </div>
+                                <div class="text-white text-xs mt-2">Facebook</div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Navigation -->
+                        <div class="bottom-nav absolute bottom-0 left-0 right-0 h-16 px-6 flex justify-between items-center">
+                            <div class="nav-item">
+                                <i data-lucide="home" class="w-6 h-6"></i>
+                                <span class="text-xs">Home</span>
+                            </div>
+                            <div class="nav-item">
+                                <i data-lucide="search" class="w-6 h-6"></i>
+                                <span class="text-xs">Search</span>
+                            </div>
+                            <div class="nav-item">
+                                <i data-lucide="plus-square" class="w-6 h-6"></i>
+                                <span class="text-xs">Post</span>
+                            </div>
+                            <div class="nav-item">
+                                <i data-lucide="bell" class="w-6 h-6"></i>
+                                <span class="text-xs">Notifications</span>
+                            </div>
+                            <div class="nav-item">
+                                <i data-lucide="user" class="w-6 h-6"></i>
+                                <span class="text-xs">Profile</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
 
     <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // GSAP animations
         gsap.to(".blur-blob", {
             scale: 1.2,
             duration: 2.5,
