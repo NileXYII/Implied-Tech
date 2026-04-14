@@ -7,8 +7,925 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="kenai0_2_0.css" />
-  <link rel="stylesheet" href="index.css" />
+
+  <style>
+    /* ============================================================
+       kenai0_2_0.css — Material Design 3 Core Framework
+       ============================================================ */
+
+    /* ── CSS Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body { line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    img, svg { display: block; max-width: 100%; }
+    button, input, select, textarea { font: inherit; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; }
+
+    /* ── Design Tokens ── */
+    :root {
+      /* --- Color Palette (Pixel Blue default) --- */
+      --md-primary:                  #1B6EF3;
+      --md-on-primary:               #ffffff;
+      --md-primary-container:        #D8E6FF;
+      --md-on-primary-container:     #001946;
+      --md-secondary:                #555F71;
+      --md-on-secondary:             #ffffff;
+      --md-secondary-container:      #D9E3F8;
+      --md-on-secondary-container:   #121C2B;
+      --md-tertiary:                 #6E5676;
+      --md-on-tertiary:              #ffffff;
+      --md-tertiary-container:       #F7D8FF;
+      --md-on-tertiary-container:    #27003B;
+      --md-error:                    #BA1A1A;
+      --md-on-error:                 #ffffff;
+      --md-error-container:          #FFDAD6;
+      --md-on-error-container:       #410002;
+
+      /* --- Surfaces --- */
+      --md-background:                        #F8F9FF;
+      --md-on-background:                     #191C20;
+      --md-surface:                           #F8F9FF;
+      --md-on-surface:                        #191C20;
+      --md-surface-variant:                   #DFE2EB;
+      --md-on-surface-variant:                #43474E;
+      --md-surface-container-lowest:          #ffffff;
+      --md-surface-container-low:             #F2F3FA;
+      --md-surface-container:                 #ECEDF4;
+      --md-surface-container-high:            #E6E8EE;
+      --md-surface-container-highest:         #E1E2E9;
+      --md-inverse-surface:                   #2E3036;
+      --md-inverse-on-surface:                #F0F0F7;
+      --md-inverse-primary:                   #ADC6FF;
+      --md-surface-tint:                      #1B6EF3;
+
+      /* --- Outline --- */
+      --md-outline:          #73777F;
+      --md-outline-variant:  #C3C7CF;
+
+      /* --- Scrim / Shadow --- */
+      --md-scrim:  rgba(0,0,0,0.32);
+
+      /* --- Shape Scale --- */
+      --md-shape-none:        0px;
+      --md-shape-extra-small: 4px;
+      --md-shape-small:       8px;
+      --md-shape-medium:      12px;
+      --md-shape-large:       16px;
+      --md-shape-extra-large: 28px;
+      --md-shape-full:        9999px;
+
+      /* --- Elevation Shadows --- */
+      --md-elevation-0: none;
+      --md-elevation-1: 0 1px 2px rgba(0,0,0,.12), 0 1px 3px 1px rgba(0,0,0,.08);
+      --md-elevation-2: 0 1px 2px rgba(0,0,0,.12), 0 2px 6px 2px rgba(0,0,0,.08);
+      --md-elevation-3: 0 4px 8px 3px rgba(0,0,0,.10), 0 1px 3px rgba(0,0,0,.14);
+      --md-elevation-4: 0 6px 10px 4px rgba(0,0,0,.10), 0 2px 3px rgba(0,0,0,.14);
+      --md-elevation-5: 0 8px 12px 6px rgba(0,0,0,.10), 0 4px 4px rgba(0,0,0,.14);
+
+      /* --- Typography Scale --- */
+      --md-font-brand:  'Google Sans', 'Roboto', sans-serif;
+      --md-font-plain:  'Roboto', sans-serif;
+      --md-font-mono:   'Roboto Mono', monospace;
+
+      --md-display-large-size:    3.5625rem;
+      --md-display-large-line:    4rem;
+      --md-display-large-weight:  400;
+
+      --md-display-medium-size:   2.8125rem;
+      --md-display-medium-line:   3.25rem;
+      --md-display-medium-weight: 400;
+
+      --md-display-small-size:    2.25rem;
+      --md-display-small-line:    2.75rem;
+      --md-display-small-weight:  400;
+
+      --md-headline-large-size:   2rem;
+      --md-headline-large-line:   2.5rem;
+      --md-headline-large-weight: 400;
+
+      --md-headline-medium-size:  1.75rem;
+      --md-headline-medium-line:  2.25rem;
+      --md-headline-medium-weight:400;
+
+      --md-headline-small-size:   1.5rem;
+      --md-headline-small-line:   2rem;
+      --md-headline-small-weight: 400;
+
+      --md-title-large-size:      1.375rem;
+      --md-title-large-line:      1.75rem;
+      --md-title-large-weight:    400;
+
+      --md-title-medium-size:     1rem;
+      --md-title-medium-line:     1.5rem;
+      --md-title-medium-weight:   500;
+
+      --md-title-small-size:      0.875rem;
+      --md-title-small-line:      1.25rem;
+      --md-title-small-weight:    500;
+
+      --md-body-large-size:       1rem;
+      --md-body-large-line:       1.5rem;
+      --md-body-large-weight:     400;
+
+      --md-body-medium-size:      0.875rem;
+      --md-body-medium-line:      1.25rem;
+      --md-body-medium-weight:    400;
+
+      --md-body-small-size:       0.75rem;
+      --md-body-small-line:       1rem;
+      --md-body-small-weight:     400;
+
+      --md-label-large-size:      0.875rem;
+      --md-label-large-line:      1.25rem;
+      --md-label-large-weight:    500;
+
+      --md-label-medium-size:     0.75rem;
+      --md-label-medium-line:     1rem;
+      --md-label-medium-weight:   500;
+
+      --md-label-small-size:      0.6875rem;
+      --md-label-small-line:      1rem;
+      --md-label-small-weight:    500;
+
+      /* --- Motion --- */
+      --md-duration-short-1:  50ms;
+      --md-duration-short-2:  100ms;
+      --md-duration-short-3:  150ms;
+      --md-duration-short-4:  200ms;
+      --md-duration-medium-1: 250ms;
+      --md-duration-medium-2: 300ms;
+      --md-duration-medium-3: 350ms;
+      --md-duration-medium-4: 400ms;
+      --md-duration-long-1:   450ms;
+      --md-duration-long-2:   500ms;
+      --md-duration-long-3:   550ms;
+      --md-duration-long-4:   600ms;
+
+      --md-easing-linear:            linear;
+      --md-easing-standard:          cubic-bezier(0.2, 0, 0, 1);
+      --md-easing-standard-decel:    cubic-bezier(0, 0, 0, 1);
+      --md-easing-standard-accel:    cubic-bezier(0.3, 0, 1, 1);
+      --md-easing-emphasized:        cubic-bezier(0.2, 0, 0, 1);
+      --md-easing-emphasized-decel:  cubic-bezier(0.05, 0.7, 0.1, 1);
+      --md-easing-emphasized-accel:  cubic-bezier(0.3, 0, 0.8, 0.15);
+      --md-easing-spring:            cubic-bezier(0.34, 1.56, 0.64, 1);
+
+      /* --- Z-index scale --- */
+      --md-z-base:    0;
+      --md-z-raised:  1;
+      --md-z-overlay: 10;
+      --md-z-sticky:  100;
+      --md-z-modal:   200;
+      --md-z-toast:   300;
+
+      /* --- State layers --- */
+      --md-state-hover-opacity:   0.08;
+      --md-state-focus-opacity:   0.12;
+      --md-state-pressed-opacity: 0.12;
+      --md-state-dragged-opacity: 0.16;
+
+      /* --- Spacing --- */
+      --md-spacing-1:  4px;
+      --md-spacing-2:  8px;
+      --md-spacing-3:  12px;
+      --md-spacing-4:  16px;
+      --md-spacing-5:  20px;
+      --md-spacing-6:  24px;
+      --md-spacing-8:  32px;
+      --md-spacing-10: 40px;
+      --md-spacing-12: 48px;
+      --md-spacing-16: 64px;
+    }
+
+    /* ── Dark mode ── */
+    [data-theme="dark"], .dark {
+      --md-primary:                  #ADC6FF;
+      --md-on-primary:               #002E6C;
+      --md-primary-container:        #004499;
+      --md-on-primary-container:     #D8E6FF;
+      --md-secondary:                #BDC7DC;
+      --md-on-secondary:             #273141;
+      --md-secondary-container:      #3D4758;
+      --md-on-secondary-container:   #D9E3F8;
+      --md-tertiary:                 #DBBCE4;
+      --md-on-tertiary:              #3D1F4C;
+      --md-tertiary-container:       #553D64;
+      --md-on-tertiary-container:    #F7D8FF;
+      --md-error:                    #FFB4AB;
+      --md-on-error:                 #690005;
+      --md-error-container:          #93000A;
+      --md-on-error-container:       #FFDAD6;
+
+      --md-background:                        #111318;
+      --md-on-background:                     #E2E2E9;
+      --md-surface:                           #111318;
+      --md-on-surface:                        #E2E2E9;
+      --md-surface-variant:                   #43474E;
+      --md-on-surface-variant:                #C3C7CF;
+      --md-surface-container-lowest:          #0C0E13;
+      --md-surface-container-low:             #191C20;
+      --md-surface-container:                 #1D2024;
+      --md-surface-container-high:            #282A2F;
+      --md-surface-container-highest:         #32353A;
+      --md-inverse-surface:                   #E2E2E9;
+      --md-inverse-on-surface:                #2E3036;
+      --md-inverse-primary:                   #1B6EF3;
+      --md-surface-tint:                      #ADC6FF;
+
+      --md-outline:         #8D9199;
+      --md-outline-variant: #43474E;
+      --md-scrim:           rgba(0,0,0,0.6);
+    }
+
+    /* ── Base ── */
+    body {
+      font-family: var(--md-font-plain);
+      font-size: var(--md-body-large-size);
+      line-height: var(--md-body-large-line);
+      font-weight: var(--md-body-large-weight);
+      color: var(--md-on-surface);
+      background-color: var(--md-background);
+      transition:
+        background-color var(--md-duration-medium-2) var(--md-easing-standard),
+        color var(--md-duration-medium-2) var(--md-easing-standard);
+    }
+
+    /* ── Typography classes ── */
+    .display-large  { font-family:var(--md-font-brand); font-size:var(--md-display-large-size);   line-height:var(--md-display-large-line);   font-weight:var(--md-display-large-weight); }
+    .display-medium { font-family:var(--md-font-brand); font-size:var(--md-display-medium-size);  line-height:var(--md-display-medium-line);  font-weight:var(--md-display-medium-weight); }
+    .display-small  { font-family:var(--md-font-brand); font-size:var(--md-display-small-size);   line-height:var(--md-display-small-line);   font-weight:var(--md-display-small-weight); }
+    .headline-large  { font-family:var(--md-font-brand); font-size:var(--md-headline-large-size);  line-height:var(--md-headline-large-line);  font-weight:var(--md-headline-large-weight); }
+    .headline-medium { font-family:var(--md-font-brand); font-size:var(--md-headline-medium-size); line-height:var(--md-headline-medium-line); font-weight:var(--md-headline-medium-weight); }
+    .headline-small  { font-family:var(--md-font-brand); font-size:var(--md-headline-small-size);  line-height:var(--md-headline-small-line);  font-weight:var(--md-headline-small-weight); }
+    .title-large   { font-family:var(--md-font-brand); font-size:var(--md-title-large-size);   line-height:var(--md-title-large-line);   font-weight:var(--md-title-large-weight); }
+    .title-medium  { font-family:var(--md-font-plain); font-size:var(--md-title-medium-size);  line-height:var(--md-title-medium-line);  font-weight:var(--md-title-medium-weight); }
+    .title-small   { font-family:var(--md-font-plain); font-size:var(--md-title-small-size);   line-height:var(--md-title-small-line);   font-weight:var(--md-title-small-weight); }
+    .body-large    { font-family:var(--md-font-plain); font-size:var(--md-body-large-size);    line-height:var(--md-body-large-line);    font-weight:var(--md-body-large-weight); }
+    .body-medium   { font-family:var(--md-font-plain); font-size:var(--md-body-medium-size);   line-height:var(--md-body-medium-line);   font-weight:var(--md-body-medium-weight); }
+    .body-small    { font-family:var(--md-font-plain); font-size:var(--md-body-small-size);    line-height:var(--md-body-small-line);    font-weight:var(--md-body-small-weight); }
+    .label-large   { font-family:var(--md-font-plain); font-size:var(--md-label-large-size);   line-height:var(--md-label-large-line);   font-weight:var(--md-label-large-weight); }
+    .label-medium  { font-family:var(--md-font-plain); font-size:var(--md-label-medium-size);  line-height:var(--md-label-medium-line);  font-weight:var(--md-label-medium-weight); }
+    .label-small   { font-family:var(--md-font-plain); font-size:var(--md-label-small-size);   line-height:var(--md-label-small-line);   font-weight:var(--md-label-small-weight); }
+
+    /* ── Layout utilities ── */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .flex        { display: flex; }
+    .flex-col    { flex-direction: column; }
+    .items-center   { align-items: center; }
+    .items-end      { align-items: flex-end; }
+    .justify-between{ justify-content: space-between; }
+    .flex-wrap   { flex-wrap: wrap; }
+    .self-center { align-self: center; }
+    .gap-2 { gap: 8px; }
+    .gap-3 { gap: 12px; }
+    .gap-4 { gap: 16px; }
+    .gap-6 { gap: 24px; }
+    .mt-2  { margin-top: 8px; }
+    .mt-3  { margin-top: 12px; }
+    .mt-4  { margin-top: 16px; }
+    .mt-5  { margin-top: 20px; }
+    .mt-6  { margin-top: 24px; }
+    .mt-8  { margin-top: 32px; }
+    .mt-10 { margin-top: 40px; }
+    .mb-2  { margin-bottom: 8px; }
+    .mb-3  { margin-bottom: 12px; }
+    .mb-4  { margin-bottom: 16px; }
+    .mb-5  { margin-bottom: 20px; }
+    .mb-6  { margin-bottom: 24px; }
+    .p-4   { padding: 16px; }
+    .p-6   { padding: 24px; }
+    .px-3  { padding-left: 12px; padding-right: 12px; }
+    .py-1  { padding-top: 4px; padding-bottom: 4px; }
+    .w-full{ width: 100%; }
+    .max-w-sm { max-width: 560px; }
+    .hidden { display: none !important; }
+    .opacity-disabled { opacity: 0.38; pointer-events: none; }
+
+    /* Grid */
+    .grid        { display: grid; }
+    .grid-3      { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid-auto   { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--grid-min, 240px), 1fr)); gap: 16px; }
+    .grid-auto-sm{ display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
+    .gap-3.grid, .gap-3 { gap: 12px; }
+    .gap-4.grid, .gap-4 { gap: 16px; }
+    .col-span-full { grid-column: 1 / -1; }
+
+    /* ── Color utilities ── */
+    .text-primary           { color: var(--md-primary); }
+    .text-on-surface        { color: var(--md-on-surface); }
+    .text-on-surface-variant{ color: var(--md-on-surface-variant); }
+    .text-on-primary        { color: var(--md-on-primary); }
+    .text-on-secondary      { color: var(--md-on-secondary); }
+
+    .bg-primary             { background-color: var(--md-primary); }
+    .bg-primary-container   { background-color: var(--md-primary-container); }
+    .bg-secondary-container { background-color: var(--md-secondary-container); }
+    .bg-tertiary-container  { background-color: var(--md-tertiary-container); }
+    .bg-error-container     { background-color: var(--md-error-container); }
+    .bg-surface             { background-color: var(--md-surface); }
+    .bg-surface-container   { background-color: var(--md-surface-container); }
+    .bg-surface-container-lowest { background-color: var(--md-surface-container-lowest); }
+    .bg-surface-container-low    { background-color: var(--md-surface-container-low); }
+    .bg-surface-container-high   { background-color: var(--md-surface-container-high); }
+
+    /* ── Shape utilities ── */
+    .rounded-xs   { border-radius: var(--md-shape-extra-small); }
+    .rounded-sm   { border-radius: var(--md-shape-small); }
+    .rounded-md   { border-radius: var(--md-shape-medium); }
+    .rounded-lg   { border-radius: var(--md-shape-large); }
+    .rounded-xl   { border-radius: var(--md-shape-extra-large); }
+    .rounded-full { border-radius: var(--md-shape-full); }
+
+    /* ── Elevation utilities ── */
+    .elevation-0 { box-shadow: var(--md-elevation-0); }
+    .elevation-1 { box-shadow: var(--md-elevation-1); }
+    .elevation-2 { box-shadow: var(--md-elevation-2); }
+    .elevation-3 { box-shadow: var(--md-elevation-3); }
+    .elevation-4 { box-shadow: var(--md-elevation-4); }
+    .elevation-5 { box-shadow: var(--md-elevation-5); }
+
+    /* ── Ripple ── */
+    .ripple {
+      position: relative;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .ripple-wave {
+      position: absolute;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0);
+      animation: ripple-anim 600ms var(--md-easing-standard) forwards;
+    }
+    @keyframes ripple-anim {
+      to { transform: scale(4); opacity: 0; }
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 40px;
+      padding: 0 24px;
+      border-radius: var(--md-shape-full);
+      font-family: var(--md-font-plain);
+      font-size: var(--md-label-large-size);
+      font-weight: var(--md-label-large-weight);
+      line-height: 1;
+      letter-spacing: 0.00625em;
+      white-space: nowrap;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      transition:
+        box-shadow var(--md-duration-short-4) var(--md-easing-standard),
+        background-color var(--md-duration-short-4) var(--md-easing-standard),
+        color var(--md-duration-short-4) var(--md-easing-standard),
+        opacity var(--md-duration-short-4) var(--md-easing-standard);
+      text-decoration: none;
+    }
+    .btn:disabled { opacity: 0.38; pointer-events: none; }
+    .btn-sm { height: 32px; padding: 0 16px; font-size: 0.75rem; }
+    .btn-lg { height: 48px; padding: 0 32px; font-size: 0.9375rem; }
+
+    .btn-icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+    .btn-filled  { background-color: var(--md-primary); color: var(--md-on-primary); }
+    .btn-filled:hover  { box-shadow: var(--md-elevation-1); background-color: color-mix(in srgb, var(--md-primary) 92%, var(--md-on-primary)); }
+
+    .btn-tonal  { background-color: var(--md-secondary-container); color: var(--md-on-secondary-container); }
+    .btn-tonal:hover { box-shadow: var(--md-elevation-1); background-color: color-mix(in srgb, var(--md-secondary-container) 92%, var(--md-on-secondary-container)); }
+
+    .btn-outlined {
+      background: transparent;
+      color: var(--md-primary);
+      border: 1px solid var(--md-outline);
+    }
+    .btn-outlined:hover { background-color: color-mix(in srgb, var(--md-primary) 8%, transparent); }
+
+    .btn-text { background: transparent; color: var(--md-primary); }
+    .btn-text:hover { background-color: color-mix(in srgb, var(--md-primary) 8%, transparent); }
+
+    .btn-elevated {
+      background-color: var(--md-surface-container-low);
+      color: var(--md-primary);
+      box-shadow: var(--md-elevation-1);
+    }
+    .btn-elevated:hover { box-shadow: var(--md-elevation-2); }
+
+    .btn-error.btn-filled  { background-color: var(--md-error); color: var(--md-on-error); }
+    .btn-error.btn-tonal   { background-color: var(--md-error-container); color: var(--md-on-error-container); }
+
+    /* ── Icon Button ── */
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      color: var(--md-on-surface-variant);
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      transition:
+        background-color var(--md-duration-short-4) var(--md-easing-standard),
+        color var(--md-duration-short-4) var(--md-easing-standard);
+      flex-shrink: 0;
+    }
+    .icon-btn:hover { background-color: var(--md-surface-container); color: var(--md-on-surface); }
+    .icon-btn[aria-pressed="true"] { color: var(--md-primary); background-color: var(--md-primary-container); }
+    .icon-btn-filled  { background-color: var(--md-primary); color: var(--md-on-primary); }
+    .icon-btn-filled:hover { background-color: color-mix(in srgb, var(--md-primary) 90%, var(--md-on-primary)); }
+    .icon-btn-tonal   { background-color: var(--md-secondary-container); color: var(--md-on-secondary-container); }
+    .icon-btn-tonal:hover { background-color: color-mix(in srgb, var(--md-secondary-container) 90%, var(--md-on-secondary-container)); }
+    .icon-btn-outlined { border: 1px solid var(--md-outline); }
+    .icon-btn-sm { width: 32px; height: 32px; }
+    .icon-btn-lg { width: 48px; height: 48px; }
+
+    /* ── FAB ── */
+    .fab {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      border-radius: var(--md-shape-large);
+      background-color: var(--md-primary-container);
+      color: var(--md-on-primary-container);
+      border: none;
+      cursor: pointer;
+      box-shadow: var(--md-elevation-3);
+      transition:
+        box-shadow var(--md-duration-short-4) var(--md-easing-standard),
+        background-color var(--md-duration-short-4) var(--md-easing-standard);
+    }
+    .fab:hover { box-shadow: var(--md-elevation-4); }
+    .fab-sm { width: 40px; height: 40px; border-radius: var(--md-shape-medium); }
+    .fab-lg { width: 96px; height: 96px; border-radius: var(--md-shape-extra-large); }
+    .fab-extended {
+      width: auto;
+      padding: 0 20px;
+      gap: 12px;
+      border-radius: var(--md-shape-large);
+    }
+    .fab-surface   { background-color: var(--md-surface-container-high); color: var(--md-primary); }
+    .fab-secondary { background-color: var(--md-secondary-container); color: var(--md-on-secondary-container); }
+    .fab-tertiary  { background-color: var(--md-tertiary-container); color: var(--md-on-tertiary-container); }
+
+    /* ── Cards ── */
+    .card {
+      border-radius: var(--md-shape-medium);
+      overflow: hidden;
+      transition:
+        box-shadow var(--md-duration-short-4) var(--md-easing-standard),
+        background-color var(--md-duration-medium-2) var(--md-easing-standard);
+    }
+    .card-elevated {
+      background-color: var(--md-surface-container-low);
+      box-shadow: var(--md-elevation-1);
+    }
+    .card-elevated:hover { box-shadow: var(--md-elevation-2); }
+    .card-filled  { background-color: var(--md-surface-container-highest); }
+    .card-outlined {
+      background-color: var(--md-surface);
+      border: 1px solid var(--md-outline-variant);
+    }
+    .card-interactive { cursor: pointer; }
+    .card-interactive:hover { box-shadow: var(--md-elevation-2); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 16px 0;
+    }
+    .card-header-text { flex: 1; min-width: 0; }
+    .card-title   { font-family: var(--md-font-brand); font-size: var(--md-title-medium-size); font-weight: var(--md-title-medium-weight); line-height: var(--md-title-medium-line); color: var(--md-on-surface); }
+    .card-subtitle{ font-size: var(--md-body-medium-size); color: var(--md-on-surface-variant); line-height: var(--md-body-medium-line); margin-top: 2px; }
+    .card-body    { padding: 12px 16px 16px; color: var(--md-on-surface-variant); font-size: var(--md-body-medium-size); line-height: var(--md-body-medium-line); }
+    .card-actions { display: flex; align-items: center; gap: 8px; padding: 0 8px 12px; flex-wrap: wrap; }
+
+    /* ── Chips ── */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 32px;
+      padding: 0 16px;
+      border-radius: var(--md-shape-full);
+      font-family: var(--md-font-plain);
+      font-size: var(--md-label-large-size);
+      font-weight: var(--md-label-large-weight);
+      cursor: pointer;
+      border: none;
+      white-space: nowrap;
+      transition:
+        background-color var(--md-duration-short-4) var(--md-easing-standard),
+        box-shadow var(--md-duration-short-4) var(--md-easing-standard);
+    }
+    .chip-icon { width: 18px; height: 18px; }
+    .chip-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip-assist   { background-color: var(--md-surface-container-low); color: var(--md-on-surface); border: 1px solid var(--md-outline); }
+    .chip-assist:hover { background-color: var(--md-surface-container); box-shadow: var(--md-elevation-1); }
+    .chip-filter   { background-color: var(--md-surface-container-low); color: var(--md-on-surface-variant); border: 1px solid var(--md-outline); }
+    .chip-filter:hover { background-color: var(--md-surface-container); }
+    .chip-filter.selected { background-color: var(--md-secondary-container); color: var(--md-on-secondary-container); border-color: transparent; }
+    .chip-input    { background-color: var(--md-surface-container-low); color: var(--md-on-surface); border: 1px solid var(--md-outline); }
+    .chip-input:hover { background-color: var(--md-surface-container); }
+    .chip-elevated { background-color: var(--md-surface-container-low); color: var(--md-on-surface); box-shadow: var(--md-elevation-1); }
+    .chip-elevated:hover { box-shadow: var(--md-elevation-2); }
+    .chip-remove { font-size: 12px; opacity: 0.7; margin-left: 4px; line-height: 1; }
+
+    /* ── Badges ── */
+    .badge-wrapper { position: relative; display: inline-flex; }
+    .badge {
+      position: absolute;
+      top: 0; right: 0;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--md-error);
+      border: 1.5px solid var(--md-surface);
+    }
+    .badge-count {
+      position: absolute;
+      top: -4px; right: -6px;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-error);
+      color: var(--md-on-error);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 500;
+      white-space: nowrap;
+      border: 1.5px solid var(--md-surface);
+    }
+
+    /* ── Snackbar ── */
+    #kenai-snackbar-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: var(--md-z-toast);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      pointer-events: none;
+      width: max-content;
+      max-width: calc(100vw - 48px);
+    }
+    .kenai-snackbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 280px;
+      max-width: 560px;
+      padding: 12px 16px;
+      border-radius: var(--md-shape-extra-small);
+      background: var(--md-inverse-surface);
+      color: var(--md-inverse-on-surface);
+      box-shadow: var(--md-elevation-3);
+      font-size: var(--md-body-medium-size);
+      font-family: var(--md-font-plain);
+      pointer-events: auto;
+      animation: snack-in 300ms var(--md-easing-emphasized-decel) both;
+    }
+    .kenai-snackbar.removing {
+      animation: snack-out 200ms var(--md-easing-emphasized-accel) both;
+    }
+    .kenai-snackbar-text { flex: 1; }
+    .kenai-snackbar-action {
+      background: none; border: none; cursor: pointer;
+      color: var(--md-inverse-primary);
+      font-size: var(--md-label-large-size);
+      font-weight: var(--md-label-large-weight);
+      font-family: var(--md-font-plain);
+      padding: 4px 8px;
+      border-radius: var(--md-shape-full);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    @keyframes snack-in  { from { opacity:0; transform:translateY(20px) scale(0.95); } to { opacity:1; transform:translateY(0) scale(1); } }
+    @keyframes snack-out { from { opacity:1; transform:translateY(0) scale(1); } to { opacity:0; transform:translateY(8px) scale(0.95); } }
+
+    /* ── Scrim ── */
+    .scrim {
+      position: fixed;
+      inset: 0;
+      background: var(--md-scrim);
+      z-index: calc(var(--md-z-modal) - 1);
+      animation: scrim-in var(--md-duration-medium-2) var(--md-easing-standard) both;
+    }
+    @keyframes scrim-in { from { opacity:0; } to { opacity:1; } }
+
+    /* ── Theme toggle ── */
+    .kenai-theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      color: var(--md-on-surface-variant);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: background-color var(--md-duration-short-4) var(--md-easing-standard);
+    }
+    .kenai-theme-toggle:hover { background-color: var(--md-surface-container); }
+    [data-theme="light"] .icon-dark,
+    [data-theme="dark"]  .icon-light { display: none; }
+    [data-theme="light"] .icon-light,
+    [data-theme="dark"]  .icon-dark  { display: block; }
+    /* default (no attr) = light */
+    :root:not([data-theme]) .icon-dark  { display: none; }
+    :root:not([data-theme]) .icon-light { display: block; }
+
+    /* ── Progress bar class (wrapper) ── */
+    .progress-bar { display: block; }
+
+    /* ============================================================
+       index.css — Showcase-specific styles
+       ============================================================ */
+
+    /* ---- App Bar ---- */
+    .app-bar {
+      position: sticky;
+      top: 0;
+      z-index: var(--md-z-sticky);
+      background: color-mix(in srgb, var(--md-surface) 85%, transparent);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      border-bottom: 1px solid transparent;
+      transition:
+        background var(--md-duration-medium-2) var(--md-easing-standard),
+        border-color var(--md-duration-medium-2) var(--md-easing-standard),
+        box-shadow var(--md-duration-medium-2) var(--md-easing-standard);
+    }
+    .app-bar.scrolled {
+      border-color: var(--md-outline-variant);
+      box-shadow: var(--md-elevation-1);
+    }
+    .app-bar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      gap: 16px;
+    }
+    .app-bar-version {
+      line-height: 1;
+      padding: 3px 10px;
+    }
+    .app-bar-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .nav-link {
+      color: var(--md-on-surface-variant);
+      padding: 8px 12px;
+      border-radius: var(--md-shape-full);
+      transition:
+        color var(--md-duration-short-4) var(--md-easing-standard),
+        background-color var(--md-duration-short-4) var(--md-easing-standard);
+      position: relative;
+      white-space: nowrap;
+    }
+    .nav-link:hover {
+      color: var(--md-on-surface);
+      background: var(--md-surface-container);
+      opacity: 1;
+    }
+    .nav-link.active {
+      color: var(--md-primary);
+      background: var(--md-primary-container);
+    }
+    @media (max-width: 840px) { .app-bar-nav { display: none; } }
+    @media (min-width: 841px) { #mobileMenuBtn { display: none; } }
+
+    /* ---- Mobile Drawer ---- */
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      right: -320px;
+      width: 300px;
+      height: 100dvh;
+      background: var(--md-surface-container-low);
+      z-index: var(--md-z-modal);
+      padding: 24px;
+      transition: right var(--md-duration-medium-3) var(--md-easing-emphasized-decel);
+      overflow-y: auto;
+    }
+    .mobile-drawer.open { right: 0; }
+    .drawer-link {
+      display: block;
+      padding: 12px 16px;
+      border-radius: var(--md-shape-large);
+      color: var(--md-on-surface);
+      transition:
+        background-color var(--md-duration-short-4) var(--md-easing-standard),
+        color var(--md-duration-short-4) var(--md-easing-standard);
+    }
+    .drawer-link:hover { background: var(--md-surface-container-high); opacity: 1; }
+
+    /* ---- Hero ---- */
+    .hero {
+      position: relative;
+      padding: 96px 0 80px;
+      overflow: hidden;
+    }
+    .hero-bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, var(--md-outline-variant) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--md-outline-variant) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.3;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+    }
+    .hero-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      animation: blob-drift 12s ease-in-out infinite alternate;
+    }
+    .hero-blob-1 { width:500px; height:500px; background:var(--md-primary); top:-150px; left:-100px; animation-delay:0s; }
+    .hero-blob-2 { width:400px; height:400px; background:var(--md-tertiary); bottom:-100px; right:-80px; animation-delay:-6s; }
+    @keyframes blob-drift {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(40px,30px) scale(1.08); }
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--md-surface-container);
+      border: 1px solid var(--md-outline-variant);
+      border-radius: var(--md-shape-full);
+      padding: 6px 16px;
+      color: var(--md-on-surface-variant);
+      cursor: default;
+      animation: fade-up 0.6s var(--md-easing-emphasized-decel) both;
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--md-primary);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { transform:scale(1); opacity:1; }
+      50%      { transform:scale(1.5); opacity:0.6; }
+    }
+    .hero-title { margin-top: 24px; line-height: 1.05; animation: fade-up 0.7s var(--md-easing-emphasized-decel) 0.1s both; }
+    .hero-title-accent { color: var(--md-primary); position: relative; }
+    .hero-title-accent::after {
+      content: '';
+      position: absolute;
+      bottom: 4px; left: 0;
+      width: 100%; height: 4px;
+      background: var(--md-primary);
+      border-radius: var(--md-shape-full);
+      opacity: 0.3;
+    }
+    .hero-sub { margin-top: 20px; max-width: 560px; color: var(--md-on-surface-variant); animation: fade-up 0.7s var(--md-easing-emphasized-decel) 0.2s both; }
+    .hero-stats { animation: fade-up 0.7s var(--md-easing-emphasized-decel) 0.4s both; max-width: 480px; }
+    .hero-stat { text-align: center; padding: 20px; }
+    .hero-stat-number { line-height: 1; font-weight: 400; }
+    @keyframes fade-up {
+      from { opacity:0; transform:translateY(24px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ---- Section Styles ---- */
+    .doc-section { padding: 80px 0; }
+    .doc-section-alt { background: var(--md-surface-container-lowest); }
+    .section-header { max-width: 640px; animation: fade-up 0.5s var(--md-easing-emphasized-decel) both; }
+    .section-eyebrow { text-transform: uppercase; letter-spacing: 0.1em; display: inline-block; }
+    .section-divider { height: 1px; background: var(--md-outline-variant); margin: 48px 0; }
+
+    /* ---- Token Demos ---- */
+    .tokens-grid { --grid-min: 280px; }
+    .color-swatches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .swatch { height: 52px; border-radius: var(--md-shape-medium); display: flex; align-items: flex-end; padding: 6px 8px; }
+    .surface-levels { display: flex; flex-direction: column; gap: 4px; }
+    .surface-level { height: 36px; border-radius: var(--md-shape-small); display: flex; align-items: center; padding: 0 12px; border: 1px solid var(--md-outline-variant); }
+    .elev-box { width:52px; height:52px; border-radius:var(--md-shape-medium); display:flex; align-items:center; justify-content:center; border:1px solid var(--md-outline-variant); background: var(--md-surface-container-low); }
+    .motion-track { height:32px; background:var(--md-surface-container); border-radius:var(--md-shape-full); position:relative; overflow:hidden; }
+    .motion-ball { width:28px; height:28px; background:var(--md-primary); border-radius:50%; position:absolute; top:2px; left:2px; transition: left 300ms var(--md-easing-emphasized); }
+
+    /* ---- Typography Table ---- */
+    .type-table { display: flex; flex-direction: column; }
+    .type-row { display: grid; grid-template-columns: 160px 1fr 120px; gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--md-outline-variant); }
+    .type-row:last-child { border-bottom: none; }
+    .type-label { white-space: nowrap; padding-top: 4px; }
+    .type-meta  { text-align: right; white-space: nowrap; padding-top: 4px; }
+    .type-divider { height: 8px; background: var(--md-surface-container); margin: 4px -8px; border-radius: var(--md-shape-small); }
+    @media (max-width: 600px) {
+      .type-row { grid-template-columns: 1fr; gap: 4px; }
+      .type-meta { text-align: left; }
+    }
+
+    /* ---- Component Blocks ---- */
+    .component-block { padding: 32px 0; }
+    .demo-area { background:var(--md-surface-container-lowest); border:1px solid var(--md-outline-variant); border-radius:var(--md-shape-extra-large); padding:24px; display:flex; flex-direction:column; gap:0; }
+    .demo-row { display:flex; align-items:center; gap:16px; padding:16px 0; border-bottom:1px solid var(--md-outline-variant); flex-wrap:wrap; }
+    .demo-row:last-child  { border-bottom:none; padding-bottom:0; }
+    .demo-row:first-child { padding-top:0; }
+    .demo-label { min-width:120px; flex-shrink:0; }
+    @media (max-width:600px) {
+      .demo-row { flex-direction:column; align-items:flex-start; }
+      .demo-label { min-width:unset; }
+    }
+
+    /* ---- Progress Indicators ---- */
+    .progress-bar-track { height:4px; background:var(--md-surface-container-highest); border-radius:var(--md-shape-full); overflow:hidden; position:relative; }
+    .progress-bar-indicator { height:100%; background:var(--md-primary); border-radius:var(--md-shape-full); transition:width var(--md-duration-medium-2) var(--md-easing-standard); }
+    .progress-bar-indeterminate { position:absolute; top:0; left:-50%; width:50%; height:100%; background:var(--md-primary); border-radius:var(--md-shape-full); animation:progress-slide 1.5s var(--md-easing-standard) infinite; }
+    @keyframes progress-slide { 0%{left:-60%;width:40%} 50%{left:20%;width:70%} 100%{left:120%;width:40%} }
+
+    .progress-circular    { width:48px; height:48px; }
+    .progress-circular-sm { width:32px; height:32px; }
+    .progress-circular svg    { width:100%; height:100%; transform:rotate(-90deg); }
+    .progress-circular-track       { fill:none; stroke:var(--md-surface-container-highest); stroke-width:3.5; }
+    .progress-circular-indicator   { fill:none; stroke:var(--md-primary); stroke-width:3.5; stroke-linecap:round; stroke-dasharray:87.96; transition:stroke-dashoffset var(--md-duration-medium-2) var(--md-easing-standard); }
+    .progress-circular-indeterminate { fill:none; stroke:var(--md-primary); stroke-width:3.5; stroke-linecap:round; stroke-dasharray:87.96; stroke-dashoffset:60; animation:circular-spin 1.4s var(--md-easing-standard) infinite; }
+    @keyframes circular-spin { 0%{transform:rotate(0deg);stroke-dashoffset:75} 50%{transform:rotate(540deg);stroke-dashoffset:15} 100%{transform:rotate(1080deg);stroke-dashoffset:75} }
+    .progress-circular-sm svg { animation:spin-svg 1.4s linear infinite; }
+    @keyframes spin-svg { to { transform:rotate(360deg); } }
+    .progress-circular-sm .progress-circular-indeterminate { animation:none; stroke-dashoffset:55; }
+
+    /* ---- Divider ---- */
+    .divider { border:none; border-top:1px solid var(--md-outline-variant); }
+    .divider-inset { margin-left:72px; }
+
+    /* ---- Layout demos ---- */
+    .grid-demo-12 { display:grid; grid-template-columns:repeat(12,1fr); gap:8px; }
+    .grid-demo-cell { background:var(--md-primary-container); color:var(--md-on-primary-container); border-radius:var(--md-shape-small); display:flex; align-items:center; justify-content:center; min-height:40px; font-family:var(--md-font-plain); font-size:var(--md-label-medium-size); font-weight:500; }
+    .col-span-12 { grid-column:span 12; }
+    .col-span-6  { grid-column:span 6; }
+    .col-span-4  { grid-column:span 4; }
+    .col-span-3  { grid-column:span 3; }
+    .col-span-2  { grid-column:span 2; }
+
+    .spacing-item { background:var(--md-primary-container); border-radius:var(--md-shape-extra-small); position:relative; flex-shrink:0; }
+    .spacing-item span { position:absolute; bottom:calc(100% + 4px); left:50%; transform:translateX(-50%); font-size:10px; color:var(--md-on-surface-variant); font-family:var(--md-font-mono); white-space:nowrap; }
+
+    /* ---- Color Lab ---- */
+    .color-picker-input { width:44px; height:44px; border:none; border-radius:var(--md-shape-medium); cursor:pointer; padding:2px; background:var(--md-surface-container); }
+    .color-preset { width:36px; height:36px; border-radius:50%; border:3px solid transparent; cursor:pointer; transition:transform var(--md-duration-short-4) var(--md-easing-spring), border-color var(--md-duration-short-4) var(--md-easing-standard); position:relative; overflow:hidden; }
+    .color-preset:hover  { transform:scale(1.15); }
+    .color-preset.active { border-color:var(--md-on-surface); }
+    .palette-swatch { height:48px; border-radius:var(--md-shape-medium); display:flex; align-items:flex-end; padding:6px 10px; transition:background-color var(--md-duration-medium-2) var(--md-easing-standard); }
+    .color-palette-display { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+
+    /* ---- Footer ---- */
+    .site-footer { background:var(--md-surface-container-low); border-top:1px solid var(--md-outline-variant); padding:32px 0; }
+    .footer-inner { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+
+    /* ---- Scroll Reveal ---- */
+    .reveal { opacity:0; transform:translateY(20px); transition:opacity var(--md-duration-long-2) var(--md-easing-emphasized-decel), transform var(--md-duration-long-2) var(--md-easing-emphasized-decel); }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-delay-1 { transition-delay:0.05s; }
+    .reveal-delay-2 { transition-delay:0.10s; }
+    .reveal-delay-3 { transition-delay:0.15s; }
+    .reveal-delay-4 { transition-delay:0.20s; }
+
+    /* ---- Responsive tweaks ---- */
+    @media (max-width:600px) {
+      .hero { padding:64px 0 56px; }
+      .hero-title { font-size:2.5rem; line-height:1.1; }
+      .hero-stats  { max-width:100%; }
+      .hero-stats.grid-3 { grid-template-columns:repeat(3,1fr); }
+      .doc-section { padding:56px 0; }
+      .grid-demo-12 { grid-template-columns:repeat(6,1fr); }
+      .col-span-12 { grid-column:span 6; }
+      .col-span-6  { grid-column:span 6; }
+      .col-span-4  { grid-column:span 3; }
+      .col-span-3  { grid-column:span 3; }
+      .col-span-2  { grid-column:span 2; }
+    }
+  </style>
 </head>
 <body>
 
@@ -25,16 +942,17 @@
             <circle cx="19" cy="20" r="3" fill="var(--md-on-primary)" opacity="0.9"/>
           </svg>
         </div>
-        <span class="title-large" style="font-family: var(--md-font-brand); letter-spacing: -0.01em;">Kenai</span>
-        <span class="app-bar-version label-medium bg-primary-container text-on-primary rounded-full px-3 py-1">v0.2.0</span>
+        <span class="title-large" style="font-family:var(--md-font-brand);letter-spacing:-0.01em;">Kenai</span>
+        <span class="app-bar-version label-medium bg-primary-container text-on-primary rounded-full px-3 py-1"
+              style="background:var(--md-primary-container);color:var(--md-on-primary-container);">v0.2.0</span>
       </div>
 
       <nav class="app-bar-nav" id="desktopNav">
-        <a href="#tokens" class="nav-link label-large">Tokens</a>
+        <a href="#tokens"     class="nav-link label-large">Tokens</a>
         <a href="#typography" class="nav-link label-large">Typography</a>
         <a href="#components" class="nav-link label-large">Components</a>
-        <a href="#layout" class="nav-link label-large">Layout</a>
-        <a href="#color" class="nav-link label-large">Color</a>
+        <a href="#layout"     class="nav-link label-large">Layout</a>
+        <a href="#color"      class="nav-link label-large">Color</a>
       </nav>
 
       <div class="flex items-center gap-2">
@@ -141,8 +1059,6 @@
       </div>
 
       <div class="tokens-grid grid grid-auto mt-8">
-
-        <!-- Color tokens -->
         <div class="card card-outlined">
           <div class="card-header">
             <div class="card-header-text">
@@ -162,7 +1078,6 @@
           </div>
         </div>
 
-        <!-- Surface tokens -->
         <div class="card card-outlined">
           <div class="card-header">
             <div class="card-header-text">
@@ -181,7 +1096,6 @@
           </div>
         </div>
 
-        <!-- Shape tokens -->
         <div class="card card-outlined">
           <div class="card-header">
             <div class="card-header-text">
@@ -190,13 +1104,13 @@
             </div>
           </div>
           <div class="card-body">
-            <div class="shape-scale flex flex-wrap gap-3 items-end">
-              <div class="shape-box rounded-xs bg-primary-container" style="width:40px;height:40px;"></div>
-              <div class="shape-box rounded-sm bg-primary-container" style="width:44px;height:44px;"></div>
-              <div class="shape-box rounded-md bg-primary-container" style="width:48px;height:48px;"></div>
-              <div class="shape-box rounded-lg bg-primary-container" style="width:52px;height:52px;"></div>
-              <div class="shape-box rounded-xl bg-primary-container" style="width:56px;height:56px;"></div>
-              <div class="shape-box rounded-full bg-primary-container" style="width:56px;height:56px;"></div>
+            <div class="flex flex-wrap gap-3 items-end">
+              <div class="rounded-xs bg-primary-container" style="width:40px;height:40px;border-radius:var(--md-shape-extra-small)"></div>
+              <div class="bg-primary-container" style="width:44px;height:44px;border-radius:var(--md-shape-small)"></div>
+              <div class="bg-primary-container" style="width:48px;height:48px;border-radius:var(--md-shape-medium)"></div>
+              <div class="bg-primary-container" style="width:52px;height:52px;border-radius:var(--md-shape-large)"></div>
+              <div class="bg-primary-container" style="width:56px;height:56px;border-radius:var(--md-shape-extra-large)"></div>
+              <div class="bg-primary-container" style="width:56px;height:56px;border-radius:var(--md-shape-full)"></div>
             </div>
             <div class="flex flex-wrap gap-3 items-end mt-2">
               <span class="label-small text-on-surface-variant" style="width:40px;text-align:center">4px</span>
@@ -209,7 +1123,6 @@
           </div>
         </div>
 
-        <!-- Elevation tokens -->
         <div class="card card-outlined">
           <div class="card-header">
             <div class="card-header-text">
@@ -218,7 +1131,7 @@
             </div>
           </div>
           <div class="card-body">
-            <div class="elevation-demo flex flex-wrap gap-4 items-end">
+            <div class="flex flex-wrap gap-4 items-end">
               <div class="elev-box elevation-0"><span class="label-small text-on-surface-variant">0</span></div>
               <div class="elev-box elevation-1"><span class="label-small text-on-surface-variant">1</span></div>
               <div class="elev-box elevation-2"><span class="label-small text-on-surface-variant">2</span></div>
@@ -229,7 +1142,6 @@
           </div>
         </div>
 
-        <!-- Motion tokens -->
         <div class="card card-outlined col-span-full">
           <div class="card-header">
             <div class="card-header-text">
@@ -238,7 +1150,7 @@
             </div>
           </div>
           <div class="card-body">
-            <div class="motion-demo grid grid-auto-sm gap-3">
+            <div class="grid-auto-sm gap-3" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;">
               <button class="motion-btn btn btn-tonal ripple" data-duration="50"  data-easing="var(--md-easing-standard)">Short 1 · 50ms</button>
               <button class="motion-btn btn btn-tonal ripple" data-duration="150" data-easing="var(--md-easing-standard)">Short 3 · 150ms</button>
               <button class="motion-btn btn btn-tonal ripple" data-duration="300" data-easing="var(--md-easing-emphasized)">Medium 2 · 300ms</button>
@@ -250,7 +1162,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
@@ -266,82 +1177,25 @@
         <h2 class="headline-large mt-2">Typography</h2>
         <p class="body-large text-on-surface-variant mt-3 max-w-sm">Two type families — Google Sans for brand/display, Roboto for body — with 15 role classes covering Display, Headline, Title, Body, and Label.</p>
       </div>
-
       <div class="type-table mt-8">
-        <div class="type-row">
-          <div class="type-label label-medium text-on-surface-variant">Display Large</div>
-          <div class="type-sample display-large">Kenai</div>
-          <div class="type-meta label-small text-on-surface-variant">57 / 64 · 400</div>
-        </div>
-        <div class="type-row">
-          <div class="type-label label-medium text-on-surface-variant">Display Medium</div>
-          <div class="type-sample display-medium">Material 3</div>
-          <div class="type-meta label-small text-on-surface-variant">45 / 52 · 400</div>
-        </div>
-        <div class="type-row">
-          <div class="type-label label-medium text-on-surface-variant">Display Small</div>
-          <div class="type-sample display-small">Design System</div>
-          <div class="type-meta label-small text-on-surface-variant">36 / 44 · 400</div>
-        </div>
+        <div class="type-row"><div class="type-label label-medium text-on-surface-variant">Display Large</div><div class="type-sample display-large">Kenai</div><div class="type-meta label-small text-on-surface-variant">57 / 64 · 400</div></div>
+        <div class="type-row"><div class="type-label label-medium text-on-surface-variant">Display Medium</div><div class="type-sample display-medium">Material 3</div><div class="type-meta label-small text-on-surface-variant">45 / 52 · 400</div></div>
+        <div class="type-row"><div class="type-label label-medium text-on-surface-variant">Display Small</div><div class="type-sample display-small">Design System</div><div class="type-meta label-small text-on-surface-variant">36 / 44 · 400</div></div>
         <div class="type-divider"></div>
-        <div class="type-row">
-          <div class="type-label label-medium text-on-surface-variant">Headline Large</div>
-          <div class="type-sample headline-large">Color Tokens</div>
-          <div class="type-meta label-small text-on-surface-variant">32 / 40 · 400</div>
-        </div>
-        <div class="type-row">
-          <div class="type-label label-medium text-on-surface-variant">Headline Medium</div>
-          <div class="type-sample headline-medium">Motion Engine</div>
-          <div class="type-meta label-small text-on-surface-variant">28 / 36 · 400</div>
-        </div>
-        <div class="type-row">
-          <div class="type-label label-medium text-on-surface-variant">Headline Small</div>
-          <div class="type-sample headline-small">Ripple Effect</div>
-          <div class="type-meta label-small text-on-surface-variant">24 / 32 · 400</div>
-        </div>
+        <div class="type-row"><div class="type-label label-medium text-on-surface-variant">Headline Large</div><div class="type-sample headline-large">Color Tokens</div><div class="type-meta label-small text-on-surface-variant">32 / 40 · 400</div></div>
+        <div class="type-row"><div class="type-label label-medium text-on-surface-variant">Headline Medium</div><div class="type-sample headline-medium">Motion Engine</div><div class="type-meta label-small text-on-surface-variant">28 / 36 · 400</div></div>
+        <div class="type-row"><div class="type-label label-medium text-on-surface-variant">Headline Small</div><div class="type-sample headline-small">Ripple Effect</div><div class="type-meta label-small text-on-surface-variant">24 / 32 · 400</div></div>
         <div class="type-divider"></div>
-        <div class="type-row">
-          <div class="type-label label-medium text-on-surface-variant">Title Large</div>
-          <div class="type-sample title-large">Card Component</div>
-          <div class="type-meta label-small text-on-surface-variant">22 / 28 · 400</div>
-        </div>
-        <div class="type-row">
-          <div class="type-label label-medium text-on-surface-variant">Title Medium</div>
-          <div class="type-sample title-medium">Chip & Badge</div>
-          <div class="type-meta label-small text-on-surface-variant">16 / 24 · 500</div>
-        </div>
+        <div class="type-row"><div class="type-label label-medium text-on-surface-variant">Title Large</div><div class="type-sample title-large">Card Component</div><div class="type-meta label-small text-on-surface-variant">22 / 28 · 400</div></div>
+        <div class="type-row"><div class="type-label label-medium text-on-surface-variant">Title Medium</div><div class="type-sample title-medium">Chip & Badge</div><div class="type-meta label-small text-on-surface-variant">16 / 24 · 500</div></div>
         <div class="type-divider"></div>
-        <div class="type-row">
-          <div class="type-label label-medium text-on-surface-variant">Body Large</div>
-          <div class="type-sample body-large">The quick brown fox jumps over the lazy dog.</div>
-          <div class="type-meta label-small text-on-surface-variant">16 / 24 · 400</div>
-        </div>
-        <div class="type-row">
-          <div class="type-label label-medium text-on-surface-variant">Body Medium</div>
-          <div class="type-sample body-medium">The quick brown fox jumps over the lazy dog.</div>
-          <div class="type-meta label-small text-on-surface-variant">14 / 20 · 400</div>
-        </div>
-        <div class="type-row">
-          <div class="type-label label-medium text-on-surface-variant">Body Small</div>
-          <div class="type-sample body-small">The quick brown fox jumps over the lazy dog.</div>
-          <div class="type-meta label-small text-on-surface-variant">12 / 16 · 400</div>
-        </div>
+        <div class="type-row"><div class="type-label label-medium text-on-surface-variant">Body Large</div><div class="type-sample body-large">The quick brown fox jumps over the lazy dog.</div><div class="type-meta label-small text-on-surface-variant">16 / 24 · 400</div></div>
+        <div class="type-row"><div class="type-label label-medium text-on-surface-variant">Body Medium</div><div class="type-sample body-medium">The quick brown fox jumps over the lazy dog.</div><div class="type-meta label-small text-on-surface-variant">14 / 20 · 400</div></div>
+        <div class="type-row"><div class="type-label label-medium text-on-surface-variant">Body Small</div><div class="type-sample body-small">The quick brown fox jumps over the lazy dog.</div><div class="type-meta label-small text-on-surface-variant">12 / 16 · 400</div></div>
         <div class="type-divider"></div>
-        <div class="type-row">
-          <div class="type-label label-medium text-on-surface-variant">Label Large</div>
-          <div class="type-sample label-large">Button Label</div>
-          <div class="type-meta label-small text-on-surface-variant">14 / 20 · 500</div>
-        </div>
-        <div class="type-row">
-          <div class="type-label label-medium text-on-surface-variant">Label Medium</div>
-          <div class="type-sample label-medium">Chip Text</div>
-          <div class="type-meta label-small text-on-surface-variant">12 / 16 · 500</div>
-        </div>
-        <div class="type-row">
-          <div class="type-label label-medium text-on-surface-variant">Label Small</div>
-          <div class="type-sample label-small">Caption</div>
-          <div class="type-meta label-small text-on-surface-variant">11 / 16 · 500</div>
-        </div>
+        <div class="type-row"><div class="type-label label-medium text-on-surface-variant">Label Large</div><div class="type-sample label-large">Button Label</div><div class="type-meta label-small text-on-surface-variant">14 / 20 · 500</div></div>
+        <div class="type-row"><div class="type-label label-medium text-on-surface-variant">Label Medium</div><div class="type-sample label-medium">Chip Text</div><div class="type-meta label-small text-on-surface-variant">12 / 16 · 500</div></div>
+        <div class="type-row"><div class="type-label label-medium text-on-surface-variant">Label Small</div><div class="type-sample label-small">Caption</div><div class="type-meta label-small text-on-surface-variant">11 / 16 · 500</div></div>
       </div>
     </div>
   </section>
@@ -359,64 +1213,18 @@
       </div>
 
       <!-- BUTTONS -->
-      <div class="component-block" id="comp-buttons">
-        <div class="component-title flex items-center gap-3 mb-6">
+      <div class="component-block">
+        <div class="flex items-center gap-3 mb-6">
           <h3 class="headline-small">Buttons</h3>
           <span class="chip chip-assist label-small">Interactive</span>
         </div>
-
         <div class="demo-area">
-          <div class="demo-row">
-            <div class="demo-label label-medium text-on-surface-variant">Filled</div>
-            <div class="flex flex-wrap gap-3 items-center">
-              <button class="btn btn-filled ripple">Default</button>
-              <button class="btn btn-filled ripple btn-sm">Small</button>
-              <button class="btn btn-filled ripple btn-lg">Large</button>
-              <button class="btn btn-filled ripple">
-                <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                With Icon
-              </button>
-              <button class="btn btn-filled ripple" disabled>Disabled</button>
-            </div>
-          </div>
-          <div class="demo-row">
-            <div class="demo-label label-medium text-on-surface-variant">Tonal</div>
-            <div class="flex flex-wrap gap-3 items-center">
-              <button class="btn btn-tonal ripple">Default</button>
-              <button class="btn btn-tonal ripple btn-sm">Small</button>
-              <button class="btn btn-tonal ripple btn-lg">Large</button>
-            </div>
-          </div>
-          <div class="demo-row">
-            <div class="demo-label label-medium text-on-surface-variant">Outlined</div>
-            <div class="flex flex-wrap gap-3 items-center">
-              <button class="btn btn-outlined ripple">Default</button>
-              <button class="btn btn-outlined ripple btn-sm">Small</button>
-              <button class="btn btn-outlined ripple btn-lg">Large</button>
-            </div>
-          </div>
-          <div class="demo-row">
-            <div class="demo-label label-medium text-on-surface-variant">Text</div>
-            <div class="flex flex-wrap gap-3 items-center">
-              <button class="btn btn-text ripple">Default</button>
-              <button class="btn btn-text ripple btn-sm">Small</button>
-              <button class="btn btn-text ripple btn-lg">Large</button>
-            </div>
-          </div>
-          <div class="demo-row">
-            <div class="demo-label label-medium text-on-surface-variant">Elevated</div>
-            <div class="flex flex-wrap gap-3 items-center">
-              <button class="btn btn-elevated ripple">Default</button>
-              <button class="btn btn-elevated ripple btn-sm">Small</button>
-            </div>
-          </div>
-          <div class="demo-row">
-            <div class="demo-label label-medium text-on-surface-variant">Destructive</div>
-            <div class="flex flex-wrap gap-3 items-center">
-              <button class="btn btn-filled btn-error ripple">Delete</button>
-              <button class="btn btn-tonal btn-error ripple">Remove</button>
-            </div>
-          </div>
+          <div class="demo-row"><div class="demo-label label-medium text-on-surface-variant">Filled</div><div class="flex flex-wrap gap-3 items-center"><button class="btn btn-filled ripple">Default</button><button class="btn btn-filled ripple btn-sm">Small</button><button class="btn btn-filled ripple btn-lg">Large</button><button class="btn btn-filled ripple"><svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>With Icon</button><button class="btn btn-filled ripple" disabled>Disabled</button></div></div>
+          <div class="demo-row"><div class="demo-label label-medium text-on-surface-variant">Tonal</div><div class="flex flex-wrap gap-3 items-center"><button class="btn btn-tonal ripple">Default</button><button class="btn btn-tonal ripple btn-sm">Small</button><button class="btn btn-tonal ripple btn-lg">Large</button></div></div>
+          <div class="demo-row"><div class="demo-label label-medium text-on-surface-variant">Outlined</div><div class="flex flex-wrap gap-3 items-center"><button class="btn btn-outlined ripple">Default</button><button class="btn btn-outlined ripple btn-sm">Small</button><button class="btn btn-outlined ripple btn-lg">Large</button></div></div>
+          <div class="demo-row"><div class="demo-label label-medium text-on-surface-variant">Text</div><div class="flex flex-wrap gap-3 items-center"><button class="btn btn-text ripple">Default</button><button class="btn btn-text ripple btn-sm">Small</button><button class="btn btn-text ripple btn-lg">Large</button></div></div>
+          <div class="demo-row"><div class="demo-label label-medium text-on-surface-variant">Elevated</div><div class="flex flex-wrap gap-3 items-center"><button class="btn btn-elevated ripple">Default</button><button class="btn btn-elevated ripple btn-sm">Small</button></div></div>
+          <div class="demo-row"><div class="demo-label label-medium text-on-surface-variant">Destructive</div><div class="flex flex-wrap gap-3 items-center"><button class="btn btn-filled btn-error ripple">Delete</button><button class="btn btn-tonal btn-error ripple">Remove</button></div></div>
         </div>
       </div>
 
@@ -424,34 +1232,18 @@
 
       <!-- ICON BUTTONS -->
       <div class="component-block">
-        <div class="component-title flex items-center gap-3 mb-6">
-          <h3 class="headline-small">Icon Buttons</h3>
-        </div>
+        <div class="flex items-center gap-3 mb-6"><h3 class="headline-small">Icon Buttons</h3></div>
         <div class="demo-area">
           <div class="demo-row">
             <div class="demo-label label-medium text-on-surface-variant">Variants</div>
             <div class="flex flex-wrap gap-3 items-center">
-              <button class="icon-btn ripple" aria-label="Standard">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-              </button>
-              <button class="icon-btn icon-btn-filled ripple" aria-label="Filled">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-              </button>
-              <button class="icon-btn icon-btn-tonal ripple" aria-label="Tonal">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-              </button>
-              <button class="icon-btn icon-btn-outlined ripple" aria-label="Outlined">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-              </button>
-              <button class="icon-btn icon-btn-sm ripple" aria-label="Small">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-              </button>
-              <button class="icon-btn icon-btn-lg ripple" aria-label="Large">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-              </button>
-              <button class="icon-btn ripple" aria-pressed="true" aria-label="Toggled">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-              </button>
+              <button class="icon-btn ripple" aria-label="Standard"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+              <button class="icon-btn icon-btn-filled ripple" aria-label="Filled"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+              <button class="icon-btn icon-btn-tonal ripple" aria-label="Tonal"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+              <button class="icon-btn icon-btn-outlined ripple" aria-label="Outlined"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+              <button class="icon-btn icon-btn-sm ripple" aria-label="Small"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+              <button class="icon-btn icon-btn-lg ripple" aria-label="Large"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+              <button class="icon-btn ripple" aria-pressed="true" aria-label="Toggled"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
             </div>
           </div>
         </div>
@@ -461,43 +1253,24 @@
 
       <!-- FAB -->
       <div class="component-block">
-        <div class="component-title flex items-center gap-3 mb-6">
-          <h3 class="headline-small">Floating Action Button</h3>
-        </div>
+        <div class="flex items-center gap-3 mb-6"><h3 class="headline-small">Floating Action Button</h3></div>
         <div class="demo-area">
           <div class="demo-row">
             <div class="demo-label label-medium text-on-surface-variant">Sizes</div>
             <div class="flex flex-wrap gap-4 items-center">
-              <button class="fab fab-sm ripple" aria-label="Small FAB">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-              </button>
-              <button class="fab ripple" aria-label="FAB">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-              </button>
-              <button class="fab fab-lg ripple" aria-label="Large FAB">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-              </button>
-              <button class="fab fab-extended ripple">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                Create
-              </button>
+              <button class="fab fab-sm ripple" aria-label="Small FAB"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
+              <button class="fab ripple" aria-label="FAB"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
+              <button class="fab fab-lg ripple" aria-label="Large FAB"><svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
+              <button class="fab fab-extended ripple"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>Create</button>
             </div>
           </div>
           <div class="demo-row">
             <div class="demo-label label-medium text-on-surface-variant">Colors</div>
             <div class="flex flex-wrap gap-4 items-center">
-              <button class="fab ripple" aria-label="Primary">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              </button>
-              <button class="fab fab-surface ripple" aria-label="Surface">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              </button>
-              <button class="fab fab-secondary ripple" aria-label="Secondary">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              </button>
-              <button class="fab fab-tertiary ripple" aria-label="Tertiary">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              </button>
+              <button class="fab ripple"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+              <button class="fab fab-surface ripple"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+              <button class="fab fab-secondary ripple"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+              <button class="fab fab-tertiary ripple"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
             </div>
           </div>
         </div>
@@ -507,61 +1280,29 @@
 
       <!-- CARDS -->
       <div class="component-block">
-        <div class="component-title flex items-center gap-3 mb-6">
-          <h3 class="headline-small">Cards</h3>
-        </div>
+        <div class="flex items-center gap-3 mb-6"><h3 class="headline-small">Cards</h3></div>
         <div class="grid grid-3 gap-4">
           <div class="card card-elevated">
-            <div class="card-header">
-              <div class="card-header-text">
-                <div class="card-title">Elevated Card</div>
-                <div class="card-subtitle">Surface tint + elevation shadow</div>
-              </div>
-            </div>
+            <div class="card-header"><div class="card-header-text"><div class="card-title">Elevated Card</div><div class="card-subtitle">Surface tint + elevation shadow</div></div></div>
             <div class="card-body">A surface that floats above the background using box-shadow and a subtle primary tint overlay.</div>
-            <div class="card-actions">
-              <button class="btn btn-text ripple">Action</button>
-              <button class="btn btn-filled ripple">Primary</button>
-            </div>
+            <div class="card-actions"><button class="btn btn-text ripple">Action</button><button class="btn btn-filled ripple">Primary</button></div>
           </div>
-
           <div class="card card-filled">
-            <div class="card-header">
-              <div class="card-header-text">
-                <div class="card-title">Filled Card</div>
-                <div class="card-subtitle">Surface container highest</div>
-              </div>
-            </div>
+            <div class="card-header"><div class="card-header-text"><div class="card-title">Filled Card</div><div class="card-subtitle">Surface container highest</div></div></div>
             <div class="card-body">Uses the highest surface container color for distinction without elevation shadows.</div>
-            <div class="card-actions">
-              <button class="btn btn-text ripple">Action</button>
-              <button class="btn btn-tonal ripple">Primary</button>
-            </div>
+            <div class="card-actions"><button class="btn btn-text ripple">Action</button><button class="btn btn-tonal ripple">Primary</button></div>
           </div>
-
           <div class="card card-outlined">
-            <div class="card-header">
-              <div class="card-header-text">
-                <div class="card-title">Outlined Card</div>
-                <div class="card-subtitle">Border · No elevation</div>
-              </div>
-            </div>
+            <div class="card-header"><div class="card-header-text"><div class="card-title">Outlined Card</div><div class="card-subtitle">Border · No elevation</div></div></div>
             <div class="card-body">Defined by a visible border with no fill or shadow. Great for lists and data displays.</div>
-            <div class="card-actions">
-              <button class="btn btn-text ripple">Action</button>
-              <button class="btn btn-outlined ripple">Primary</button>
-            </div>
+            <div class="card-actions"><button class="btn btn-text ripple">Action</button><button class="btn btn-outlined ripple">Primary</button></div>
           </div>
-
           <div class="card card-elevated card-interactive ripple col-span-full">
             <div class="card-header">
               <div style="width:48px;height:48px;border-radius:var(--md-shape-medium);background:var(--md-primary-container);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--md-on-primary-container)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
               </div>
-              <div class="card-header-text">
-                <div class="card-title">Interactive Card</div>
-                <div class="card-subtitle">Click me · Hover state · Ripple effect</div>
-              </div>
+              <div class="card-header-text"><div class="card-title">Interactive Card</div><div class="card-subtitle">Click me · Hover state · Ripple effect</div></div>
               <button class="icon-btn ripple"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
             </div>
             <div class="card-body">This entire card is a clickable element with ripple feedback, hover state layer, and smooth elevation change.</div>
@@ -573,21 +1314,13 @@
 
       <!-- CHIPS -->
       <div class="component-block">
-        <div class="component-title flex items-center gap-3 mb-6">
-          <h3 class="headline-small">Chips</h3>
-        </div>
+        <div class="flex items-center gap-3 mb-6"><h3 class="headline-small">Chips</h3></div>
         <div class="demo-area">
           <div class="demo-row">
             <div class="demo-label label-medium text-on-surface-variant">Assist</div>
             <div class="chip-group">
-              <button class="chip chip-assist ripple">
-                <svg class="chip-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                Location
-              </button>
-              <button class="chip chip-assist ripple">
-                <svg class="chip-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-                People
-              </button>
+              <button class="chip chip-assist ripple"><svg class="chip-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Location</button>
+              <button class="chip chip-assist ripple"><svg class="chip-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>People</button>
               <button class="chip chip-assist ripple">Calendar</button>
             </div>
           </div>
@@ -604,25 +1337,16 @@
           <div class="demo-row">
             <div class="demo-label label-medium text-on-surface-variant">Input</div>
             <div class="chip-group" id="inputChips">
-              <button class="chip chip-input ripple">
-                React <span class="chip-remove">✕</span>
-              </button>
-              <button class="chip chip-input ripple">
-                TypeScript <span class="chip-remove">✕</span>
-              </button>
-              <button class="chip chip-input ripple">
-                CSS <span class="chip-remove">✕</span>
-              </button>
+              <button class="chip chip-input ripple">React <span class="chip-remove">✕</span></button>
+              <button class="chip chip-input ripple">TypeScript <span class="chip-remove">✕</span></button>
+              <button class="chip chip-input ripple">CSS <span class="chip-remove">✕</span></button>
             </div>
           </div>
           <div class="demo-row">
             <div class="demo-label label-medium text-on-surface-variant">Elevated</div>
             <div class="chip-group">
               <button class="chip chip-elevated ripple">Elevated</button>
-              <button class="chip chip-elevated ripple">
-                <svg class="chip-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                Featured
-              </button>
+              <button class="chip chip-elevated ripple"><svg class="chip-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Featured</button>
               <button class="chip chip-elevated ripple opacity-disabled">Disabled</button>
             </div>
           </div>
@@ -633,31 +1357,14 @@
 
       <!-- BADGES -->
       <div class="component-block">
-        <div class="component-title flex items-center gap-3 mb-6">
-          <h3 class="headline-small">Badges</h3>
-        </div>
+        <div class="flex items-center gap-3 mb-6"><h3 class="headline-small">Badges</h3></div>
         <div class="demo-area">
           <div class="demo-row">
-            <div class="demo-label label-medium text-on-surface-variant">Dot</div>
+            <div class="demo-label label-medium text-on-surface-variant">Dot & Count</div>
             <div class="flex flex-wrap gap-6 items-center">
-              <div class="badge-wrapper">
-                <button class="icon-btn ripple">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-                </button>
-                <span class="badge"></span>
-              </div>
-              <div class="badge-wrapper">
-                <button class="icon-btn ripple">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                </button>
-                <span class="badge-count label-small">3</span>
-              </div>
-              <div class="badge-wrapper">
-                <button class="icon-btn ripple">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-                </button>
-                <span class="badge-count label-small">99+</span>
-              </div>
+              <div class="badge-wrapper"><button class="icon-btn ripple"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg></button><span class="badge"></span></div>
+              <div class="badge-wrapper"><button class="icon-btn ripple"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></button><span class="badge-count label-small">3</span></div>
+              <div class="badge-wrapper"><button class="icon-btn ripple"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></button><span class="badge-count label-small">99+</span></div>
             </div>
           </div>
         </div>
@@ -665,19 +1372,13 @@
 
       <div class="section-divider"></div>
 
-      <!-- PROGRESS INDICATORS -->
+      <!-- PROGRESS -->
       <div class="component-block">
-        <div class="component-title flex items-center gap-3 mb-6">
-          <h3 class="headline-small">Progress Indicators</h3>
-        </div>
+        <div class="flex items-center gap-3 mb-6"><h3 class="headline-small">Progress Indicators</h3></div>
         <div class="demo-area">
           <div class="demo-row flex-col" style="align-items:flex-start;gap:16px;">
             <div class="demo-label label-medium text-on-surface-variant">Linear — Determinate</div>
-            <div class="progress-bar w-full" style="max-width:400px;">
-              <div class="progress-bar-track">
-                <div class="progress-bar-indicator" id="progressDet" style="width:65%"></div>
-              </div>
-            </div>
+            <div class="progress-bar w-full" style="max-width:400px;"><div class="progress-bar-track"><div class="progress-bar-indicator" id="progressDet" style="width:65%"></div></div></div>
             <div class="flex gap-2">
               <button class="btn btn-tonal btn-sm ripple" id="progMinus">−</button>
               <span class="label-medium self-center" id="progLabel">65%</span>
@@ -686,27 +1387,13 @@
           </div>
           <div class="demo-row flex-col" style="align-items:flex-start;gap:16px;">
             <div class="demo-label label-medium text-on-surface-variant">Linear — Indeterminate</div>
-            <div class="progress-bar w-full" style="max-width:400px;">
-              <div class="progress-bar-track">
-                <div class="progress-bar-indeterminate"></div>
-              </div>
-            </div>
+            <div class="progress-bar w-full" style="max-width:400px;"><div class="progress-bar-track"><div class="progress-bar-indeterminate"></div></div></div>
           </div>
           <div class="demo-row">
             <div class="demo-label label-medium text-on-surface-variant">Circular</div>
             <div class="flex gap-6 items-center">
-              <div class="progress-circular">
-                <svg viewBox="0 0 36 36">
-                  <circle class="progress-circular-track" cx="18" cy="18" r="14"/>
-                  <circle class="progress-circular-indicator" cx="18" cy="18" r="14" style="stroke-dashoffset: calc(87.96 - (87.96 * 65) / 100)"/>
-                </svg>
-              </div>
-              <div class="progress-circular progress-circular-sm">
-                <svg viewBox="0 0 36 36">
-                  <circle class="progress-circular-track" cx="18" cy="18" r="14"/>
-                  <circle class="progress-circular-indeterminate" cx="18" cy="18" r="14"/>
-                </svg>
-              </div>
+              <div class="progress-circular"><svg viewBox="0 0 36 36"><circle class="progress-circular-track" cx="18" cy="18" r="14"/><circle class="progress-circular-indicator" cx="18" cy="18" r="14" style="stroke-dashoffset: calc(87.96 - (87.96 * 65) / 100)"/></svg></div>
+              <div class="progress-circular progress-circular-sm"><svg viewBox="0 0 36 36"><circle class="progress-circular-track" cx="18" cy="18" r="14"/><circle class="progress-circular-indeterminate" cx="18" cy="18" r="14"/></svg></div>
             </div>
           </div>
         </div>
@@ -716,9 +1403,7 @@
 
       <!-- SNACKBAR -->
       <div class="component-block">
-        <div class="component-title flex items-center gap-3 mb-6">
-          <h3 class="headline-small">Snackbar</h3>
-        </div>
+        <div class="flex items-center gap-3 mb-6"><h3 class="headline-small">Snackbar</h3></div>
         <div class="demo-area">
           <div class="demo-row">
             <div class="demo-label label-medium text-on-surface-variant">Variants</div>
@@ -735,9 +1420,7 @@
 
       <!-- DIVIDER -->
       <div class="component-block">
-        <div class="component-title flex items-center gap-3 mb-6">
-          <h3 class="headline-small">Divider</h3>
-        </div>
+        <div class="flex items-center gap-3 mb-6"><h3 class="headline-small">Divider</h3></div>
         <div class="demo-area">
           <div class="body-medium text-on-surface-variant mb-3">Content above</div>
           <hr class="divider" />
@@ -746,7 +1429,6 @@
           <div class="body-medium text-on-surface-variant mt-3">Content below</div>
         </div>
       </div>
-
     </div>
   </section>
 
@@ -761,39 +1443,21 @@
         <h2 class="headline-large mt-2">Layout System</h2>
         <p class="body-large text-on-surface-variant mt-3 max-w-sm">Responsive 12-column grid with named breakpoints, auto-fit columns, and full utility coverage for flex and spacing.</p>
       </div>
-
       <div class="mt-8">
         <h4 class="title-medium mb-4">12-Column Grid</h4>
         <div class="grid-demo-12">
           <div class="col-span-12 grid-demo-cell">12</div>
-          <div class="col-span-6 grid-demo-cell">6</div>
-          <div class="col-span-6 grid-demo-cell">6</div>
-          <div class="col-span-4 grid-demo-cell">4</div>
-          <div class="col-span-4 grid-demo-cell">4</div>
-          <div class="col-span-4 grid-demo-cell">4</div>
-          <div class="col-span-3 grid-demo-cell">3</div>
-          <div class="col-span-3 grid-demo-cell">3</div>
-          <div class="col-span-3 grid-demo-cell">3</div>
-          <div class="col-span-3 grid-demo-cell">3</div>
-          <div class="col-span-2 grid-demo-cell">2</div>
-          <div class="col-span-2 grid-demo-cell">2</div>
-          <div class="col-span-2 grid-demo-cell">2</div>
-          <div class="col-span-2 grid-demo-cell">2</div>
-          <div class="col-span-2 grid-demo-cell">2</div>
-          <div class="col-span-2 grid-demo-cell">2</div>
+          <div class="col-span-6 grid-demo-cell">6</div><div class="col-span-6 grid-demo-cell">6</div>
+          <div class="col-span-4 grid-demo-cell">4</div><div class="col-span-4 grid-demo-cell">4</div><div class="col-span-4 grid-demo-cell">4</div>
+          <div class="col-span-3 grid-demo-cell">3</div><div class="col-span-3 grid-demo-cell">3</div><div class="col-span-3 grid-demo-cell">3</div><div class="col-span-3 grid-demo-cell">3</div>
+          <div class="col-span-2 grid-demo-cell">2</div><div class="col-span-2 grid-demo-cell">2</div><div class="col-span-2 grid-demo-cell">2</div><div class="col-span-2 grid-demo-cell">2</div><div class="col-span-2 grid-demo-cell">2</div><div class="col-span-2 grid-demo-cell">2</div>
         </div>
-
         <h4 class="title-medium mt-8 mb-4">Auto-fit Grid</h4>
-        <div class="grid grid-auto gap-3">
-          <div class="grid-demo-cell p-4">Auto 1</div>
-          <div class="grid-demo-cell p-4">Auto 2</div>
-          <div class="grid-demo-cell p-4">Auto 3</div>
-          <div class="grid-demo-cell p-4">Auto 4</div>
-          <div class="grid-demo-cell p-4">Auto 5</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;">
+          <div class="grid-demo-cell p-4">Auto 1</div><div class="grid-demo-cell p-4">Auto 2</div><div class="grid-demo-cell p-4">Auto 3</div><div class="grid-demo-cell p-4">Auto 4</div><div class="grid-demo-cell p-4">Auto 5</div>
         </div>
-
         <h4 class="title-medium mt-8 mb-4">Spacing Scale</h4>
-        <div class="spacing-demo flex flex-wrap gap-2 items-end">
+        <div class="flex flex-wrap gap-2 items-end" style="padding-top:24px;">
           <div class="spacing-item" style="width:4px;height:4px;"><span>1</span></div>
           <div class="spacing-item" style="width:8px;height:8px;"><span>2</span></div>
           <div class="spacing-item" style="width:12px;height:12px;"><span>3</span></div>
@@ -819,12 +1483,10 @@
         <h2 class="headline-large mt-2">Color Theming</h2>
         <p class="body-large text-on-surface-variant mt-3 max-w-sm">Generate a full M3 tonal palette from any seed color. The engine computes all required roles using perceptual lightness math.</p>
       </div>
-
       <div class="color-lab mt-8">
         <div class="card card-outlined p-6">
           <h4 class="title-large mb-2">Palette Generator</h4>
           <p class="body-medium text-on-surface-variant mb-5">Pick a seed color to dynamically recolor the entire page.</p>
-
           <div class="color-presets flex flex-wrap gap-3 mb-5" id="colorPresets">
             <button class="color-preset ripple" data-color="#1B6EF3" style="background:#1B6EF3" title="Pixel Blue"></button>
             <button class="color-preset ripple" data-color="#4CAF50" style="background:#4CAF50" title="Green"></button>
@@ -835,15 +1497,13 @@
             <button class="color-preset ripple" data-color="#795548" style="background:#795548" title="Brown"></button>
             <button class="color-preset ripple" data-color="#607D8B" style="background:#607D8B" title="Blue Grey"></button>
           </div>
-
           <div class="flex gap-3 items-center flex-wrap">
             <input type="color" id="seedColorPicker" class="color-picker-input" value="#1B6EF3" />
             <label class="label-medium text-on-surface-variant" for="seedColorPicker">Custom seed color</label>
             <button class="btn btn-text ripple" id="resetColorBtn">Reset to default</button>
           </div>
         </div>
-
-        <div class="color-live-preview mt-6 grid grid-auto gap-4">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;" class="mt-6">
           <div class="card card-elevated p-4">
             <div class="title-medium mb-2">Preview</div>
             <div class="flex flex-wrap gap-2 mb-4">
@@ -853,10 +1513,9 @@
             </div>
             <div class="chip-group">
               <button class="chip chip-filter ripple selected">Active</button>
-              <button class="chip ripple">Default</button>
+              <button class="chip chip-filter ripple">Default</button>
             </div>
           </div>
-
           <div class="card card-outlined p-4">
             <div class="color-palette-display">
               <div class="palette-swatch bg-primary"><span class="label-small text-on-primary">Primary</span></div>
@@ -878,13 +1537,11 @@
     <div class="container">
       <div class="footer-inner">
         <div class="flex items-center gap-3">
-          <div class="kenai-logo">
-            <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
-              <rect width="28" height="28" rx="8" fill="var(--md-primary)"/>
-              <path d="M7 14L11 10L15 14L19 8" stroke="var(--md-on-primary)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="19" cy="20" r="3" fill="var(--md-on-primary)" opacity="0.9"/>
-            </svg>
-          </div>
+          <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
+            <rect width="28" height="28" rx="8" fill="var(--md-primary)"/>
+            <path d="M7 14L11 10L15 14L19 8" stroke="var(--md-on-primary)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="19" cy="20" r="3" fill="var(--md-on-primary)" opacity="0.9"/>
+          </svg>
           <span class="title-medium">Kenai</span>
           <span class="label-small text-on-surface-variant">v0.2.0 · Material Design 3</span>
         </div>
@@ -893,7 +1550,352 @@
     </div>
   </footer>
 
-  <script src="kenai0_2_0.js"></script>
-  <script src="index.js"></script>
+  <!-- Snackbar container injected by JS -->
+
+  <script>
+    /* ============================================================
+       kenai0_2_0.js — Kenai Framework Core JS
+       ============================================================ */
+    (function (global) {
+      'use strict';
+
+      /* ── Ripple ── */
+      function initRipple(el) {
+        if (el._kenaiRipple) return;
+        el._kenaiRipple = true;
+        el.addEventListener('pointerdown', function (e) {
+          const rect = el.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height) * 2;
+          const x = e.clientX - rect.left - size / 2;
+          const y = e.clientY - rect.top  - size / 2;
+          const wave = document.createElement('span');
+          wave.className = 'ripple-wave';
+          wave.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px;opacity:0.12;`;
+          el.appendChild(wave);
+          wave.addEventListener('animationend', () => wave.remove());
+        });
+      }
+
+      function bindRipples() {
+        document.querySelectorAll('.ripple').forEach(initRipple);
+      }
+
+      /* ── Theme Toggle ── */
+      function initTheme() {
+        const saved = localStorage.getItem('kenai-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', saved);
+        document.querySelectorAll('[data-kenai-theme-toggle]').forEach(btn => {
+          btn.addEventListener('click', function () {
+            const current = document.documentElement.getAttribute('data-theme') || 'light';
+            const next = current === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('kenai-theme', next);
+            document.documentElement.dispatchEvent(new CustomEvent('kenai:themechange', { detail: { theme: next } }));
+          });
+        });
+      }
+
+      /* ── Scroll Lock ── */
+      const ScrollLock = {
+        lock()   { document.body.style.overflow = 'hidden'; },
+        unlock() { document.body.style.overflow = ''; }
+      };
+
+      /* ── Snackbar ── */
+      let snackContainer = null;
+      function getSnackContainer() {
+        if (!snackContainer) {
+          snackContainer = document.createElement('div');
+          snackContainer.id = 'kenai-snackbar-container';
+          document.body.appendChild(snackContainer);
+        }
+        return snackContainer;
+      }
+
+      const Snackbar = {
+        show(message, opts = {}) {
+          const { action, onAction, duration = 4000 } = opts;
+          const container = getSnackContainer();
+          const el = document.createElement('div');
+          el.className = 'kenai-snackbar';
+          const textEl = document.createElement('span');
+          textEl.className = 'kenai-snackbar-text';
+          textEl.textContent = message;
+          el.appendChild(textEl);
+          if (action) {
+            const btn = document.createElement('button');
+            btn.className = 'kenai-snackbar-action';
+            btn.textContent = action;
+            btn.addEventListener('click', () => {
+              dismiss();
+              if (onAction) onAction();
+            });
+            el.appendChild(btn);
+          }
+          container.appendChild(el);
+          initRipple(el);
+
+          function dismiss() {
+            el.classList.add('removing');
+            el.addEventListener('animationend', () => el.remove(), { once: true });
+          }
+          const timer = setTimeout(dismiss, duration);
+          el.addEventListener('click', () => { clearTimeout(timer); dismiss(); });
+          return { dismiss };
+        }
+      };
+
+      /* ── Color Palette Engine ── */
+      function hexToHsl(hex) {
+        let r = parseInt(hex.slice(1,3),16)/255;
+        let g = parseInt(hex.slice(3,5),16)/255;
+        let b = parseInt(hex.slice(5,7),16)/255;
+        const max = Math.max(r,g,b), min = Math.min(r,g,b);
+        let h, s, l = (max+min)/2;
+        if (max === min) { h = s = 0; }
+        else {
+          const d = max - min;
+          s = l > 0.5 ? d/(2-max-min) : d/(max+min);
+          switch(max){
+            case r: h=(g-b)/d+(g<b?6:0); break;
+            case g: h=(b-r)/d+2; break;
+            case b: h=(r-g)/d+4; break;
+          }
+          h /= 6;
+        }
+        return [h*360, s*100, l*100];
+      }
+
+      function hslToHex(h,s,l) {
+        s /= 100; l /= 100;
+        const a = s * Math.min(l, 1-l);
+        const f = n => {
+          const k = (n+h/30)%12;
+          const color = l - a*Math.max(Math.min(k-3,9-k,1),-1);
+          return Math.round(255*color).toString(16).padStart(2,'0');
+        };
+        return `#${f(0)}${f(8)}${f(4)}`;
+      }
+
+      const Color = {
+        applyPalette(hex) {
+          const [h, s] = hexToHsl(hex);
+          const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+          const root = document.documentElement;
+          if (isDark) {
+            root.style.setProperty('--md-primary',             hslToHex(h, Math.min(s,80), 75));
+            root.style.setProperty('--md-primary-container',   hslToHex(h, Math.min(s,60), 30));
+            root.style.setProperty('--md-on-primary',          hslToHex(h, Math.min(s,60), 15));
+            root.style.setProperty('--md-on-primary-container',hslToHex(h, Math.min(s,50), 90));
+            root.style.setProperty('--md-secondary',            hslToHex((h+30)%360, Math.max(s*0.4,20), 70));
+            root.style.setProperty('--md-secondary-container',  hslToHex((h+30)%360, Math.max(s*0.3,15), 30));
+            root.style.setProperty('--md-on-secondary-container',hslToHex((h+30)%360, Math.max(s*0.3,15), 90));
+            root.style.setProperty('--md-tertiary',             hslToHex((h+60)%360, Math.max(s*0.5,25), 75));
+            root.style.setProperty('--md-tertiary-container',   hslToHex((h+60)%360, Math.max(s*0.4,20), 30));
+          } else {
+            root.style.setProperty('--md-primary',             hslToHex(h, Math.min(s,80), 40));
+            root.style.setProperty('--md-primary-container',   hslToHex(h, Math.min(s,60), 92));
+            root.style.setProperty('--md-on-primary',          '#ffffff');
+            root.style.setProperty('--md-on-primary-container',hslToHex(h, Math.min(s,60), 12));
+            root.style.setProperty('--md-secondary',            hslToHex((h+30)%360, Math.max(s*0.4,20), 40));
+            root.style.setProperty('--md-secondary-container',  hslToHex((h+30)%360, Math.max(s*0.3,15), 90));
+            root.style.setProperty('--md-on-secondary-container',hslToHex((h+30)%360, Math.max(s*0.3,15), 12));
+            root.style.setProperty('--md-tertiary',             hslToHex((h+60)%360, Math.max(s*0.5,25), 38));
+            root.style.setProperty('--md-tertiary-container',   hslToHex((h+60)%360, Math.max(s*0.4,20), 90));
+          }
+        },
+        reset() {
+          const props = ['--md-primary','--md-primary-container','--md-on-primary','--md-on-primary-container',
+                         '--md-secondary','--md-secondary-container','--md-on-secondary-container',
+                         '--md-tertiary','--md-tertiary-container'];
+          props.forEach(p => document.documentElement.style.removeProperty(p));
+        }
+      };
+
+      /* ── Init ── */
+      function init() {
+        bindRipples();
+        initTheme();
+        // Observe for dynamically added ripple elements
+        const mo = new MutationObserver(bindRipples);
+        mo.observe(document.body, { childList: true, subtree: true });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+      global.KENAI = { Snackbar, Color, ScrollLock, bindRipples };
+
+    })(window);
+
+
+    /* ============================================================
+       index.js — Showcase Interactions
+       ============================================================ */
+    (function () {
+      'use strict';
+
+      /* ── Scroll-spy app bar ── */
+      const appBar = document.getElementById('appBar');
+      window.addEventListener('scroll', function () {
+        appBar.classList.toggle('scrolled', window.scrollY > 8);
+      }, { passive: true });
+
+      /* ── Nav active link ── */
+      const sections = document.querySelectorAll('.doc-section, .hero');
+      const navLinks = document.querySelectorAll('.nav-link');
+      function updateActiveLink() {
+        let current = '';
+        sections.forEach(sec => { if (window.scrollY >= sec.offsetTop - 120) current = sec.id || ''; });
+        navLinks.forEach(link => {
+          const href = link.getAttribute('href').replace('#', '');
+          link.classList.toggle('active', href === current);
+        });
+      }
+      window.addEventListener('scroll', updateActiveLink, { passive: true });
+      updateActiveLink();
+
+      /* ── Mobile drawer ── */
+      const drawer      = document.getElementById('mobileDrawer');
+      const drawerScrim = document.getElementById('drawerScrim');
+      const openBtn     = document.getElementById('mobileMenuBtn');
+      const closeBtn    = document.getElementById('closeDrawerBtn');
+      function openDrawer()  { drawer.classList.add('open'); drawerScrim.classList.remove('hidden'); drawer.removeAttribute('aria-hidden'); KENAI.ScrollLock.lock(); }
+      function closeDrawer() { drawer.classList.remove('open'); drawerScrim.classList.add('hidden'); drawer.setAttribute('aria-hidden','true'); KENAI.ScrollLock.unlock(); }
+      openBtn.addEventListener('click', openDrawer);
+      closeBtn.addEventListener('click', closeDrawer);
+      drawerScrim.addEventListener('click', closeDrawer);
+      drawer.querySelectorAll('.drawer-link').forEach(a => a.addEventListener('click', closeDrawer));
+
+      /* ── Scroll reveal ── */
+      document.querySelectorAll('.component-block, .demo-area, .card, .type-table, .tokens-grid, .color-lab, .grid-demo-12').forEach((el, i) => {
+        if (!el.classList.contains('reveal')) {
+          el.classList.add('reveal', 'reveal-delay-' + ((i % 4) + 1));
+        }
+      });
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); } });
+      }, { rootMargin: '0px 0px -60px 0px', threshold: 0.08 });
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      /* ── Hero stat counters ── */
+      function animateCount(el, target, suffix, duration) {
+        const start = performance.now();
+        function step(now) {
+          const p = Math.min((now - start) / duration, 1);
+          const ease = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(ease * target) + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+      const statObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const count = parseInt(el.dataset.count, 10);
+          const suffix = count === 0 ? 'KB' : count > 90 ? '+' : '';
+          animateCount(el, count, suffix, 1200);
+          statObserver.unobserve(el);
+        });
+      }, { threshold: 0.5 });
+      document.querySelectorAll('[data-count]').forEach(el => statObserver.observe(el));
+
+      /* ── Motion demos ── */
+      const motionBall = document.getElementById('motionBall');
+      let ballDir = false, ballLocked = false;
+      document.querySelectorAll('.motion-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+          if (ballLocked) return;
+          ballLocked = true;
+          const duration = parseInt(this.dataset.duration, 10);
+          motionBall.style.transition = `left ${duration}ms ${this.dataset.easing}`;
+          ballDir = !ballDir;
+          motionBall.style.left = ballDir ? 'calc(100% - 30px)' : '2px';
+          setTimeout(() => { ballLocked = false; }, duration + 50);
+        });
+      });
+
+      /* ── Filter chips ── */
+      const filterGroup = document.getElementById('filterChips');
+      if (filterGroup) {
+        filterGroup.addEventListener('click', e => {
+          const btn = e.target.closest('[data-filter]');
+          if (!btn) return;
+          filterGroup.querySelectorAll('[data-filter]').forEach(b => { b.classList.remove('selected'); b.removeAttribute('aria-pressed'); });
+          btn.classList.add('selected');
+          btn.setAttribute('aria-pressed', 'true');
+        });
+      }
+
+      /* ── Input chip remove ── */
+      const inputChipGroup = document.getElementById('inputChips');
+      if (inputChipGroup) {
+        inputChipGroup.addEventListener('click', e => {
+          const remove = e.target.closest('.chip-remove');
+          if (!remove) return;
+          const chip = remove.closest('.chip');
+          if (chip) { chip.style.cssText += 'transition:opacity 150ms ease,transform 150ms ease;opacity:0;transform:scale(0.8);'; setTimeout(() => chip.remove(), 160); }
+        });
+      }
+
+      /* ── Progress bar ── */
+      let progValue = 65;
+      const progBar   = document.getElementById('progressDet');
+      const progLabel = document.getElementById('progLabel');
+      function updateProg() { if (progBar) progBar.style.width = progValue + '%'; if (progLabel) progLabel.textContent = progValue + '%'; }
+      document.getElementById('progPlus') ?.addEventListener('click',  () => { progValue = Math.min(100, progValue + 10); updateProg(); });
+      document.getElementById('progMinus')?.addEventListener('click', () => { progValue = Math.max(0,   progValue - 10); updateProg(); });
+
+      /* ── Color palette ── */
+      const presets     = document.querySelectorAll('.color-preset');
+      const colorPicker = document.getElementById('seedColorPicker');
+      const resetBtn    = document.getElementById('resetColorBtn');
+      const activePreset = document.querySelector('.color-preset[data-color="#1B6EF3"]');
+
+      function applyColor(hex) { KENAI.Color.applyPalette(hex); if (colorPicker) colorPicker.value = hex; }
+
+      presets.forEach(btn => {
+        btn.addEventListener('click', function () {
+          presets.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          applyColor(this.dataset.color);
+          KENAI.Snackbar.show('Theme updated to ' + this.getAttribute('title') + '!', { duration: 2500 });
+        });
+      });
+      if (colorPicker) colorPicker.addEventListener('input', function () { presets.forEach(b => b.classList.remove('active')); applyColor(this.value); });
+      if (resetBtn) resetBtn.addEventListener('click', function () {
+        KENAI.Color.reset();
+        presets.forEach(b => b.classList.remove('active'));
+        if (activePreset) activePreset.classList.add('active');
+        if (colorPicker) colorPicker.value = '#1B6EF3';
+        KENAI.Snackbar.show('Reset to Pixel Blue.', { duration: 2000 });
+      });
+      if (activePreset) activePreset.classList.add('active');
+
+      document.documentElement.addEventListener('kenai:themechange', function () {
+        if (colorPicker && colorPicker.value !== '#1B6EF3') KENAI.Color.applyPalette(colorPicker.value);
+      });
+
+      /* ── Icon button toggle ── */
+      document.querySelectorAll('.icon-btn[aria-pressed]').forEach(btn => {
+        btn.addEventListener('click', function () {
+          this.setAttribute('aria-pressed', String(this.getAttribute('aria-pressed') !== 'true'));
+        });
+      });
+
+      /* ── Smooth scroll ── */
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', function (e) {
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        });
+      });
+
+    })();
+  </script>
 </body>
 </html>
