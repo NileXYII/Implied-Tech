@@ -1,209 +1,1911 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to Implied</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KENAI — Material Design 3 Framework</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet" />
+
   <style>
-    .splash-screen {
-      opacity: 0;
-      transform: scale(0.9);
+    /* ============================================================
+       KENAI — Material Design 3 CSS Framework
+       Version: 0.1.0
+    ============================================================ */
+
+    :root, [data-theme="light"] {
+      --md-primary:              #1B6EF3;
+      --md-on-primary:           #FFFFFF;
+      --md-primary-container:    #D8E3FF;
+      --md-on-primary-container: #001551;
+      --md-secondary:              #565F71;
+      --md-on-secondary:           #FFFFFF;
+      --md-secondary-container:    #DAE2F9;
+      --md-on-secondary-container: #131C2C;
+      --md-tertiary:              #715573;
+      --md-on-tertiary:           #FFFFFF;
+      --md-tertiary-container:    #FBD7FC;
+      --md-on-tertiary-container: #29132D;
+      --md-error:              #BA1A1A;
+      --md-on-error:           #FFFFFF;
+      --md-error-container:    #FFDAD6;
+      --md-on-error-container: #410002;
+      --md-background:         #F9F9FF;
+      --md-on-background:      #191C20;
+      --md-surface:            #F9F9FF;
+      --md-on-surface:         #191C20;
+      --md-surface-variant:    #E1E2EC;
+      --md-on-surface-variant: #44474F;
+      --md-surface-1: color-mix(in srgb, var(--md-primary) 5%,  var(--md-surface));
+      --md-surface-2: color-mix(in srgb, var(--md-primary) 8%,  var(--md-surface));
+      --md-surface-3: color-mix(in srgb, var(--md-primary) 11%, var(--md-surface));
+      --md-surface-4: color-mix(in srgb, var(--md-primary) 12%, var(--md-surface));
+      --md-surface-5: color-mix(in srgb, var(--md-primary) 14%, var(--md-surface));
+      --md-outline:         #74777F;
+      --md-outline-variant: #C4C6D0;
+      --md-inverse-surface:    #2E3036;
+      --md-inverse-on-surface: #F0F0F7;
+      --md-inverse-primary:    #ADC6FF;
+      --md-scrim:  #000000;
+      --md-shadow: #000000;
     }
 
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    [data-theme="dark"] {
+      --md-primary:              #ADC6FF;
+      --md-on-primary:           #002A77;
+      --md-primary-container:    #0047A8;
+      --md-on-primary-container: #D8E3FF;
+      --md-secondary:              #BEC6DC;
+      --md-on-secondary:           #283040;
+      --md-secondary-container:    #3E4758;
+      --md-on-secondary-container: #DAE2F9;
+      --md-tertiary:              #DEBCDF;
+      --md-on-tertiary:           #3F2844;
+      --md-tertiary-container:    #583E5B;
+      --md-on-tertiary-container: #FBD7FC;
+      --md-error:              #FFB4AB;
+      --md-on-error:           #690005;
+      --md-error-container:    #93000A;
+      --md-on-error-container: #FFDAD6;
+      --md-background:         #111318;
+      --md-on-background:      #E2E2E9;
+      --md-surface:            #111318;
+      --md-on-surface:         #E2E2E9;
+      --md-surface-variant:    #44474F;
+      --md-on-surface-variant: #C4C6D0;
+      --md-surface-1: color-mix(in srgb, var(--md-primary) 5%,  var(--md-surface));
+      --md-surface-2: color-mix(in srgb, var(--md-primary) 8%,  var(--md-surface));
+      --md-surface-3: color-mix(in srgb, var(--md-primary) 11%, var(--md-surface));
+      --md-surface-4: color-mix(in srgb, var(--md-primary) 12%, var(--md-surface));
+      --md-surface-5: color-mix(in srgb, var(--md-primary) 14%, var(--md-surface));
+      --md-outline:         #8E9099;
+      --md-outline-variant: #44474F;
+      --md-inverse-surface:    #E2E2E9;
+      --md-inverse-on-surface: #2E3036;
+      --md-inverse-primary:    #1B6EF3;
+      --md-scrim:  #000000;
+      --md-shadow: #000000;
     }
 
-    .animated-bg {
-      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
+    :root {
+      --md-font-brand:  'Google Sans Display', 'Google Sans', sans-serif;
+      --md-font-plain:  'Roboto', sans-serif;
+      --md-font-mono:   'Roboto Mono', monospace;
+
+      --md-display-large-size:    3.5625rem;
+      --md-display-large-line:    4rem;
+      --md-display-large-weight:  400;
+      --md-display-large-tracking: -0.015625rem;
+      --md-display-medium-size:   2.8125rem;
+      --md-display-medium-line:   3.25rem;
+      --md-display-medium-weight: 400;
+      --md-display-medium-tracking: 0;
+      --md-display-small-size:    2.25rem;
+      --md-display-small-line:    2.75rem;
+      --md-display-small-weight:  400;
+      --md-display-small-tracking: 0;
+
+      --md-headline-large-size:    2rem;
+      --md-headline-large-line:    2.5rem;
+      --md-headline-large-weight:  400;
+      --md-headline-large-tracking: 0;
+      --md-headline-medium-size:   1.75rem;
+      --md-headline-medium-line:   2.25rem;
+      --md-headline-medium-weight: 400;
+      --md-headline-medium-tracking: 0;
+      --md-headline-small-size:    1.5rem;
+      --md-headline-small-line:    2rem;
+      --md-headline-small-weight:  400;
+      --md-headline-small-tracking: 0;
+
+      --md-title-large-size:    1.375rem;
+      --md-title-large-line:    1.75rem;
+      --md-title-large-weight:  400;
+      --md-title-large-tracking: 0;
+      --md-title-medium-size:   1rem;
+      --md-title-medium-line:   1.5rem;
+      --md-title-medium-weight: 500;
+      --md-title-medium-tracking: 0.009375rem;
+      --md-title-small-size:    0.875rem;
+      --md-title-small-line:    1.25rem;
+      --md-title-small-weight:  500;
+      --md-title-small-tracking: 0.00625rem;
+
+      --md-body-large-size:    1rem;
+      --md-body-large-line:    1.5rem;
+      --md-body-large-weight:  400;
+      --md-body-large-tracking: 0.03125rem;
+      --md-body-medium-size:   0.875rem;
+      --md-body-medium-line:   1.25rem;
+      --md-body-medium-weight: 400;
+      --md-body-medium-tracking: 0.015625rem;
+      --md-body-small-size:    0.75rem;
+      --md-body-small-line:    1rem;
+      --md-body-small-weight:  400;
+      --md-body-small-tracking: 0.025rem;
+
+      --md-label-large-size:    0.875rem;
+      --md-label-large-line:    1.25rem;
+      --md-label-large-weight:  500;
+      --md-label-large-tracking: 0.00625rem;
+      --md-label-medium-size:   0.75rem;
+      --md-label-medium-line:   1rem;
+      --md-label-medium-weight: 500;
+      --md-label-medium-tracking: 0.03125rem;
+      --md-label-small-size:    0.6875rem;
+      --md-label-small-line:    1rem;
+      --md-label-small-weight:  500;
+      --md-label-small-tracking: 0.03125rem;
+
+      --md-shape-none:        0px;
+      --md-shape-extra-small: 4px;
+      --md-shape-small:       8px;
+      --md-shape-medium:      12px;
+      --md-shape-large:       16px;
+      --md-shape-extra-large: 28px;
+      --md-shape-full:        9999px;
+
+      --md-elevation-0: none;
+      --md-elevation-1: 0px 1px 2px rgba(0,0,0,.3),  0px 1px 3px 1px rgba(0,0,0,.15);
+      --md-elevation-2: 0px 1px 2px rgba(0,0,0,.3),  0px 2px 6px 2px rgba(0,0,0,.15);
+      --md-elevation-3: 0px 4px 8px 3px rgba(0,0,0,.15), 0px 1px 3px rgba(0,0,0,.3);
+      --md-elevation-4: 0px 6px 10px 4px rgba(0,0,0,.15), 0px 2px 3px rgba(0,0,0,.3);
+      --md-elevation-5: 0px 8px 12px 6px rgba(0,0,0,.15), 0px 4px 4px rgba(0,0,0,.3);
+
+      --md-duration-short-1:  50ms;
+      --md-duration-short-2:  100ms;
+      --md-duration-short-3:  150ms;
+      --md-duration-short-4:  200ms;
+      --md-duration-medium-1: 250ms;
+      --md-duration-medium-2: 300ms;
+      --md-duration-medium-3: 350ms;
+      --md-duration-medium-4: 400ms;
+      --md-duration-long-1:   450ms;
+      --md-duration-long-2:   500ms;
+      --md-duration-long-3:   550ms;
+      --md-duration-long-4:   600ms;
+
+      --md-easing-standard:         cubic-bezier(0.2, 0, 0, 1);
+      --md-easing-standard-decel:   cubic-bezier(0, 0, 0, 1);
+      --md-easing-emphasized-decel: cubic-bezier(0.05, 0.7, 0.1, 1);
+      --md-easing-legacy:           cubic-bezier(0.4, 0, 0.2, 1);
+
+      --md-spacing-1:  4px;
+      --md-spacing-2:  8px;
+      --md-spacing-3:  12px;
+      --md-spacing-4:  16px;
+      --md-spacing-5:  20px;
+      --md-spacing-6:  24px;
+      --md-spacing-7:  28px;
+      --md-spacing-8:  32px;
+      --md-spacing-9:  36px;
+      --md-spacing-10: 40px;
+      --md-spacing-12: 48px;
+      --md-spacing-14: 56px;
+      --md-spacing-16: 64px;
     }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
     }
 
-    .float {
-      animation: float 3s ease-in-out infinite;
+    body {
+      background-color: var(--md-background);
+      color: var(--md-on-background);
+      font-family: var(--md-font-plain);
+      font-size: var(--md-body-large-size);
+      line-height: var(--md-body-large-line);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100dvh;
+      transition: background-color var(--md-duration-medium-2) var(--md-easing-standard),
+                  color var(--md-duration-medium-2) var(--md-easing-standard);
     }
 
-    .glow {
-      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+    img, svg { display: block; max-width: 100%; }
+    input, button, textarea, select { font: inherit; }
+    ul, ol { list-style: none; }
+    a { color: var(--md-primary); text-decoration: none; transition: opacity var(--md-duration-short-3) var(--md-easing-standard); }
+    a:hover { opacity: 0.8; }
+    button { cursor: pointer; border: none; background: none; }
+    hr { border: none; border-top: 1px solid var(--md-outline-variant); margin: var(--md-spacing-4) 0; }
+    code, kbd, pre { font-family: var(--md-font-mono); font-size: 0.875em; }
+    pre { background: var(--md-surface-variant); color: var(--md-on-surface-variant); padding: var(--md-spacing-4); border-radius: var(--md-shape-medium); overflow-x: auto; }
+    :focus-visible { outline: 3px solid var(--md-primary); outline-offset: 2px; border-radius: var(--md-shape-extra-small); }
+    ::selection { background: var(--md-primary-container); color: var(--md-on-primary-container); }
+
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--md-outline-variant); border-radius: var(--md-shape-full); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--md-outline); }
+
+    /* Typography */
+    .display-large  { font-family: var(--md-font-brand); font-size: var(--md-display-large-size); line-height: var(--md-display-large-line); font-weight: 400; letter-spacing: var(--md-display-large-tracking); }
+    .display-medium { font-family: var(--md-font-brand); font-size: var(--md-display-medium-size); line-height: var(--md-display-medium-line); font-weight: 400; }
+    .display-small  { font-family: var(--md-font-brand); font-size: var(--md-display-small-size); line-height: var(--md-display-small-line); font-weight: 400; }
+    .headline-large  { font-family: var(--md-font-brand); font-size: var(--md-headline-large-size); line-height: var(--md-headline-large-line); font-weight: 400; }
+    .headline-medium { font-family: var(--md-font-brand); font-size: var(--md-headline-medium-size); line-height: var(--md-headline-medium-line); font-weight: 400; }
+    .headline-small  { font-family: var(--md-font-brand); font-size: var(--md-headline-small-size); line-height: var(--md-headline-small-line); font-weight: 400; }
+    .title-large   { font-family: var(--md-font-brand); font-size: var(--md-title-large-size); line-height: var(--md-title-large-line); font-weight: 400; }
+    .title-medium  { font-family: var(--md-font-plain); font-size: var(--md-title-medium-size); line-height: var(--md-title-medium-line); font-weight: 500; letter-spacing: var(--md-title-medium-tracking); }
+    .title-small   { font-family: var(--md-font-plain); font-size: var(--md-title-small-size); line-height: var(--md-title-small-line); font-weight: 500; }
+    .body-large    { font-size: var(--md-body-large-size); line-height: var(--md-body-large-line); font-weight: 400; letter-spacing: var(--md-body-large-tracking); }
+    .body-medium   { font-size: var(--md-body-medium-size); line-height: var(--md-body-medium-line); font-weight: 400; }
+    .body-small    { font-size: var(--md-body-small-size); line-height: var(--md-body-small-line); font-weight: 400; }
+    .label-large   { font-size: var(--md-label-large-size); line-height: var(--md-label-large-line); font-weight: 500; letter-spacing: var(--md-label-large-tracking); }
+    .label-medium  { font-size: var(--md-label-medium-size); line-height: var(--md-label-medium-line); font-weight: 500; letter-spacing: var(--md-label-medium-tracking); }
+    .label-small   { font-size: var(--md-label-small-size); line-height: var(--md-label-small-line); font-weight: 500; }
+
+    h1 { font-family: var(--md-font-brand); font-size: var(--md-headline-large-size); line-height: var(--md-headline-large-line); font-weight: 400; }
+    h2 { font-family: var(--md-font-brand); font-size: var(--md-headline-medium-size); line-height: var(--md-headline-medium-line); font-weight: 400; }
+    h3 { font-family: var(--md-font-brand); font-size: var(--md-headline-small-size); line-height: var(--md-headline-small-line); font-weight: 400; }
+    h4 { font-family: var(--md-font-brand); font-size: var(--md-title-large-size); line-height: var(--md-title-large-line); font-weight: 400; }
+    h5 { font-family: var(--md-font-plain); font-size: var(--md-title-medium-size); line-height: var(--md-title-medium-line); font-weight: 500; }
+    h6 { font-family: var(--md-font-plain); font-size: var(--md-title-small-size); line-height: var(--md-title-small-line); font-weight: 500; }
+
+    /* Theme Toggle */
+    .kenai-theme-toggle {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 48px; height: 48px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-surface-variant);
+      color: var(--md-on-surface-variant);
+      cursor: pointer; border: none;
+      transition: background-color var(--md-duration-short-4) var(--md-easing-standard),
+                  color var(--md-duration-short-4) var(--md-easing-standard),
+                  transform var(--md-duration-short-3) var(--md-easing-standard);
+    }
+    .kenai-theme-toggle:hover { background: var(--md-surface-3); }
+    .kenai-theme-toggle:active { transform: scale(0.92); }
+    .kenai-theme-toggle .icon-light { display: none; }
+    .kenai-theme-toggle .icon-dark  { display: block; }
+    [data-theme="dark"] .kenai-theme-toggle .icon-light { display: block; }
+    [data-theme="dark"] .kenai-theme-toggle .icon-dark  { display: none; }
+
+    /* Utilities */
+    .text-primary            { color: var(--md-primary); }
+    .text-secondary          { color: var(--md-secondary); }
+    .text-tertiary           { color: var(--md-tertiary); }
+    .text-error              { color: var(--md-error); }
+    .text-on-surface         { color: var(--md-on-surface); }
+    .text-on-surface-variant { color: var(--md-on-surface-variant); }
+
+    .bg-surface          { background-color: var(--md-surface); }
+    .bg-surface-variant  { background-color: var(--md-surface-variant); }
+    .bg-surface-1        { background-color: var(--md-surface-1); }
+    .bg-surface-2        { background-color: var(--md-surface-2); }
+    .bg-primary-container   { background-color: var(--md-primary-container); }
+    .bg-secondary-container { background-color: var(--md-secondary-container); }
+    .bg-tertiary-container  { background-color: var(--md-tertiary-container); }
+    .bg-error-container     { background-color: var(--md-error-container); }
+
+    .rounded-xs    { border-radius: var(--md-shape-extra-small); }
+    .rounded-sm    { border-radius: var(--md-shape-small); }
+    .rounded-md    { border-radius: var(--md-shape-medium); }
+    .rounded-lg    { border-radius: var(--md-shape-large); }
+    .rounded-xl    { border-radius: var(--md-shape-extra-large); }
+    .rounded-full  { border-radius: var(--md-shape-full); }
+
+    .elevation-1 { box-shadow: var(--md-elevation-1); background-color: var(--md-surface-1); }
+    .elevation-2 { box-shadow: var(--md-elevation-2); background-color: var(--md-surface-2); }
+    .elevation-3 { box-shadow: var(--md-elevation-3); background-color: var(--md-surface-3); }
+
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .flex-wrap { flex-wrap: wrap; }
+    .items-center { align-items: center; }
+    .justify-center { justify-content: center; }
+    .justify-between { justify-content: space-between; }
+    .flex-1 { flex: 1; }
+    .gap-2 { gap: var(--md-spacing-2); }
+    .gap-3 { gap: var(--md-spacing-3); }
+    .gap-4 { gap: var(--md-spacing-4); }
+    .gap-6 { gap: var(--md-spacing-6); }
+    .grid { display: grid; }
+    .grid-auto { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+    .w-full { width: 100%; }
+    .container { width: 100%; max-width: 1200px; margin-inline: auto; padding-inline: var(--md-spacing-4); }
+    .max-w-md { max-width: 840px; }
+    .mx-auto { margin-inline: auto; }
+    .p-4 { padding: var(--md-spacing-4); }
+    .p-6 { padding: var(--md-spacing-6); }
+    .px-4 { padding-inline: var(--md-spacing-4); }
+    .px-6 { padding-inline: var(--md-spacing-6); }
+    .py-2 { padding-block: var(--md-spacing-2); }
+    .py-3 { padding-block: var(--md-spacing-3); }
+    .py-4 { padding-block: var(--md-spacing-4); }
+
+    .text-center { text-align: center; }
+    .opacity-disabled { opacity: 0.38; pointer-events: none; }
+
+    .divider { height: 1px; background-color: var(--md-outline-variant); border: none; margin: 0; }
+
+    .state-layer { position: relative; overflow: hidden; }
+    .state-layer::after {
+      content: ''; position: absolute; inset: 0;
+      background: currentColor; opacity: 0;
+      transition: opacity var(--md-duration-short-3) var(--md-easing-standard);
+      pointer-events: none; border-radius: inherit;
+    }
+    .state-layer:hover::after  { opacity: 0.08; }
+    .state-layer:active::after { opacity: 0.12; }
+
+    .ripple { position: relative; overflow: hidden; }
+
+    /* ============================================================
+       KENAI COMPONENT LIBRARY
+    ============================================================ */
+
+    /* --- Top App Bar --- */
+    .top-app-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--md-spacing-1);
+      padding: var(--md-spacing-2) var(--md-spacing-4);
+      height: 64px;
+      background-color: var(--md-surface);
+      border-bottom: 1px solid var(--md-outline-variant);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: background-color var(--md-duration-medium-2) var(--md-easing-standard),
+                  box-shadow var(--md-duration-medium-2) var(--md-easing-standard);
+    }
+    .top-app-bar.scrolled {
+      background-color: var(--md-surface-2);
+      box-shadow: var(--md-elevation-2);
+    }
+    .top-app-bar-title {
+      font-family: var(--md-font-brand);
+      font-size: var(--md-title-large-size);
+      line-height: var(--md-title-large-line);
+      font-weight: 400;
+      color: var(--md-on-surface);
+      flex: 1;
     }
 
-    .social-icon {
-      transition: all 0.3s ease;
-    }
-
-    .social-icon:hover {
-      transform: translateY(-5px) scale(1.1);
-      filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9));
-    }
-
-    .loader {
-      width: 100%;
-      height: 3px;
-      background: rgba(255, 255, 255, 0.2);
-      position: fixed;
-      bottom: 0;
-      left: 0;
-    }
-
-    .loader-bar {
-      height: 100%;
-      background: white;
-      width: 0%;
-      transition: width 0.5s ease;
-    }
-
-    .button-shine {
+    /* --- Buttons --- */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: var(--md-spacing-2);
+      padding: 10px 24px;
+      border-radius: var(--md-shape-full);
+      font-family: var(--md-font-plain);
+      font-size: var(--md-label-large-size);
+      line-height: var(--md-label-large-line);
+      font-weight: var(--md-label-large-weight);
+      letter-spacing: var(--md-label-large-tracking);
+      cursor: pointer; border: none;
+      transition: box-shadow var(--md-duration-short-4) var(--md-easing-standard),
+                  background-color var(--md-duration-short-4) var(--md-easing-standard);
+      text-decoration: none;
+      white-space: nowrap;
+      user-select: none;
       position: relative;
       overflow: hidden;
     }
 
-    .button-shine::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        to right,
-        transparent,
-        rgba(255, 255, 255, 0.3),
-        transparent
-      );
-      transform: rotate(45deg);
-      transition: all 0.5s;
+    .btn-filled {
+      background: var(--md-primary);
+      color: var(--md-on-primary);
+    }
+    .btn-filled:hover { box-shadow: var(--md-elevation-1); }
+
+    .btn-filled-tonal {
+      background: var(--md-secondary-container);
+      color: var(--md-on-secondary-container);
     }
 
-    .button-shine:hover::after {
-      transform: rotate(45deg) translate(100%, 100%);
+    .btn-outlined {
+      background: transparent;
+      color: var(--md-primary);
+      border: 1px solid var(--md-outline);
+    }
+
+    .btn-text {
+      background: transparent;
+      color: var(--md-primary);
+      padding-inline: 12px;
+    }
+
+    .btn-elevated {
+      background: var(--md-surface-1);
+      color: var(--md-primary);
+      box-shadow: var(--md-elevation-1);
+    }
+    .btn-elevated:hover { box-shadow: var(--md-elevation-2); }
+
+    /* FAB */
+    .fab {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 56px; height: 56px;
+      border-radius: var(--md-shape-large);
+      background: var(--md-primary-container);
+      color: var(--md-on-primary-container);
+      box-shadow: var(--md-elevation-3);
+      cursor: pointer; border: none;
+      transition: box-shadow var(--md-duration-short-4) var(--md-easing-standard),
+                  transform var(--md-duration-short-3) var(--md-easing-standard);
+      position: relative; overflow: hidden;
+    }
+    .fab:hover { box-shadow: var(--md-elevation-4); }
+    .fab:active { transform: scale(0.95); box-shadow: var(--md-elevation-3); }
+
+    .fab-small { width: 40px; height: 40px; border-radius: var(--md-shape-medium); }
+    .fab-large { width: 96px; height: 96px; border-radius: var(--md-shape-extra-large); }
+
+    /* Extended FAB */
+    .fab-extended {
+      display: inline-flex; align-items: center; gap: var(--md-spacing-3);
+      padding: 0 20px; height: 56px;
+      border-radius: var(--md-shape-large);
+      background: var(--md-primary-container);
+      color: var(--md-on-primary-container);
+      box-shadow: var(--md-elevation-3);
+      font-size: var(--md-label-large-size);
+      font-weight: var(--md-label-large-weight);
+      cursor: pointer; border: none;
+      transition: box-shadow var(--md-duration-short-4) var(--md-easing-standard);
+      position: relative; overflow: hidden;
+    }
+    .fab-extended:hover { box-shadow: var(--md-elevation-4); }
+
+    /* Icon Button */
+    .icon-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 48px; height: 48px;
+      border-radius: var(--md-shape-full);
+      color: var(--md-on-surface-variant);
+      cursor: pointer; border: none;
+      background: transparent;
+      transition: background-color var(--md-duration-short-4) var(--md-easing-standard);
+      position: relative; overflow: hidden;
+    }
+    .icon-btn:hover { background: color-mix(in srgb, var(--md-on-surface-variant) 8%, transparent); }
+    .icon-btn.filled { background: var(--md-primary); color: var(--md-on-primary); }
+    .icon-btn.tonal  { background: var(--md-secondary-container); color: var(--md-on-secondary-container); }
+    .icon-btn.outlined { border: 1px solid var(--md-outline); }
+
+    /* --- Cards --- */
+    .card {
+      border-radius: var(--md-shape-medium);
+      overflow: hidden;
+      transition: box-shadow var(--md-duration-medium-1) var(--md-easing-standard);
+    }
+    .card-elevated {
+      background: var(--md-surface-1);
+      box-shadow: var(--md-elevation-1);
+    }
+    .card-elevated:hover { box-shadow: var(--md-elevation-2); }
+    .card-filled {
+      background: var(--md-surface-variant);
+    }
+    .card-outlined {
+      background: var(--md-surface);
+      border: 1px solid var(--md-outline-variant);
+    }
+    .card-content { padding: var(--md-spacing-4); }
+    .card-media { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+    .card-actions { display: flex; align-items: center; padding: var(--md-spacing-2) var(--md-spacing-4) var(--md-spacing-4); gap: var(--md-spacing-2); }
+
+    /* --- Chips --- */
+    .chip {
+      display: inline-flex; align-items: center; gap: var(--md-spacing-2);
+      height: 32px; padding: 0 16px;
+      border-radius: var(--md-shape-small);
+      font-size: var(--md-label-large-size);
+      font-weight: var(--md-label-large-weight);
+      cursor: pointer;
+      transition: background-color var(--md-duration-short-3) var(--md-easing-standard),
+                  box-shadow var(--md-duration-short-3) var(--md-easing-standard);
+      position: relative; overflow: hidden;
+      user-select: none;
+    }
+    .chip-assist, .chip-filter, .chip-input, .chip-suggestion {
+      background: var(--md-surface);
+      color: var(--md-on-surface-variant);
+      border: 1px solid var(--md-outline);
+    }
+    .chip-assist:hover, .chip-suggestion:hover { background: var(--md-surface-2); }
+    .chip.selected {
+      background: var(--md-secondary-container);
+      color: var(--md-on-secondary-container);
+      border-color: transparent;
+    }
+    .chip .material-symbols-rounded { font-size: 18px; }
+
+    /* --- Text Fields --- */
+    .text-field {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .text-field-filled .tf-container {
+      background: var(--md-surface-variant);
+      border-radius: var(--md-shape-extra-small) var(--md-shape-extra-small) 0 0;
+      padding: 8px 16px 8px;
+      border-bottom: 1px solid var(--md-on-surface-variant);
+      transition: border-color var(--md-duration-short-3) var(--md-easing-standard),
+                  border-width var(--md-duration-short-3) var(--md-easing-standard),
+                  background-color var(--md-duration-short-3) var(--md-easing-standard);
+    }
+    .text-field-filled .tf-container:focus-within {
+      border-bottom: 2px solid var(--md-primary);
+      background: color-mix(in srgb, var(--md-primary) 4%, var(--md-surface-variant));
+    }
+    .text-field-outlined .tf-container {
+      border: 1px solid var(--md-outline);
+      border-radius: var(--md-shape-extra-small);
+      padding: 8px 16px;
+      background: transparent;
+      transition: border-color var(--md-duration-short-3) var(--md-easing-standard),
+                  border-width var(--md-duration-short-3) var(--md-easing-standard);
+    }
+    .text-field-outlined .tf-container:focus-within {
+      border: 2px solid var(--md-primary);
+    }
+    .tf-label {
+      font-size: var(--md-body-small-size);
+      color: var(--md-on-surface-variant);
+      margin-bottom: 2px;
+    }
+    .tf-container:focus-within .tf-label { color: var(--md-primary); }
+    .tf-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--md-on-surface);
+      font-size: var(--md-body-large-size);
+      width: 100%;
+    }
+    .tf-support {
+      font-size: var(--md-body-small-size);
+      color: var(--md-on-surface-variant);
+      padding: 4px 16px 0;
+    }
+    .tf-support.error { color: var(--md-error); }
+    .text-field.error .tf-container { border-color: var(--md-error); }
+
+    /* --- Checkbox --- */
+    .checkbox-wrapper {
+      display: inline-flex; align-items: center; gap: var(--md-spacing-3);
+      cursor: pointer; user-select: none;
+    }
+    .checkbox {
+      appearance: none;
+      width: 18px; height: 18px;
+      border: 2px solid var(--md-on-surface-variant);
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background-color var(--md-duration-short-3) var(--md-easing-standard),
+                  border-color var(--md-duration-short-3) var(--md-easing-standard);
+      position: relative;
+    }
+    .checkbox:checked {
+      background: var(--md-primary);
+      border-color: var(--md-primary);
+    }
+    .checkbox:checked::after {
+      content: '';
+      position: absolute; top: 1px; left: 4px;
+      width: 6px; height: 10px;
+      border: 2px solid var(--md-on-primary);
+      border-top: none; border-left: none;
+      transform: rotate(45deg);
+    }
+    .checkbox:indeterminate { background: var(--md-primary); border-color: var(--md-primary); }
+    .checkbox:indeterminate::after {
+      content: '';
+      position: absolute; top: 50%; left: 2px;
+      width: 10px; height: 2px;
+      background: var(--md-on-primary);
+      transform: translateY(-50%);
+    }
+
+    /* --- Switch --- */
+    .switch-wrapper {
+      display: inline-flex; align-items: center; gap: var(--md-spacing-3);
+      cursor: pointer; user-select: none;
+    }
+    .switch {
+      appearance: none;
+      width: 52px; height: 32px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-surface-variant);
+      border: 2px solid var(--md-outline);
+      cursor: pointer; position: relative;
+      transition: background-color var(--md-duration-short-4) var(--md-easing-standard),
+                  border-color var(--md-duration-short-4) var(--md-easing-standard);
+    }
+    .switch::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 2px;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: var(--md-outline);
+      transform: translateY(-50%);
+      transition: transform var(--md-duration-short-4) var(--md-easing-standard),
+                  width var(--md-duration-short-4) var(--md-easing-standard),
+                  height var(--md-duration-short-4) var(--md-easing-standard),
+                  background var(--md-duration-short-4) var(--md-easing-standard);
+    }
+    .switch:checked {
+      background: var(--md-primary);
+      border-color: var(--md-primary);
+    }
+    .switch:checked::after {
+      transform: translateY(-50%) translateX(20px);
+      background: var(--md-on-primary);
+      width: 24px; height: 24px;
+    }
+    .switch:active::after { width: 28px; }
+
+    /* --- Radio --- */
+    .radio-wrapper {
+      display: inline-flex; align-items: center; gap: var(--md-spacing-3);
+      cursor: pointer; user-select: none;
+    }
+    .radio {
+      appearance: none;
+      width: 20px; height: 20px;
+      border: 2px solid var(--md-on-surface-variant);
+      border-radius: 50%;
+      cursor: pointer; position: relative;
+      transition: border-color var(--md-duration-short-3) var(--md-easing-standard);
+    }
+    .radio:checked { border-color: var(--md-primary); border-width: 2px; }
+    .radio:checked::after {
+      content: '';
+      position: absolute; top: 50%; left: 50%;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--md-primary);
+      transform: translate(-50%, -50%);
+    }
+
+    /* --- Slider --- */
+    .slider {
+      appearance: none;
+      width: 100%; height: 4px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-surface-variant);
+      cursor: pointer;
+      outline: none;
+      accent-color: var(--md-primary);
+    }
+
+    /* --- Progress --- */
+    .progress-bar {
+      height: 4px; border-radius: var(--md-shape-full);
+      background: var(--md-surface-variant);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--md-primary);
+      border-radius: inherit;
+      transition: width var(--md-duration-medium-4) var(--md-easing-standard);
+    }
+    .progress-indeterminate .progress-fill {
+      width: 30% !important;
+      animation: progress-indeterminate 1.5s infinite var(--md-easing-legacy);
+    }
+    @keyframes progress-indeterminate {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(450%); }
+    }
+
+    /* Circular Progress */
+    .progress-circular {
+      width: 48px; height: 48px;
+      animation: rotate 1.4s linear infinite;
+    }
+    .progress-circular circle {
+      stroke: var(--md-primary);
+      stroke-dasharray: 126;
+      stroke-dashoffset: 30;
+      stroke-linecap: round;
+      fill: none;
+      animation: dash 1.4s ease-in-out infinite;
+    }
+    @keyframes rotate { 100% { transform: rotate(360deg); } }
+    @keyframes dash {
+      0%   { stroke-dashoffset: 120; }
+      50%  { stroke-dashoffset: 20; transform: rotate(45deg); }
+      100% { stroke-dashoffset: 120; transform: rotate(360deg); }
+    }
+
+    /* --- Badges --- */
+    .badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 16px; height: 16px; padding: 0 4px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-error);
+      color: var(--md-on-error);
+      font-size: var(--md-label-small-size);
+      font-weight: var(--md-label-small-weight);
+    }
+    .badge-dot {
+      width: 6px; height: 6px; min-width: 6px; padding: 0;
+    }
+
+    /* --- Snackbar --- */
+    .snackbar {
+      display: flex; align-items: center; justify-content: space-between; gap: var(--md-spacing-4);
+      padding: 14px 16px;
+      border-radius: var(--md-shape-extra-small);
+      background: var(--md-inverse-surface);
+      color: var(--md-inverse-on-surface);
+      box-shadow: var(--md-elevation-3);
+      max-width: 600px;
+      font-size: var(--md-body-medium-size);
+      animation: snackbar-enter 300ms var(--md-easing-emphasized-decel) forwards;
+    }
+    @keyframes snackbar-enter {
+      from { transform: translateY(20px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+    .snackbar-action { color: var(--md-inverse-primary); font-weight: 500; font-size: var(--md-label-large-size); background: none; border: none; cursor: pointer; }
+
+    /* --- Dialog --- */
+    .dialog-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 200;
+      animation: fade-in 200ms var(--md-easing-standard);
+    }
+    .dialog {
+      background: var(--md-surface-3);
+      border-radius: var(--md-shape-extra-large);
+      padding: var(--md-spacing-6);
+      max-width: 560px; width: calc(100% - 48px);
+      box-shadow: var(--md-elevation-3);
+      animation: dialog-enter 300ms var(--md-easing-emphasized-decel);
+    }
+    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes dialog-enter {
+      from { transform: scale(0.9); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    .dialog-title { font-family: var(--md-font-brand); font-size: var(--md-headline-small-size); line-height: var(--md-headline-small-line); font-weight: 400; margin-bottom: var(--md-spacing-4); }
+    .dialog-body { color: var(--md-on-surface-variant); font-size: var(--md-body-medium-size); line-height: var(--md-body-medium-line); margin-bottom: var(--md-spacing-6); }
+    .dialog-actions { display: flex; justify-content: flex-end; gap: var(--md-spacing-2); }
+
+    /* --- Navigation Bar --- */
+    .nav-bar {
+      display: flex;
+      background: var(--md-surface-2);
+      border-top: 1px solid var(--md-outline-variant);
+    }
+    .nav-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 12px 0 16px;
+      gap: 4px; cursor: pointer; color: var(--md-on-surface-variant);
+      transition: color var(--md-duration-short-4) var(--md-easing-standard);
+      position: relative;
+    }
+    .nav-item.active { color: var(--md-on-secondary-container); }
+    .nav-item-indicator {
+      position: absolute; top: 10px;
+      width: 64px; height: 32px;
+      border-radius: var(--md-shape-full);
+      background: transparent;
+      transition: background-color var(--md-duration-short-4) var(--md-easing-standard);
+    }
+    .nav-item.active .nav-item-indicator { background: var(--md-secondary-container); }
+    .nav-item-icon { position: relative; z-index: 1; font-size: 24px; }
+    .nav-item-label { font-size: var(--md-label-medium-size); font-weight: var(--md-label-medium-weight); }
+
+    /* --- Navigation Drawer --- */
+    .nav-drawer {
+      width: 360px;
+      background: var(--md-surface-1);
+      border-radius: 0 var(--md-shape-extra-large) var(--md-shape-extra-large) 0;
+      padding: var(--md-spacing-3) var(--md-spacing-3);
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .drawer-section-title {
+      font-size: var(--md-title-small-size); font-weight: 500;
+      color: var(--md-on-surface-variant);
+      padding: var(--md-spacing-4) var(--md-spacing-4) var(--md-spacing-2);
+    }
+    .drawer-item {
+      display: flex; align-items: center; gap: var(--md-spacing-3);
+      padding: 0 var(--md-spacing-4); height: 56px;
+      border-radius: var(--md-shape-full);
+      color: var(--md-on-surface-variant);
+      cursor: pointer;
+      transition: background-color var(--md-duration-short-3) var(--md-easing-standard),
+                  color var(--md-duration-short-3) var(--md-easing-standard);
+      font-size: var(--md-label-large-size); font-weight: 500;
+    }
+    .drawer-item:hover { background: color-mix(in srgb, var(--md-on-surface) 8%, transparent); }
+    .drawer-item.active {
+      background: var(--md-secondary-container);
+      color: var(--md-on-secondary-container);
+    }
+    .drawer-badge { margin-left: auto; }
+
+    /* --- List --- */
+    .list { display: flex; flex-direction: column; }
+    .list-item {
+      display: flex; align-items: center; gap: var(--md-spacing-4);
+      padding: var(--md-spacing-3) var(--md-spacing-4);
+      min-height: 56px;
+      cursor: pointer; color: var(--md-on-surface);
+      transition: background-color var(--md-duration-short-3) var(--md-easing-standard);
+      position: relative;
+    }
+    .list-item:hover { background: color-mix(in srgb, var(--md-on-surface) 8%, transparent); }
+    .list-item-leading { color: var(--md-on-surface-variant); flex-shrink: 0; }
+    .list-item-content { flex: 1; min-width: 0; }
+    .list-item-headline { font-size: var(--md-body-large-size); color: var(--md-on-surface); }
+    .list-item-supporting { font-size: var(--md-body-medium-size); color: var(--md-on-surface-variant); }
+    .list-item-trailing { color: var(--md-on-surface-variant); flex-shrink: 0; font-size: var(--md-label-small-size); }
+
+    /* --- Tabs --- */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--md-outline-variant);
+      overflow-x: auto;
+    }
+    .tab {
+      flex: 1; min-width: 90px;
+      display: flex; align-items: center; justify-content: center; gap: var(--md-spacing-2);
+      padding: 14px var(--md-spacing-4);
+      font-size: var(--md-title-small-size); font-weight: 500;
+      color: var(--md-on-surface-variant);
+      cursor: pointer; border: none; background: none;
+      position: relative;
+      transition: color var(--md-duration-short-3) var(--md-easing-standard);
+      white-space: nowrap;
+    }
+    .tab::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px; border-radius: 3px 3px 0 0;
+      background: var(--md-primary);
+      transform: scaleX(0);
+      transition: transform var(--md-duration-short-4) var(--md-easing-standard);
+    }
+    .tab.active { color: var(--md-primary); }
+    .tab.active::after { transform: scaleX(1); }
+
+    /* --- Tooltip --- */
+    .tooltip-wrapper { position: relative; display: inline-flex; }
+    .tooltip {
+      position: absolute; bottom: calc(100% + 8px); left: 50%;
+      transform: translateX(-50%);
+      background: var(--md-inverse-surface);
+      color: var(--md-inverse-on-surface);
+      padding: 4px 8px;
+      border-radius: var(--md-shape-extra-small);
+      font-size: var(--md-label-small-size); font-weight: 500;
+      white-space: nowrap; pointer-events: none;
+      opacity: 0;
+      transition: opacity var(--md-duration-short-3) var(--md-easing-standard),
+                  transform var(--md-duration-short-3) var(--md-easing-standard);
+      transform: translateX(-50%) translateY(4px);
+    }
+    .tooltip-wrapper:hover .tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* --- Dividers --- */
+    .divider-full { width: 100%; height: 1px; background: var(--md-outline-variant); }
+    .divider-inset { margin-left: 72px; height: 1px; background: var(--md-outline-variant); }
+
+    /* ============================================================
+       DEMO PAGE LAYOUT
+    ============================================================ */
+
+    .demo-hero {
+      padding: var(--md-spacing-16) var(--md-spacing-4);
+      text-align: center;
+      background: linear-gradient(160deg, var(--md-surface-1) 0%, var(--md-surface) 60%);
+      border-bottom: 1px solid var(--md-outline-variant);
+      animation: hero-enter 600ms var(--md-easing-emphasized-decel) forwards;
+    }
+    @keyframes hero-enter {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .version-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-primary-container);
+      color: var(--md-on-primary-container);
+      font-size: var(--md-label-small-size); font-weight: 500;
+      margin-bottom: var(--md-spacing-6);
+    }
+
+    .demo-section {
+      padding: var(--md-spacing-10) var(--md-spacing-4);
+      border-bottom: 1px solid var(--md-outline-variant);
+    }
+    .demo-section:last-child { border-bottom: none; }
+
+    .section-header {
+      margin-bottom: var(--md-spacing-8);
+    }
+    .section-tag {
+      display: inline-block;
+      font-size: var(--md-label-small-size); font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--md-primary);
+      margin-bottom: var(--md-spacing-2);
+    }
+
+    .component-row {
+      display: flex; flex-wrap: wrap; align-items: center; gap: var(--md-spacing-3);
+      margin-bottom: var(--md-spacing-4);
+    }
+
+    .demo-label {
+      font-size: var(--md-label-medium-size); font-weight: 500;
+      color: var(--md-on-surface-variant);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin-bottom: var(--md-spacing-3);
+    }
+
+    .color-swatch {
+      width: 80px; height: 80px;
+      border-radius: var(--md-shape-medium);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: var(--md-spacing-2);
+      font-size: 10px; font-weight: 500;
+    }
+
+    .type-row {
+      padding: var(--md-spacing-3) 0;
+      border-bottom: 1px solid var(--md-outline-variant);
+    }
+    .type-row:last-child { border-bottom: none; }
+
+    .elevation-box {
+      width: 80px; height: 80px;
+      border-radius: var(--md-shape-medium);
+      display: flex; align-items: center; justify-content: center;
+      font-size: var(--md-label-small-size); font-weight: 500;
+      color: var(--md-on-surface);
+    }
+
+    .shape-box {
+      width: 80px; height: 80px;
+      background: var(--md-primary-container);
+      display: flex; align-items: center; justify-content: center;
+      font-size: var(--md-label-small-size); font-weight: 500;
+      color: var(--md-on-primary-container);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .demo-hero { padding: var(--md-spacing-10) var(--md-spacing-4); }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .nav-drawer { width: 100%; }
+    }
+
+    /* Stagger animation for sections */
+    .demo-section {
+      opacity: 0;
+      animation: section-enter 500ms var(--md-easing-emphasized-decel) forwards;
+    }
+    .demo-section:nth-child(1) { animation-delay: 100ms; }
+    .demo-section:nth-child(2) { animation-delay: 150ms; }
+    .demo-section:nth-child(3) { animation-delay: 200ms; }
+    .demo-section:nth-child(4) { animation-delay: 250ms; }
+    .demo-section:nth-child(5) { animation-delay: 300ms; }
+    .demo-section:nth-child(6) { animation-delay: 350ms; }
+    .demo-section:nth-child(7) { animation-delay: 400ms; }
+    .demo-section:nth-child(8) { animation-delay: 450ms; }
+    .demo-section:nth-child(9) { animation-delay: 500ms; }
+    .demo-section:nth-child(10) { animation-delay: 550ms; }
+    @keyframes section-enter {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
-<body class="animated-bg min-h-screen flex items-center justify-center relative overflow-hidden">
-  <!-- Loading Bar -->
-  <div class="loader">
-    <div class="loader-bar" id="loader-bar"></div>
-  </div>
 
-  <!-- Main Content -->
-  <div class="splash-screen" id="splash-content">
-    <div class="relative z-10 text-center p-8">
-      <!-- Logo Container -->
-      <div class="mb-12">
-        <div class="w-32 h-32 mx-auto bg-white/10 rounded-full backdrop-blur-lg p-6 float glow">
-          <svg class="w-full h-full text-white" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-          </svg>
+<body>
+
+  <!-- TOP APP BAR -->
+  <header class="top-app-bar" id="appBar">
+    <button class="icon-btn ripple" aria-label="Menu" data-ripple>
+      <span class="material-symbols-rounded">menu</span>
+    </button>
+    <span class="top-app-bar-title">KENAI</span>
+    <div style="display:flex;gap:4px;align-items:center;">
+      <button class="icon-btn ripple" aria-label="Search" data-ripple>
+        <span class="material-symbols-rounded">search</span>
+      </button>
+      <button class="kenai-theme-toggle ripple" data-kenai-theme-toggle data-ripple aria-label="Switch theme">
+        <span class="material-symbols-rounded icon-dark">dark_mode</span>
+        <span class="material-symbols-rounded icon-light">light_mode</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="demo-hero">
+    <div class="container max-w-md mx-auto">
+      <div class="version-chip">
+        <span class="material-symbols-rounded" style="font-size:14px;">auto_awesome</span>
+        v0.1.0
+      </div>
+      <h1 class="display-small" style="margin-bottom:var(--md-spacing-4);">
+        Material Design 3<br>for the web
+      </h1>
+      <p class="body-large text-on-surface-variant" style="max-width:480px;margin:0 auto var(--md-spacing-8);">
+        KENAI is a stock Android &amp; Pixel-inspired CSS framework implementing the full M3 design system — tokens, typography, components, and motion.
+      </p>
+      <div class="component-row" style="justify-content:center;">
+        <button class="btn btn-filled ripple" data-ripple>
+          <span class="material-symbols-rounded">rocket_launch</span>
+          Get started
+        </button>
+        <button class="btn btn-outlined ripple" data-ripple>
+          <span class="material-symbols-rounded">code</span>
+          GitHub
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <main class="container" style="padding-top:var(--md-spacing-4);">
+
+    <!-- COLOR SYSTEM -->
+    <section class="demo-section">
+      <div class="section-header">
+        <span class="section-tag">Design Tokens</span>
+        <h2>Color System</h2>
+        <p class="body-medium text-on-surface-variant" style="margin-top:var(--md-spacing-2);">Dynamic color roles from the M3 tonal palette system.</p>
+      </div>
+      <div class="demo-label">Primary &amp; Secondary</div>
+      <div class="component-row" style="flex-wrap:wrap;">
+        <div class="color-swatch" style="background:var(--md-primary);color:var(--md-on-primary);">Primary</div>
+        <div class="color-swatch" style="background:var(--md-primary-container);color:var(--md-on-primary-container);">P-Container</div>
+        <div class="color-swatch" style="background:var(--md-secondary);color:var(--md-on-secondary);">Secondary</div>
+        <div class="color-swatch" style="background:var(--md-secondary-container);color:var(--md-on-secondary-container);">S-Container</div>
+        <div class="color-swatch" style="background:var(--md-tertiary);color:var(--md-on-tertiary);">Tertiary</div>
+        <div class="color-swatch" style="background:var(--md-tertiary-container);color:var(--md-on-tertiary-container);">T-Container</div>
+        <div class="color-swatch" style="background:var(--md-error);color:var(--md-on-error);">Error</div>
+        <div class="color-swatch" style="background:var(--md-error-container);color:var(--md-on-error-container);">E-Container</div>
+      </div>
+      <div class="demo-label" style="margin-top:var(--md-spacing-6);">Surface Tones (Elevation via tint)</div>
+      <div class="component-row">
+        <div class="color-swatch" style="background:var(--md-surface);color:var(--md-on-surface);">Surface</div>
+        <div class="color-swatch" style="background:var(--md-surface-1);color:var(--md-on-surface);">Surface 1</div>
+        <div class="color-swatch" style="background:var(--md-surface-2);color:var(--md-on-surface);">Surface 2</div>
+        <div class="color-swatch" style="background:var(--md-surface-3);color:var(--md-on-surface);">Surface 3</div>
+        <div class="color-swatch" style="background:var(--md-surface-4);color:var(--md-on-surface);">Surface 4</div>
+        <div class="color-swatch" style="background:var(--md-surface-5);color:var(--md-on-surface);">Surface 5</div>
+      </div>
+      <div class="demo-label" style="margin-top:var(--md-spacing-6);">Dynamic Color Seed</div>
+      <div class="component-row" style="align-items:flex-end;">
+        <div class="text-field text-field-outlined" style="width:200px;">
+          <div class="tf-container">
+            <div class="tf-label">Seed color</div>
+            <input class="tf-input" type="color" id="colorSeed" value="#1B6EF3" style="height:28px;padding:0;cursor:pointer;" />
+          </div>
+        </div>
+        <button class="btn btn-filled-tonal ripple" data-ripple onclick="applySeed()">Apply palette</button>
+        <button class="btn btn-text ripple" data-ripple onclick="resetSeed()">Reset</button>
+      </div>
+    </section>
+
+    <!-- TYPOGRAPHY -->
+    <section class="demo-section">
+      <div class="section-header">
+        <span class="section-tag">Design Tokens</span>
+        <h2>Typography Scale</h2>
+        <p class="body-medium text-on-surface-variant" style="margin-top:var(--md-spacing-2);">5 roles × 3 sizes — Display, Headline, Title, Body, Label.</p>
+      </div>
+      <div class="type-row"><span class="display-large">Display Large</span></div>
+      <div class="type-row"><span class="display-medium">Display Medium</span></div>
+      <div class="type-row"><span class="display-small">Display Small</span></div>
+      <div class="type-row"><span class="headline-large">Headline Large</span></div>
+      <div class="type-row"><span class="headline-medium">Headline Medium</span></div>
+      <div class="type-row"><span class="headline-small">Headline Small</span></div>
+      <div class="type-row"><span class="title-large">Title Large</span></div>
+      <div class="type-row"><span class="title-medium">Title Medium</span></div>
+      <div class="type-row"><span class="title-small">Title Small</span></div>
+      <div class="type-row"><span class="body-large">Body Large — The quick brown fox jumps over the lazy dog.</span></div>
+      <div class="type-row"><span class="body-medium">Body Medium — The quick brown fox jumps over the lazy dog.</span></div>
+      <div class="type-row"><span class="body-small">Body Small — The quick brown fox jumps over the lazy dog.</span></div>
+      <div class="type-row"><span class="label-large">Label Large</span></div>
+      <div class="type-row"><span class="label-medium">Label Medium</span></div>
+      <div class="type-row"><span class="label-small">Label Small</span></div>
+    </section>
+
+    <!-- ELEVATION & SHAPE -->
+    <section class="demo-section">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--md-spacing-10);">
+        <div>
+          <div class="section-header">
+            <span class="section-tag">Tokens</span>
+            <h2>Elevation</h2>
+          </div>
+          <div class="component-row">
+            <div class="elevation-box" style="box-shadow:var(--md-elevation-0);background:var(--md-surface);">0</div>
+            <div class="elevation-box elevation-1">1</div>
+            <div class="elevation-box elevation-2">2</div>
+            <div class="elevation-box elevation-3">3</div>
+            <div class="elevation-box" style="box-shadow:var(--md-elevation-4);background:var(--md-surface-4);">4</div>
+            <div class="elevation-box" style="box-shadow:var(--md-elevation-5);background:var(--md-surface-5);">5</div>
+          </div>
+        </div>
+        <div>
+          <div class="section-header">
+            <span class="section-tag">Tokens</span>
+            <h2>Shape</h2>
+          </div>
+          <div class="component-row">
+            <div class="shape-box rounded-xs">XS</div>
+            <div class="shape-box rounded-sm">SM</div>
+            <div class="shape-box rounded-md">MD</div>
+            <div class="shape-box rounded-lg">LG</div>
+            <div class="shape-box rounded-xl">XL</div>
+            <div class="shape-box rounded-full">Full</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BUTTONS -->
+    <section class="demo-section">
+      <div class="section-header">
+        <span class="section-tag">Components</span>
+        <h2>Buttons</h2>
+      </div>
+      <div class="demo-label">Common Buttons</div>
+      <div class="component-row">
+        <button class="btn btn-elevated ripple" data-ripple>Elevated</button>
+        <button class="btn btn-filled ripple" data-ripple>Filled</button>
+        <button class="btn btn-filled-tonal ripple" data-ripple>Filled Tonal</button>
+        <button class="btn btn-outlined ripple" data-ripple>Outlined</button>
+        <button class="btn btn-text ripple" data-ripple>Text</button>
+      </div>
+      <div class="demo-label" style="margin-top:var(--md-spacing-4);">With Icons</div>
+      <div class="component-row">
+        <button class="btn btn-filled ripple" data-ripple><span class="material-symbols-rounded">add</span>Create</button>
+        <button class="btn btn-filled-tonal ripple" data-ripple><span class="material-symbols-rounded">send</span>Send</button>
+        <button class="btn btn-outlined ripple" data-ripple><span class="material-symbols-rounded">bookmark</span>Save</button>
+        <button class="btn btn-text ripple" data-ripple><span class="material-symbols-rounded">share</span>Share</button>
+      </div>
+      <div class="demo-label" style="margin-top:var(--md-spacing-4);">Disabled</div>
+      <div class="component-row">
+        <button class="btn btn-filled opacity-disabled">Filled</button>
+        <button class="btn btn-outlined opacity-disabled">Outlined</button>
+        <button class="btn btn-text opacity-disabled">Text</button>
+      </div>
+      <div class="demo-label" style="margin-top:var(--md-spacing-4);">FAB</div>
+      <div class="component-row">
+        <button class="fab fab-small ripple" data-ripple aria-label="Add"><span class="material-symbols-rounded">add</span></button>
+        <button class="fab ripple" data-ripple aria-label="Edit"><span class="material-symbols-rounded">edit</span></button>
+        <button class="fab fab-large ripple" data-ripple aria-label="Create"><span class="material-symbols-rounded">create</span></button>
+        <button class="fab-extended ripple" data-ripple><span class="material-symbols-rounded">add</span>New document</button>
+      </div>
+      <div class="demo-label" style="margin-top:var(--md-spacing-4);">Icon Buttons</div>
+      <div class="component-row">
+        <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">favorite</span></button>
+        <button class="icon-btn filled ripple" data-ripple><span class="material-symbols-rounded">favorite</span></button>
+        <button class="icon-btn tonal ripple" data-ripple><span class="material-symbols-rounded">settings</span></button>
+        <button class="icon-btn outlined ripple" data-ripple><span class="material-symbols-rounded">bookmark</span></button>
+      </div>
+    </section>
+
+    <!-- CHIPS -->
+    <section class="demo-section">
+      <div class="section-header">
+        <span class="section-tag">Components</span>
+        <h2>Chips</h2>
+      </div>
+      <div class="component-row">
+        <button class="chip chip-assist ripple" data-ripple><span class="material-symbols-rounded">location_on</span>Add location</button>
+        <button class="chip chip-filter ripple selected" data-ripple><span class="material-symbols-rounded">check</span>Selected</button>
+        <button class="chip chip-filter ripple" data-ripple>Unselected</button>
+        <button class="chip chip-suggestion ripple" data-ripple>Reply</button>
+        <button class="chip chip-suggestion ripple" data-ripple>Sounds good 👍</button>
+        <button class="chip chip-input ripple" data-ripple>Anna<span class="material-symbols-rounded" style="font-size:18px;margin-left:4px;">close</span></button>
+      </div>
+    </section>
+
+    <!-- CARDS -->
+    <section class="demo-section">
+      <div class="section-header">
+        <span class="section-tag">Components</span>
+        <h2>Cards</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--md-spacing-4);">
+
+        <div class="card card-elevated state-layer ripple" data-ripple>
+          <div class="card-content">
+            <div class="flex items-center justify-between" style="margin-bottom:var(--md-spacing-3);">
+              <span class="material-symbols-rounded text-primary" style="font-size:32px;">cloud</span>
+              <span class="badge">3</span>
+            </div>
+            <h4 style="margin-bottom:var(--md-spacing-2);">Elevated Card</h4>
+            <p class="body-medium text-on-surface-variant">Elevated cards use shadow and a tinted surface to separate from the background.</p>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-text ripple" data-ripple>Learn more</button>
+            <button class="btn btn-filled-tonal ripple" data-ripple>Enable</button>
+          </div>
+        </div>
+
+        <div class="card card-filled state-layer">
+          <div class="card-content">
+            <div class="flex items-center gap-3" style="margin-bottom:var(--md-spacing-3);">
+              <div style="width:40px;height:40px;border-radius:50%;background:var(--md-tertiary-container);display:flex;align-items:center;justify-content:center;">
+                <span class="material-symbols-rounded" style="color:var(--md-on-tertiary-container);">palette</span>
+              </div>
+              <div>
+                <p class="title-medium">Filled Card</p>
+                <p class="body-small text-on-surface-variant">Design System</p>
+              </div>
+            </div>
+            <p class="body-medium text-on-surface-variant">Filled cards use a filled container, slightly lower emphasis than elevated.</p>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-text ripple" data-ripple>Dismiss</button>
+            <button class="btn btn-text ripple" data-ripple>Open</button>
+          </div>
+        </div>
+
+        <div class="card card-outlined">
+          <div style="height:160px;background:linear-gradient(135deg,var(--md-primary-container),var(--md-tertiary-container));display:flex;align-items:center;justify-content:center;">
+            <span class="material-symbols-rounded" style="font-size:48px;color:var(--md-on-primary-container);">image</span>
+          </div>
+          <div class="card-content">
+            <h4 style="margin-bottom:var(--md-spacing-2);">Outlined Card</h4>
+            <p class="body-medium text-on-surface-variant">Outlined cards use a border to separate, lowest emphasis variant.</p>
+          </div>
+          <div class="card-actions">
+            <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">favorite_border</span></button>
+            <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">bookmark_border</span></button>
+            <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">share</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INPUTS -->
+    <section class="demo-section">
+      <div class="section-header">
+        <span class="section-tag">Components</span>
+        <h2>Text Fields, Checkboxes, Switches</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--md-spacing-6);">
+
+        <div style="display:flex;flex-direction:column;gap:var(--md-spacing-4);">
+          <div class="demo-label">Filled Text Fields</div>
+          <div class="text-field text-field-filled">
+            <div class="tf-container">
+              <div class="tf-label">Username</div>
+              <input class="tf-input" type="text" placeholder="e.g. pixel_user" />
+            </div>
+            <span class="tf-support">Must be unique</span>
+          </div>
+          <div class="text-field text-field-filled">
+            <div class="tf-container">
+              <div class="tf-label">Password</div>
+              <input class="tf-input" type="password" placeholder="Min 8 characters" />
+            </div>
+          </div>
+          <div class="text-field text-field-filled error">
+            <div class="tf-container">
+              <div class="tf-label">Email</div>
+              <input class="tf-input" type="email" value="bad@" />
+            </div>
+            <span class="tf-support error">Invalid email address</span>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:var(--md-spacing-4);">
+          <div class="demo-label">Outlined Text Fields</div>
+          <div class="text-field text-field-outlined">
+            <div class="tf-container">
+              <div class="tf-label">Full name</div>
+              <input class="tf-input" type="text" placeholder="Jane Doe" />
+            </div>
+          </div>
+          <div class="text-field text-field-outlined">
+            <div class="tf-container">
+              <div class="tf-label">Message</div>
+              <textarea class="tf-input" rows="3" placeholder="Write something..." style="resize:none;"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:var(--md-spacing-6);">
+          <div>
+            <div class="demo-label">Checkboxes</div>
+            <div style="display:flex;flex-direction:column;gap:var(--md-spacing-3);">
+              <label class="checkbox-wrapper">
+                <input type="checkbox" class="checkbox" checked /> Checked
+              </label>
+              <label class="checkbox-wrapper">
+                <input type="checkbox" class="checkbox" id="indetermCb" /> Unchecked
+              </label>
+              <label class="checkbox-wrapper opacity-disabled">
+                <input type="checkbox" class="checkbox" disabled /> Disabled
+              </label>
+            </div>
+          </div>
+          <div>
+            <div class="demo-label">Switches</div>
+            <div style="display:flex;flex-direction:column;gap:var(--md-spacing-3);">
+              <label class="switch-wrapper">
+                <input type="checkbox" class="switch" checked /> Wi-Fi
+              </label>
+              <label class="switch-wrapper">
+                <input type="checkbox" class="switch" /> Bluetooth
+              </label>
+              <label class="switch-wrapper opacity-disabled">
+                <input type="checkbox" class="switch" disabled /> Airplane mode
+              </label>
+            </div>
+          </div>
+          <div>
+            <div class="demo-label">Radio Buttons</div>
+            <div style="display:flex;flex-direction:column;gap:var(--md-spacing-3);">
+              <label class="radio-wrapper"><input type="radio" name="r1" class="radio" checked /> Option A</label>
+              <label class="radio-wrapper"><input type="radio" name="r1" class="radio" /> Option B</label>
+              <label class="radio-wrapper"><input type="radio" name="r1" class="radio" /> Option C</label>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Title with Glowing Effect -->
-      <h1 class="text-6xl md:text-8xl font-black text-white mb-6 glow tracking-wider">
-        IMPLIED PH
-      </h1>
+      <div class="demo-label" style="margin-top:var(--md-spacing-8);">Slider</div>
+      <div style="max-width:400px;">
+        <input type="range" class="slider" min="0" max="100" value="40" id="sliderDemo" />
+        <p class="body-small text-on-surface-variant" style="margin-top:var(--md-spacing-2);">Value: <span id="sliderVal">40</span></p>
+      </div>
+    </section>
 
-      <!-- Animated Subtitle -->
-      <p class="text-xl md:text-3xl text-white/90 font-light mb-12 tracking-wide">
-        Where Creativity Meets Innovation
-      </p>
+    <!-- PROGRESS -->
+    <section class="demo-section">
+      <div class="section-header">
+        <span class="section-tag">Components</span>
+        <h2>Progress Indicators</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--md-spacing-8);">
+        <div>
+          <div class="demo-label">Linear — Determinate</div>
+          <div style="display:flex;flex-direction:column;gap:var(--md-spacing-4);">
+            <div class="progress-bar"><div class="progress-fill" style="width:25%"></div></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+          </div>
+          <div class="demo-label" style="margin-top:var(--md-spacing-6);">Linear — Indeterminate</div>
+          <div class="progress-bar progress-indeterminate"><div class="progress-fill"></div></div>
+        </div>
+        <div>
+          <div class="demo-label">Circular</div>
+          <div class="component-row">
+            <svg class="progress-circular" viewBox="0 0 48 48">
+              <circle cx="24" cy="24" r="20" stroke-width="4" />
+            </svg>
+            <svg class="progress-circular" viewBox="0 0 48 48" style="width:32px;height:32px;">
+              <circle cx="24" cy="24" r="20" stroke-width="4" />
+            </svg>
+          </div>
+          <div class="demo-label" style="margin-top:var(--md-spacing-6);">Badges</div>
+          <div class="component-row">
+            <div style="position:relative;display:inline-flex;">
+              <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">notifications</span></button>
+              <span class="badge" style="position:absolute;top:4px;right:4px;">5</span>
+            </div>
+            <div style="position:relative;display:inline-flex;">
+              <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">mail</span></button>
+              <span class="badge badge-dot" style="position:absolute;top:8px;right:8px;"></span>
+            </div>
+            <span class="badge">12</span>
+            <span class="badge" style="min-width:24px;height:24px;font-size:11px;">99+</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      <!-- Interactive Button -->
-      <button onclick="window.location.href='home.html'" class="button-shine bg-white/20 backdrop-blur-md text-white px-8 py-4 rounded-full 
-                     text-lg font-semibold transition-all duration-300 hover:bg-white/30 
-                     transform hover:scale-105 mb-16">
-  Begin Journey
-</button>
+    <!-- NAVIGATION -->
+    <section class="demo-section">
+      <div class="section-header">
+        <span class="section-tag">Components</span>
+        <h2>Navigation</h2>
+      </div>
 
-      <!-- Social Media Links -->
-      <div class="flex justify-center items-center space-x-8">
-        <a href="#" class="social-icon group">
-          <div class="p-4 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all">
-            <i class="fab fa-facebook text-2xl text-white group-hover:scale-110 transition-transform"></i>
+      <div class="demo-label">Navigation Bar</div>
+      <div class="nav-bar rounded-xl" style="max-width:480px;margin-bottom:var(--md-spacing-8);">
+        <div class="nav-item active ripple" data-ripple>
+          <div class="nav-item-indicator"></div>
+          <span class="material-symbols-rounded nav-item-icon">home</span>
+          <span class="nav-item-label">Home</span>
+        </div>
+        <div class="nav-item ripple" data-ripple>
+          <div class="nav-item-indicator"></div>
+          <span class="material-symbols-rounded nav-item-icon">search</span>
+          <span class="nav-item-label">Explore</span>
+        </div>
+        <div class="nav-item ripple" data-ripple style="position:relative;">
+          <div class="nav-item-indicator"></div>
+          <span class="material-symbols-rounded nav-item-icon">notifications</span>
+          <span class="badge badge-dot" style="position:absolute;top:10px;right:30%;"></span>
+          <span class="nav-item-label">Alerts</span>
+        </div>
+        <div class="nav-item ripple" data-ripple>
+          <div class="nav-item-indicator"></div>
+          <span class="material-symbols-rounded nav-item-icon">account_circle</span>
+          <span class="nav-item-label">Profile</span>
+        </div>
+      </div>
+
+      <div class="demo-label">Navigation Drawer</div>
+      <div class="nav-drawer elevation-1" style="max-width:320px;border-radius:var(--md-shape-extra-large);">
+        <div style="padding:var(--md-spacing-4) var(--md-spacing-4) var(--md-spacing-2);">
+          <p class="headline-small" style="margin-bottom:4px;">KENAI</p>
+          <p class="body-small text-on-surface-variant">v0.1.0 — Material Design 3</p>
+        </div>
+        <div class="divider-full" style="margin:var(--md-spacing-2) 0;"></div>
+        <span class="drawer-section-title">Components</span>
+        <div class="drawer-item active ripple" data-ripple>
+          <span class="material-symbols-rounded">widgets</span> Buttons
+        </div>
+        <div class="drawer-item ripple" data-ripple>
+          <span class="material-symbols-rounded">credit_card</span> Cards
+          <span class="badge drawer-badge">New</span>
+        </div>
+        <div class="drawer-item ripple" data-ripple>
+          <span class="material-symbols-rounded">text_fields</span> Text Fields
+        </div>
+        <div class="drawer-item ripple" data-ripple>
+          <span class="material-symbols-rounded">navigation</span> Navigation
+        </div>
+        <div class="divider-full" style="margin:var(--md-spacing-2) 0;"></div>
+        <span class="drawer-section-title">Settings</span>
+        <div class="drawer-item ripple" data-ripple>
+          <span class="material-symbols-rounded">palette</span> Theming
+        </div>
+        <div class="drawer-item ripple" data-ripple>
+          <span class="material-symbols-rounded">info</span> About
+        </div>
+      </div>
+    </section>
+
+    <!-- TABS & LISTS -->
+    <section class="demo-section">
+      <div class="section-header">
+        <span class="section-tag">Components</span>
+        <h2>Tabs &amp; Lists</h2>
+      </div>
+
+      <div class="demo-label">Tabs</div>
+      <div class="tabs rounded-sm" style="max-width:480px;margin-bottom:var(--md-spacing-8);" id="tabsDemo">
+        <button class="tab active ripple" data-ripple data-tab="0">
+          <span class="material-symbols-rounded">home</span> Home
+        </button>
+        <button class="tab ripple" data-ripple data-tab="1">
+          <span class="material-symbols-rounded">explore</span> Explore
+        </button>
+        <button class="tab ripple" data-ripple data-tab="2">
+          <span class="material-symbols-rounded">favorite</span> Saved
+        </button>
+        <button class="tab ripple" data-ripple data-tab="3">
+          <span class="material-symbols-rounded">person</span> Profile
+        </button>
+      </div>
+
+      <div class="demo-label">List</div>
+      <div class="list card card-outlined" style="max-width:480px;">
+        <div class="list-item ripple" data-ripple>
+          <div class="list-item-leading"><span class="material-symbols-rounded">account_circle</span></div>
+          <div class="list-item-content">
+            <div class="list-item-headline">Alex Johnson</div>
+            <div class="list-item-supporting">Last message: Hey, are you free tonight?</div>
           </div>
-        </a>
-        <a href="#" class="social-icon group">
-          <div class="p-4 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all">
-            <i class="fab fa-instagram text-2xl text-white group-hover:scale-110 transition-transform"></i>
+          <div class="list-item-trailing">2 min</div>
+        </div>
+        <div class="divider-inset"></div>
+        <div class="list-item ripple" data-ripple>
+          <div class="list-item-leading"><span class="material-symbols-rounded">account_circle</span></div>
+          <div class="list-item-content">
+            <div class="list-item-headline">Sam Rivera</div>
+            <div class="list-item-supporting">Check out this Material Design update!</div>
           </div>
-        </a>
-        <a href="#" class="social-icon group">
-          <div class="p-4 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all">
-            <i class="fab fa-tiktok text-2xl text-white group-hover:scale-110 transition-transform"></i>
+          <div class="list-item-trailing">1 hr</div>
+        </div>
+        <div class="divider-inset"></div>
+        <div class="list-item ripple" data-ripple>
+          <div class="list-item-leading"><span class="material-symbols-rounded">account_circle</span></div>
+          <div class="list-item-content">
+            <div class="list-item-headline">Jordan Patel</div>
+            <div class="list-item-supporting">Sounds great, see you then!</div>
           </div>
-        </a>
-        <a href="#" class="social-icon group">
-          <div class="p-4 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all">
-            <i class="fab fa-youtube text-2xl text-white group-hover:scale-110 transition-transform"></i>
-          </div>
-        </a>
+          <div class="list-item-trailing">3 hrs</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OVERLAYS -->
+    <section class="demo-section">
+      <div class="section-header">
+        <span class="section-tag">Components</span>
+        <h2>Overlays &amp; Feedback</h2>
+      </div>
+      <div class="demo-label">Snackbar</div>
+      <div style="max-width:600px;margin-bottom:var(--md-spacing-6);">
+        <div class="snackbar">
+          <span>File "report.pdf" deleted</span>
+          <button class="snackbar-action ripple" data-ripple>Undo</button>
+        </div>
+      </div>
+      <div class="component-row" style="margin-bottom:var(--md-spacing-8);">
+        <button class="btn btn-filled ripple" data-ripple onclick="showSnackbar('Message sent successfully')">Show Snackbar</button>
+        <button class="btn btn-filled-tonal ripple" data-ripple onclick="showSnackbar('Item deleted', true)">With Action</button>
+      </div>
+
+      <div class="demo-label">Dialog</div>
+      <div class="component-row">
+        <button class="btn btn-filled ripple" data-ripple onclick="document.getElementById('demoDialog').style.display='flex'">Open Dialog</button>
+        <button class="btn btn-outlined ripple" data-ripple onclick="document.getElementById('alertDialog').style.display='flex'">Alert Dialog</button>
+      </div>
+
+      <div class="demo-label" style="margin-top:var(--md-spacing-6);">Tooltips</div>
+      <div class="component-row">
+        <div class="tooltip-wrapper">
+          <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">help</span></button>
+          <span class="tooltip">Help & support</span>
+        </div>
+        <div class="tooltip-wrapper">
+          <button class="icon-btn tonal ripple" data-ripple><span class="material-symbols-rounded">settings</span></button>
+          <span class="tooltip">Settings</span>
+        </div>
+        <div class="tooltip-wrapper">
+          <button class="btn btn-filled-tonal ripple" data-ripple>Hover me</button>
+          <span class="tooltip">I'm a tooltip!</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOTION DEMO -->
+    <section class="demo-section">
+      <div class="section-header">
+        <span class="section-tag">Tokens</span>
+        <h2>Motion &amp; Interaction</h2>
+        <p class="body-medium text-on-surface-variant" style="margin-top:var(--md-spacing-2);">All buttons, chips, and interactive surfaces respond with M3 ripple ink and state layers.</p>
+      </div>
+      <div class="component-row">
+        <button class="btn btn-filled ripple" data-ripple onclick="animateCards()">Animate Cards</button>
+        <button class="btn btn-filled-tonal ripple" data-ripple onclick="triggerProgress()">Progress Demo</button>
+      </div>
+      <div id="motionCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--md-spacing-4);margin-top:var(--md-spacing-6);">
+        <div class="card card-elevated" id="mc1" style="padding:var(--md-spacing-4);transition:transform 300ms var(--md-easing-emphasized-decel),opacity 300ms;">
+          <span class="material-symbols-rounded text-primary" style="font-size:32px;margin-bottom:8px;">speed</span>
+          <p class="title-medium">Short 1 — 50ms</p>
+          <p class="body-small text-on-surface-variant">Micro-interactions</p>
+        </div>
+        <div class="card card-elevated" id="mc2" style="padding:var(--md-spacing-4);transition:transform 300ms var(--md-easing-emphasized-decel),opacity 300ms;transition-delay:80ms;">
+          <span class="material-symbols-rounded text-primary" style="font-size:32px;margin-bottom:8px;">motion_photos_on</span>
+          <p class="title-medium">Medium 2 — 300ms</p>
+          <p class="body-small text-on-surface-variant">Enter / Exit transitions</p>
+        </div>
+        <div class="card card-elevated" id="mc3" style="padding:var(--md-spacing-4);transition:transform 300ms var(--md-easing-emphasized-decel),opacity 300ms;transition-delay:160ms;">
+          <span class="material-symbols-rounded text-primary" style="font-size:32px;margin-bottom:8px;">animation</span>
+          <p class="title-medium">Emphasized — 500ms</p>
+          <p class="body-small text-on-surface-variant">Large spatial transitions</p>
+        </div>
+      </div>
+      <div id="progressContainer" style="margin-top:var(--md-spacing-6);display:none;">
+        <div class="progress-bar"><div class="progress-fill" id="demoProgress" style="width:0%;transition:width 600ms var(--md-easing-standard)"></div></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FAB fixed -->
+  <div style="position:fixed;bottom:24px;right:24px;z-index:50;">
+    <button class="fab ripple" data-ripple aria-label="Compose" onclick="showSnackbar('Compose new message')">
+      <span class="material-symbols-rounded">edit</span>
+    </button>
+  </div>
+
+  <!-- DIALOG: Full -->
+  <div id="demoDialog" class="dialog-backdrop" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
+    <div class="dialog">
+      <h3 class="dialog-title">Permanently delete?</h3>
+      <p class="dialog-body">Deleting "Work documents" will also delete all its contents. You cannot undo this action.</p>
+      <div class="dialog-actions">
+        <button class="btn btn-text ripple" data-ripple onclick="document.getElementById('demoDialog').style.display='none'">Cancel</button>
+        <button class="btn btn-filled ripple" data-ripple onclick="document.getElementById('demoDialog').style.display='none';showSnackbar('Folder deleted')">Delete</button>
       </div>
     </div>
   </div>
 
+  <!-- DIALOG: Alert -->
+  <div id="alertDialog" class="dialog-backdrop" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
+    <div class="dialog">
+      <div style="margin-bottom:var(--md-spacing-4);">
+        <span class="material-symbols-rounded text-error" style="font-size:40px;">warning</span>
+      </div>
+      <h3 class="dialog-title">Location access</h3>
+      <p class="dialog-body">Allow KENAI to access your location while you're using the app? Your location will be used to show relevant content.</p>
+      <div class="dialog-actions">
+        <button class="btn btn-text ripple" data-ripple onclick="document.getElementById('alertDialog').style.display='none'">Deny</button>
+        <button class="btn btn-filled-tonal ripple" data-ripple onclick="document.getElementById('alertDialog').style.display='none';showSnackbar('Location access granted')">Allow</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SNACKBAR CONTAINER -->
+  <div id="snackbarContainer" style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:300;display:flex;flex-direction:column;gap:8px;pointer-events:none;"></div>
+
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Animate loading bar
-      const loaderBar = document.getElementById('loader-bar');
-      gsap.to(loaderBar, {
-        width: '100%',
-        duration: 2,
-        ease: 'power2.inOut',
-        onComplete: () => {
-          // Fade in main content
-          const splashContent = document.getElementById('splash-content');
-          gsap.to(splashContent, {
-            opacity: 1,
-            scale: 1,
-            duration: 1,
-            ease: 'power4.out'
-          });
+  /*!
+   * KENAI — kenai.js embedded
+   */
+  (function (global) {
+    'use strict';
+    const KENAI = {};
 
-          // Hide loader
-          gsap.to('.loader', {
-            opacity: 0,
-            duration: 0.5,
-            delay: 0.5
-          });
-        }
-      });
+    KENAI.Theme = (function () {
+      const STORAGE_KEY = 'kenai-theme';
+      const ATTR = 'data-theme';
+      const root = document.documentElement;
 
-      // Create particle effect
-      const createParticle = () => {
-        const particle = document.createElement('div');
-        particle.className = 'absolute w-1 h-1 bg-white/30 rounded-full';
-        particle.style.left = Math.random() * 100 + 'vw';
-        particle.style.top = '100vh';
-        document.body.appendChild(particle);
-
-        gsap.to(particle, {
-          y: -window.innerHeight - 10,
-          x: (Math.random() - 0.5) * 200,
-          duration: Math.random() * 2 + 1,
-          ease: 'none',
-          opacity: 0,
-          onComplete: () => {
-            particle.remove();
-            createParticle();
-          }
-        });
-      };
-
-      // Initialize particles
-      for (let i = 0; i < 30; i++) {
-        setTimeout(createParticle, i * 200);
+      function resolve() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored === 'light' || stored === 'dark') return stored;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       }
+
+      function apply(theme) {
+        root.setAttribute(ATTR, theme);
+        localStorage.setItem(STORAGE_KEY, theme);
+        document.querySelectorAll('[data-kenai-theme-toggle]').forEach(btn => {
+          btn.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+          btn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+        });
+        root.dispatchEvent(new CustomEvent('kenai:themechange', { detail: { theme } }));
+      }
+
+      function toggle() { apply(current() === 'dark' ? 'light' : 'dark'); }
+      function current() { return root.getAttribute(ATTR) || 'light'; }
+
+      function init() {
+        apply(resolve());
+        document.addEventListener('click', function (e) {
+          const btn = e.target.closest('[data-kenai-theme-toggle]');
+          if (btn) toggle();
+        });
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+          if (!localStorage.getItem(STORAGE_KEY)) apply(e.matches ? 'dark' : 'light');
+        });
+      }
+
+      return { init, toggle, apply, current, resolve };
+    })();
+
+    KENAI.Ripple = (function () {
+      const RIPPLE_CLASS = 'kenai-ripple-wave';
+
+      function injectStyles() {
+        if (document.getElementById('kenai-ripple-styles')) return;
+        const style = document.createElement('style');
+        style.id = 'kenai-ripple-styles';
+        style.textContent = `
+          .kenai-ripple-wave {
+            position: absolute; border-radius: 50%; transform: scale(0);
+            animation: kenai-ripple-anim 550ms cubic-bezier(0.2, 0, 0, 1) forwards;
+            background: currentColor; opacity: 0.12; pointer-events: none;
+          }
+          @keyframes kenai-ripple-anim { to { transform: scale(4); opacity: 0; } }
+        `;
+        document.head.appendChild(style);
+      }
+
+      function spawn(element, event) {
+        const rect = element.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = (event.clientX - rect.left) - size / 2;
+        const y = (event.clientY - rect.top) - size / 2;
+        const ripple = document.createElement('span');
+        ripple.classList.add(RIPPLE_CLASS);
+        ripple.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px;`;
+        const pos = window.getComputedStyle(element).position;
+        if (pos === 'static') element.style.position = 'relative';
+        element.appendChild(ripple);
+        ripple.addEventListener('animationend', () => ripple.remove());
+      }
+
+      function attach(root) {
+        const targets = (root || document).querySelectorAll('.ripple, [data-ripple]');
+        targets.forEach(el => {
+          if (el._kenaiRipple) return;
+          el._kenaiRipple = true;
+          el.addEventListener('pointerdown', function (e) { spawn(this, e); });
+        });
+      }
+
+      function observe() {
+        const observer = new MutationObserver(mutations => {
+          mutations.forEach(m => {
+            m.addedNodes.forEach(node => {
+              if (node.nodeType !== 1) return;
+              if (node.matches && node.matches('.ripple, [data-ripple]')) attach(node.parentElement);
+              else if (node.querySelectorAll) attach(node);
+            });
+          });
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+      }
+
+      function init() { injectStyles(); attach(); observe(); }
+      return { init, attach, spawn };
+    })();
+
+    KENAI.Color = (function () {
+      function hexToRgb(hex) {
+        hex = hex.replace('#', '');
+        if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+        const n = parseInt(hex, 16);
+        return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+      }
+      function clamp(val, min, max) { return Math.min(max, Math.max(min, val)); }
+      function rgbToHex(r, g, b) {
+        return '#' + [r, g, b].map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+      }
+      function adjust(hex, ratio) {
+        const { r, g, b } = hexToRgb(hex);
+        const factor = ratio > 0 ? (255 - Math.max(r, g, b)) * ratio : Math.min(r, g, b) * Math.abs(ratio);
+        const sign = ratio > 0 ? 1 : -1;
+        return rgbToHex(clamp(r + factor * sign, 0, 255), clamp(g + factor * sign, 0, 255), clamp(b + factor * sign, 0, 255));
+      }
+      function applyPalette(seedHex, target) {
+        const el = target ? document.querySelector(target) : document.documentElement;
+        if (!el) return;
+        el.style.setProperty('--md-primary', seedHex);
+        el.style.setProperty('--md-on-primary', adjust(seedHex, 0.9));
+        el.style.setProperty('--md-primary-container', adjust(seedHex, 0.75));
+        el.style.setProperty('--md-on-primary-container', adjust(seedHex, -0.6));
+        el.style.setProperty('--md-inverse-primary', adjust(seedHex, 0.4));
+      }
+      return { applyPalette, hexToRgb, adjust };
+    })();
+
+    function init() { KENAI.Theme.init(); KENAI.Ripple.init(); }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+    global.KENAI = KENAI;
+
+  })(typeof window !== 'undefined' ? window : this);
+
+  // ============================================================
+  // DEMO PAGE INTERACTIVITY
+  // ============================================================
+
+  // Scroll-reactive top app bar
+  window.addEventListener('scroll', () => {
+    const bar = document.getElementById('appBar');
+    if (window.scrollY > 8) bar.classList.add('scrolled');
+    else bar.classList.remove('scrolled');
+  });
+
+  // Tabs
+  document.getElementById('tabsDemo').addEventListener('click', e => {
+    const tab = e.target.closest('.tab');
+    if (!tab) return;
+    document.querySelectorAll('#tabsDemo .tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+
+  // Nav items
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
     });
+  });
+
+  // Drawer items
+  document.querySelectorAll('.drawer-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.drawer-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+    });
+  });
+
+  // Slider
+  const slider = document.getElementById('sliderDemo');
+  const sliderVal = document.getElementById('sliderVal');
+  slider.addEventListener('input', () => sliderVal.textContent = slider.value);
+
+  // Snackbar
+  function showSnackbar(message, withAction = false) {
+    const container = document.getElementById('snackbarContainer');
+    const sb = document.createElement('div');
+    sb.className = 'snackbar';
+    sb.style.pointerEvents = 'all';
+    sb.innerHTML = `<span>${message}</span>${withAction ? '<button class="snackbar-action ripple" data-ripple onclick="this.closest(\'.snackbar\').remove()">Undo</button>' : ''}`;
+    container.appendChild(sb);
+    KENAI.Ripple.attach(sb);
+    setTimeout(() => {
+      sb.style.opacity = '0';
+      sb.style.transform = 'translateY(10px)';
+      sb.style.transition = 'opacity 200ms,transform 200ms';
+      setTimeout(() => sb.remove(), 200);
+    }, withAction ? 5000 : 3000);
+  }
+
+  // Color seed
+  function applySeed() {
+    const hex = document.getElementById('colorSeed').value;
+    KENAI.Color.applyPalette(hex);
+    showSnackbar('Palette applied from seed ' + hex);
+  }
+  function resetSeed() {
+    ['--md-primary','--md-on-primary','--md-primary-container','--md-on-primary-container','--md-inverse-primary'].forEach(p =>
+      document.documentElement.style.removeProperty(p));
+    document.getElementById('colorSeed').value = '#1B6EF3';
+    showSnackbar('Palette reset to default');
+  }
+
+  // Animate cards
+  function animateCards() {
+    ['mc1','mc2','mc3'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      el.style.transform = 'translateY(-12px) scale(1.03)';
+      el.style.boxShadow = 'var(--md-elevation-3)';
+      setTimeout(() => {
+        el.style.transform = '';
+        el.style.boxShadow = '';
+      }, 400 + i * 80);
+    });
+  }
+
+  // Progress demo
+  function triggerProgress() {
+    const container = document.getElementById('progressContainer');
+    const bar = document.getElementById('demoProgress');
+    container.style.display = 'block';
+    bar.style.width = '0%';
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        bar.style.width = '30%';
+        setTimeout(() => { bar.style.width = '65%';
+          setTimeout(() => { bar.style.width = '100%';
+            setTimeout(() => { container.style.display = 'none'; bar.style.width = '0%'; }, 800);
+          }, 600);
+        }, 500);
+      }, 50);
+    });
+  }
   </script>
 </body>
 </html>
