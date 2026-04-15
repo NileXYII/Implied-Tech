@@ -1,1227 +1,1405 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KENAI — Material Design 3 Framework</title>
+  <title>KENAI — Material Design 3 CSS Framework</title>
+  <meta name="description" content="KENAI is a stock Android / Pixel-inspired Material Design 3 CSS framework. Link it. Use it. Ship it." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet" />
-
-  <!-- KENAI v0.2.0 -->
-  <link rel="stylesheet" href="kenai0.2.0.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="kenai.css" />
 
   <style>
-    /* ============================================================
-       DEMO PAGE — Top App Bar Component
-       (not yet in kenai.css, kept here for demo)
-    ============================================================ */
-    .top-app-bar {
+    /* ================================================================
+       PAGE-LEVEL STYLES — not part of kenai.css
+    ================================================================ */
+
+    /* --- Code block / syntax highlight --- */
+    .code-card {
+      background: #0D1117;
+      border-radius: var(--md-shape-medium);
+      overflow: hidden;
+      font-family: var(--md-font-mono);
+      font-size: 13px;
+      line-height: 1.7;
+      box-shadow: var(--md-elevation-3);
+      position: relative;
+    }
+    [data-theme="light"] .code-card { background: #1A1E27; }
+
+    .code-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px var(--md-spacing-4);
+      background: rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .code-bar-dots { display: flex; gap: 6px; }
+    .code-bar-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+    }
+    .dot-red    { background: #FF5F57; }
+    .dot-yellow { background: #FEBC2E; }
+    .dot-green  { background: #28C840; }
+    .code-bar-lang {
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .code-copy-btn {
+      background: rgba(255,255,255,0.08);
+      border: none;
+      border-radius: var(--md-shape-extra-small);
+      color: rgba(255,255,255,0.5);
+      font-size: 11px;
+      padding: 3px 8px;
+      cursor: pointer;
+      font-family: var(--md-font-mono);
+      transition: background 150ms, color 150ms;
+    }
+    .code-copy-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
+    .code-body {
+      padding: var(--md-spacing-4) var(--md-spacing-5);
+      overflow-x: auto;
+      color: #CDD9E5;
+    }
+    .code-body pre { margin: 0; white-space: pre; }
+
+    /* Syntax tokens */
+    .t-kw   { color: #FF7B72; }   /* keyword */
+    .t-fn   { color: #D2A8FF; }   /* function / class */
+    .t-str  { color: #A5D6FF; }   /* string */
+    .t-val  { color: #79C0FF; }   /* value / number */
+    .t-cmt  { color: #8B949E; font-style: italic; }  /* comment */
+    .t-tag  { color: #7EE787; }   /* html tag */
+    .t-attr { color: #FF7B72; }   /* attribute */
+    .t-cls  { color: #FFA657; }   /* class name */
+    .t-prop { color: #79C0FF; }   /* css property */
+    .t-punc { color: #CDD9E5; }   /* punctuation */
+
+    /* --- App Bar --- */
+    .app-bar {
       position: sticky; top: 0; z-index: var(--md-z-fixed);
       display: flex; align-items: center; gap: var(--md-spacing-1);
-      padding: var(--md-spacing-2) var(--md-spacing-4);
+      padding: 0 var(--md-spacing-2);
+      height: 64px;
       background: var(--md-surface-container);
-      min-height: 64px;
       transition: background-color var(--md-duration-medium-2) var(--md-easing-standard),
                   box-shadow var(--md-duration-short-4) var(--md-easing-standard);
     }
-    .top-app-bar.scrolled {
+    .app-bar.scrolled {
       background: var(--md-surface-container-high);
       box-shadow: var(--md-elevation-2);
     }
-    .top-app-bar-title {
-      flex: 1;
-      font-family: var(--md-font-brand);
-      font-size: var(--md-title-large-size);
-      line-height: var(--md-title-large-line);
-      font-weight: 400;
-      color: var(--md-on-surface);
-      margin-left: var(--md-spacing-2);
+    .app-bar-logo {
+      display: flex; align-items: center; gap: var(--md-spacing-2);
+      font-family: var(--md-font-brand); font-size: var(--md-title-large-size);
+      font-weight: 700; color: var(--md-on-surface);
+      text-decoration: none; padding: 0 var(--md-spacing-2);
     }
-
-    /* --- Navigation Bar --- */
-    .nav-bar {
-      display: flex;
-      background: var(--md-surface-container);
-      border-top: 1px solid var(--md-outline-variant);
-    }
-    .nav-item {
-      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 12px 0 16px;
-      gap: 4px; cursor: pointer; color: var(--md-on-surface-variant);
-      transition: color var(--md-duration-short-4) var(--md-easing-standard);
-      position: relative;
-    }
-    .nav-item.active { color: var(--md-on-secondary-container); }
-    .nav-item-indicator {
-      position: absolute; top: 10px;
-      width: 64px; height: 32px;
-      border-radius: var(--md-shape-full);
-      background: transparent;
-      transition: background-color var(--md-duration-short-4) var(--md-easing-standard);
-    }
-    .nav-item.active .nav-item-indicator { background: var(--md-secondary-container); }
-    .nav-item-icon { position: relative; z-index: 1; font-size: 24px; }
-    .nav-item-label { font-size: var(--md-label-medium-size); font-weight: var(--md-label-medium-weight); }
-
-    /* --- Navigation Drawer --- */
-    .nav-drawer {
-      width: 360px;
-      background: var(--md-surface-container-low);
-      border-radius: 0 var(--md-shape-extra-large) var(--md-shape-extra-large) 0;
-      padding: var(--md-spacing-3);
-      display: flex; flex-direction: column; gap: 2px;
-    }
-    .drawer-section-title {
-      font-size: var(--md-title-small-size); font-weight: 500;
-      color: var(--md-on-surface-variant);
-      padding: var(--md-spacing-4) var(--md-spacing-4) var(--md-spacing-2);
-    }
-    .drawer-item {
-      display: flex; align-items: center; gap: var(--md-spacing-3);
-      padding: 0 var(--md-spacing-4); height: 56px;
-      border-radius: var(--md-shape-full);
-      color: var(--md-on-surface-variant);
-      cursor: pointer;
-      transition: background-color var(--md-duration-short-3) var(--md-easing-standard),
-                  color var(--md-duration-short-3) var(--md-easing-standard);
-      font-size: var(--md-label-large-size); font-weight: 500;
-    }
-    .drawer-item:hover { background: color-mix(in srgb, var(--md-on-surface) 8%, transparent); }
-    .drawer-item.active {
-      background: var(--md-secondary-container);
-      color: var(--md-on-secondary-container);
-    }
-    .drawer-badge { margin-left: auto; }
-
-    /* --- List --- */
-    .list { display: flex; flex-direction: column; }
-    .list-item {
-      display: flex; align-items: center; gap: var(--md-spacing-4);
-      padding: var(--md-spacing-3) var(--md-spacing-4);
-      min-height: 56px;
-      cursor: pointer; color: var(--md-on-surface);
-      transition: background-color var(--md-duration-short-3) var(--md-easing-standard);
-      position: relative;
-    }
-    .list-item:hover { background: color-mix(in srgb, var(--md-on-surface) 8%, transparent); }
-    .list-item-leading { color: var(--md-on-surface-variant); flex-shrink: 0; }
-    .list-item-content { flex: 1; min-width: 0; }
-    .list-item-headline { font-size: var(--md-body-large-size); color: var(--md-on-surface); }
-    .list-item-supporting { font-size: var(--md-body-medium-size); color: var(--md-on-surface-variant); }
-    .list-item-trailing { color: var(--md-on-surface-variant); flex-shrink: 0; font-size: var(--md-label-small-size); }
-
-    /* --- Tabs --- */
-    .tabs {
-      display: flex;
-      border-bottom: 1px solid var(--md-outline-variant);
-      overflow-x: auto;
-    }
-    .tab {
-      flex: 1; min-width: 90px;
-      display: flex; align-items: center; justify-content: center; gap: var(--md-spacing-2);
-      padding: 14px var(--md-spacing-4);
-      font-size: var(--md-title-small-size); font-weight: 500;
-      color: var(--md-on-surface-variant);
-      cursor: pointer; border: none; background: none;
-      position: relative;
-      transition: color var(--md-duration-short-3) var(--md-easing-standard);
-      white-space: nowrap;
-    }
-    .tab::after {
-      content: '';
-      position: absolute; bottom: 0; left: 0; right: 0;
-      height: 3px; border-radius: 3px 3px 0 0;
-      background: var(--md-primary);
-      transform: scaleX(0);
-      transition: transform var(--md-duration-short-4) var(--md-easing-standard);
-    }
-    .tab.active { color: var(--md-primary); }
-    .tab.active::after { transform: scaleX(1); }
-
-    /* --- Tooltip --- */
-    .tooltip-wrapper { position: relative; display: inline-flex; }
-    .tooltip {
-      position: absolute; bottom: calc(100% + 8px); left: 50%;
-      transform: translateX(-50%);
-      background: var(--md-inverse-surface);
-      color: var(--md-inverse-on-surface);
-      padding: 4px 8px;
-      border-radius: var(--md-shape-extra-small);
-      font-size: var(--md-label-small-size); font-weight: 500;
-      white-space: nowrap; pointer-events: none;
-      opacity: 0;
-      z-index: var(--md-z-tooltip);
-      transition: opacity var(--md-duration-short-3) var(--md-easing-standard),
-                  transform var(--md-duration-short-3) var(--md-easing-standard);
-      transform: translateX(-50%) translateY(4px);
-    }
-    .tooltip-wrapper:hover .tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    /* --- Text Fields --- */
-    .text-field { position: relative; display: flex; flex-direction: column; }
-    .text-field-filled .tf-container {
-      background: var(--md-surface-container-high);
-      border-radius: var(--md-shape-extra-small) var(--md-shape-extra-small) 0 0;
-      padding: 8px 16px 8px;
-      border-bottom: 1px solid var(--md-on-surface-variant);
-      transition: border-color var(--md-duration-short-3) var(--md-easing-standard),
-                  border-width var(--md-duration-short-3) var(--md-easing-standard);
-    }
-    .text-field-filled .tf-container:focus-within {
-      border-bottom: 2px solid var(--md-primary);
-    }
-    .text-field-outlined .tf-container {
-      border: 1px solid var(--md-outline);
-      border-radius: var(--md-shape-extra-small);
-      padding: 8px 16px;
-      background: transparent;
-      transition: border-color var(--md-duration-short-3) var(--md-easing-standard),
-                  border-width var(--md-duration-short-3) var(--md-easing-standard);
-    }
-    .text-field-outlined .tf-container:focus-within { border: 2px solid var(--md-primary); }
-    .tf-label { font-size: var(--md-body-small-size); color: var(--md-on-surface-variant); margin-bottom: 2px; }
-    .tf-container:focus-within .tf-label { color: var(--md-primary); }
-    .tf-input { background: transparent; border: none; outline: none; color: var(--md-on-surface); font-size: var(--md-body-large-size); width: 100%; }
-    .tf-support { font-size: var(--md-body-small-size); color: var(--md-on-surface-variant); padding: 4px 16px 0; }
-    .tf-support.error { color: var(--md-error); }
-    .text-field.error .tf-container { border-color: var(--md-error); }
-
-    /* --- Checkbox --- */
-    .checkbox-wrapper { display: inline-flex; align-items: center; gap: var(--md-spacing-3); cursor: pointer; user-select: none; }
-    .checkbox {
-      appearance: none; width: 18px; height: 18px;
-      border: 2px solid var(--md-on-surface-variant); border-radius: 2px;
-      cursor: pointer; position: relative;
-      transition: background-color var(--md-duration-short-3) var(--md-easing-standard),
-                  border-color var(--md-duration-short-3) var(--md-easing-standard);
-    }
-    .checkbox:checked { background: var(--md-primary); border-color: var(--md-primary); }
-    .checkbox:checked::after {
-      content: ''; position: absolute; top: 1px; left: 4px;
-      width: 6px; height: 10px;
-      border: 2px solid var(--md-on-primary); border-top: none; border-left: none;
-      transform: rotate(45deg);
-    }
-
-    /* --- Switch --- */
-    .switch-wrapper { display: inline-flex; align-items: center; gap: var(--md-spacing-3); cursor: pointer; user-select: none; }
-    .switch {
-      appearance: none; width: 52px; height: 32px;
-      border-radius: var(--md-shape-full);
-      background: var(--md-surface-variant); border: 2px solid var(--md-outline);
-      cursor: pointer; position: relative;
-      transition: background-color var(--md-duration-short-4) var(--md-easing-standard),
-                  border-color var(--md-duration-short-4) var(--md-easing-standard);
-    }
-    .switch::after {
-      content: ''; position: absolute; top: 50%; left: 2px;
-      width: 24px; height: 24px; border-radius: 50%;
-      background: var(--md-outline);
-      transform: translateY(-50%);
-      transition: transform var(--md-duration-short-4) var(--md-easing-standard),
-                  width var(--md-duration-short-4) var(--md-easing-standard),
-                  background var(--md-duration-short-4) var(--md-easing-standard);
-    }
-    .switch:checked { background: var(--md-primary); border-color: var(--md-primary); }
-    .switch:checked::after { transform: translateY(-50%) translateX(20px); background: var(--md-on-primary); }
-    .switch:active::after { width: 28px; }
-
-    /* --- Radio --- */
-    .radio-wrapper { display: inline-flex; align-items: center; gap: var(--md-spacing-3); cursor: pointer; user-select: none; }
-    .radio {
-      appearance: none; width: 20px; height: 20px;
-      border: 2px solid var(--md-on-surface-variant); border-radius: 50%;
-      cursor: pointer; position: relative;
-      transition: border-color var(--md-duration-short-3) var(--md-easing-standard);
-    }
-    .radio:checked { border-color: var(--md-primary); }
-    .radio:checked::after {
-      content: ''; position: absolute; top: 50%; left: 50%;
-      width: 10px; height: 10px; border-radius: 50%;
-      background: var(--md-primary); transform: translate(-50%, -50%);
-    }
-
-    /* --- Slider --- */
-    .slider { appearance: none; width: 100%; height: 4px; border-radius: var(--md-shape-full); background: var(--md-surface-variant); cursor: pointer; outline: none; accent-color: var(--md-primary); }
-
-    /* --- Dialog --- */
-    .dialog-backdrop {
-      position: fixed; inset: 0; background: var(--md-scrim);
+    .app-bar-logo-mark {
+      width: 32px; height: 32px; border-radius: var(--md-shape-small);
+      background: var(--md-primary); color: var(--md-on-primary);
       display: flex; align-items: center; justify-content: center;
-      z-index: var(--md-z-modal);
-      animation: kenai-fade-in var(--md-duration-short-4) var(--md-easing-standard);
+      font-size: 18px; font-weight: 700;
     }
-    .dialog {
-      background: var(--md-surface-container-high);
-      border-radius: var(--md-shape-dialog);
-      padding: var(--md-spacing-6);
-      max-width: 560px; width: calc(100% - 48px);
-      box-shadow: var(--md-elevation-3);
-      animation: dialog-enter var(--md-duration-medium-2) var(--md-easing-emphasized-decel);
+    .app-bar-nav {
+      display: flex; align-items: center; gap: var(--md-spacing-1);
+      margin-left: var(--md-spacing-4);
     }
-    @keyframes dialog-enter { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    .dialog-title { font-family: var(--md-font-brand); font-size: var(--md-headline-small-size); line-height: var(--md-headline-small-line); font-weight: 400; margin-bottom: var(--md-spacing-4); color: var(--md-on-surface); }
-    .dialog-body { color: var(--md-on-surface-variant); font-size: var(--md-body-medium-size); line-height: var(--md-body-medium-line); margin-bottom: var(--md-spacing-6); }
-    .dialog-actions { display: flex; justify-content: flex-end; gap: var(--md-spacing-2); }
+    .app-bar-nav a {
+      padding: var(--md-spacing-2) var(--md-spacing-3);
+      border-radius: var(--md-shape-full);
+      font-size: var(--md-label-large-size);
+      font-weight: 500;
+      color: var(--md-on-surface-variant);
+      transition: background var(--md-duration-short-3) var(--md-easing-standard), color var(--md-duration-short-3);
+    }
+    .app-bar-nav a:hover { background: color-mix(in srgb, var(--md-on-surface) 8%, transparent); color: var(--md-on-surface); opacity: 1; }
+    .spacer { flex: 1; }
 
-    /* ============================================================
-       DEMO PAGE LAYOUT
-    ============================================================ */
-    .demo-hero {
-      padding: var(--md-spacing-16) var(--md-spacing-4);
+    /* --- Hero --- */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 100px var(--md-spacing-6) 80px;
       text-align: center;
-      background: linear-gradient(160deg, var(--md-surface-container-low) 0%, var(--md-surface) 60%);
-      border-bottom: 1px solid var(--md-outline-variant);
-      animation: hero-enter 600ms var(--md-easing-emphasized-decel) forwards;
+      background: var(--md-surface);
     }
-    @keyframes hero-enter { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-
-    .version-chip {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 4px 12px; border-radius: var(--md-shape-full);
+    .hero-grid-bg {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(var(--md-outline-variant) 1px, transparent 1px),
+        linear-gradient(90deg, var(--md-outline-variant) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.35;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+    }
+    .hero-glow {
+      position: absolute;
+      top: -120px; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 500px;
+      background: radial-gradient(ellipse, color-mix(in srgb, var(--md-primary) 18%, transparent) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: var(--md-spacing-2);
+      padding: 6px 14px; border-radius: var(--md-shape-full);
       background: var(--md-primary-container); color: var(--md-on-primary-container);
-      font-size: var(--md-label-small-size); font-weight: 500; margin-bottom: var(--md-spacing-6);
-    }
-
-    .demo-section {
-      padding: var(--md-spacing-10) var(--md-spacing-4);
-      border-bottom: 1px solid var(--md-outline-variant);
-    }
-    .demo-section:last-child { border-bottom: none; }
-    .section-header { margin-bottom: var(--md-spacing-8); }
-    .section-tag {
-      display: inline-block;
-      font-size: var(--md-label-small-size); font-weight: 500; letter-spacing: 0.08em;
-      text-transform: uppercase; color: var(--md-primary); margin-bottom: var(--md-spacing-2);
-    }
-
-    .component-row {
-      display: flex; flex-wrap: wrap; align-items: center; gap: var(--md-spacing-3);
-      margin-bottom: var(--md-spacing-4);
-    }
-
-    .demo-label {
       font-size: var(--md-label-medium-size); font-weight: 500;
+      margin-bottom: var(--md-spacing-6);
+      letter-spacing: 0.03em;
+      border: 1px solid color-mix(in srgb, var(--md-primary) 30%, transparent);
+    }
+    .hero-title {
+      font-family: 'Google Sans Display', var(--md-font-brand);
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      line-height: 1.1;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--md-on-surface);
+      margin-bottom: var(--md-spacing-6);
+    }
+    .hero-title strong { font-weight: 700; color: var(--md-primary); }
+    .hero-subtitle {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      line-height: 1.6;
       color: var(--md-on-surface-variant);
-      text-transform: uppercase; letter-spacing: 0.06em;
-      margin-bottom: var(--md-spacing-3);
+      max-width: 540px;
+      margin: 0 auto var(--md-spacing-10);
     }
-
-    .color-swatch {
-      width: 80px; height: 80px; border-radius: var(--md-shape-medium);
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: var(--md-spacing-2); font-size: 10px; font-weight: 500;
+    .hero-actions { display: flex; align-items: center; justify-content: center; gap: var(--md-spacing-3); flex-wrap: wrap; }
+    .hero-stats {
+      display: flex; align-items: center; justify-content: center; gap: var(--md-spacing-8);
+      margin-top: var(--md-spacing-16);
+      padding-top: var(--md-spacing-8);
+      border-top: 1px solid var(--md-outline-variant);
+      flex-wrap: wrap;
     }
-
-    .type-row {
-      padding: var(--md-spacing-3) 0;
-      border-bottom: 1px solid var(--md-outline-variant);
+    .hero-stat-value {
+      font-family: var(--md-font-brand);
+      font-size: 2rem; font-weight: 700;
+      color: var(--md-on-surface);
+      line-height: 1;
     }
-    .type-row:last-child { border-bottom: none; }
-
-    .elevation-box {
-      width: 80px; height: 80px; border-radius: var(--md-shape-medium);
-      display: flex; align-items: center; justify-content: center;
-      font-size: var(--md-label-small-size); font-weight: 500; color: var(--md-on-surface);
-    }
-
-    .shape-box {
-      width: 80px; height: 80px;
-      background: var(--md-primary-container); color: var(--md-on-primary-container);
-      display: flex; align-items: center; justify-content: center;
-      font-size: var(--md-label-small-size); font-weight: 500;
-    }
-
-    /* Token pill for new token display */
-    .token-row {
-      display: flex; align-items: center; gap: var(--md-spacing-3);
-      padding: var(--md-spacing-2) 0;
-      border-bottom: 1px solid var(--md-outline-variant);
-    }
-    .token-row:last-child { border-bottom: none; }
-    .token-swatch {
-      width: 40px; height: 40px; border-radius: var(--md-shape-small);
-      flex-shrink: 0; border: 1px solid var(--md-outline-variant);
-    }
-    .token-name { font-family: var(--md-font-mono); font-size: var(--md-body-small-size); color: var(--md-on-surface); flex: 1; }
-    .token-value { font-size: var(--md-body-small-size); color: var(--md-on-surface-variant); }
-
-    /* Code block */
-    .code-block {
-      background: var(--md-surface-container-highest);
-      border-radius: var(--md-shape-medium);
-      padding: var(--md-spacing-4) var(--md-spacing-5);
-      font-family: var(--md-font-mono);
+    .hero-stat-label {
       font-size: var(--md-body-small-size);
       color: var(--md-on-surface-variant);
-      overflow-x: auto;
-      line-height: 1.7;
+      margin-top: 4px;
     }
 
-    /* Stagger animation for sections */
-    .demo-section {
-      opacity: 0;
-      animation: section-enter 500ms var(--md-easing-emphasized-decel) forwards;
+    /* --- Section layout --- */
+    .section {
+      padding: 80px var(--md-spacing-6);
+      border-bottom: 1px solid var(--md-outline-variant);
     }
-    .demo-section:nth-child(1)  { animation-delay: 100ms; }
-    .demo-section:nth-child(2)  { animation-delay: 150ms; }
-    .demo-section:nth-child(3)  { animation-delay: 200ms; }
-    .demo-section:nth-child(4)  { animation-delay: 250ms; }
-    .demo-section:nth-child(5)  { animation-delay: 300ms; }
-    .demo-section:nth-child(6)  { animation-delay: 350ms; }
-    .demo-section:nth-child(7)  { animation-delay: 400ms; }
-    .demo-section:nth-child(8)  { animation-delay: 450ms; }
-    .demo-section:nth-child(9)  { animation-delay: 500ms; }
-    .demo-section:nth-child(10) { animation-delay: 550ms; }
-    .demo-section:nth-child(11) { animation-delay: 600ms; }
-    @keyframes section-enter { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .section:last-of-type { border-bottom: none; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-eyebrow {
+      font-size: var(--md-label-medium-size);
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--md-primary);
+      margin-bottom: var(--md-spacing-2);
+    }
+    .section-title {
+      font-family: var(--md-font-brand);
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 400;
+      color: var(--md-on-surface);
+      line-height: 1.2;
+      margin-bottom: var(--md-spacing-3);
+    }
+    .section-desc {
+      font-size: var(--md-body-large-size);
+      color: var(--md-on-surface-variant);
+      max-width: 560px;
+      line-height: 1.6;
+      margin-bottom: var(--md-spacing-10);
+    }
 
-    @media (max-width: 600px) {
-      .demo-hero { padding: var(--md-spacing-10) var(--md-spacing-4); }
-      .nav-drawer { width: 100%; }
+    /* --- Compare banner (vs Bootstrap / Tailwind) --- */
+    .compare-bar {
+      background: var(--md-surface-container-high);
+      border-radius: var(--md-shape-large);
+      padding: var(--md-spacing-4) var(--md-spacing-6);
+      display: flex; align-items: center; gap: var(--md-spacing-4);
+      flex-wrap: wrap;
+      border: 1px solid var(--md-outline-variant);
     }
+    .compare-item {
+      display: flex; align-items: center; gap: var(--md-spacing-2);
+      font-size: var(--md-body-medium-size); color: var(--md-on-surface-variant);
+    }
+    .compare-item strong { color: var(--md-on-surface); }
+    .compare-check { color: #28A745; font-size: 18px; }
+    .compare-cross { color: var(--md-error); font-size: 18px; }
+
+    /* --- Feature cards --- */
+    .feature-card {
+      background: var(--md-surface-container-low);
+      border-radius: var(--md-shape-large);
+      padding: var(--md-spacing-6);
+      border: 1px solid var(--md-outline-variant);
+      transition: box-shadow var(--md-duration-medium-1) var(--md-easing-standard),
+                  border-color var(--md-duration-medium-1) var(--md-easing-standard),
+                  background var(--md-duration-medium-1) var(--md-easing-standard);
+    }
+    .feature-card:hover {
+      box-shadow: var(--md-elevation-2);
+      border-color: var(--md-primary);
+      background: var(--md-surface-container);
+    }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: var(--md-shape-medium);
+      background: var(--md-primary-container);
+      color: var(--md-on-primary-container);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      margin-bottom: var(--md-spacing-4);
+    }
+    .feature-title {
+      font-family: var(--md-font-brand);
+      font-size: var(--md-title-medium-size);
+      font-weight: 500;
+      color: var(--md-on-surface);
+      margin-bottom: var(--md-spacing-2);
+    }
+    .feature-desc {
+      font-size: var(--md-body-medium-size);
+      color: var(--md-on-surface-variant);
+      line-height: 1.6;
+    }
+
+    /* --- Component preview + code --- */
+    .component-showcase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--md-spacing-4);
+      align-items: start;
+    }
+    @media (max-width: 760px) {
+      .component-showcase { grid-template-columns: 1fr; }
+      .app-bar-nav { display: none; }
+      .hero { padding: 64px var(--md-spacing-4) 48px; }
+      .section { padding: 56px var(--md-spacing-4); }
+    }
+    .preview-panel {
+      background: var(--md-surface-container-low);
+      border-radius: var(--md-shape-large);
+      padding: var(--md-spacing-6);
+      border: 1px solid var(--md-outline-variant);
+      display: flex; flex-direction: column; gap: var(--md-spacing-4);
+      min-height: 240px;
+      justify-content: center;
+    }
+    .preview-label {
+      font-size: var(--md-label-small-size);
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--md-on-surface-variant);
+      margin-bottom: var(--md-spacing-2);
+    }
+
+    /* --- Demo section tabs nav --- */
+    .demo-tabs {
+      display: flex; gap: 2px;
+      background: var(--md-surface-container);
+      border-radius: var(--md-shape-medium);
+      padding: 4px;
+      width: fit-content;
+      margin-bottom: var(--md-spacing-8);
+    }
+    .demo-tab {
+      padding: var(--md-spacing-2) var(--md-spacing-4);
+      border-radius: calc(var(--md-shape-medium) - 2px);
+      font-size: var(--md-label-large-size);
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--md-on-surface-variant);
+      transition: background var(--md-duration-short-3) var(--md-easing-standard), color var(--md-duration-short-3);
+    }
+    .demo-tab.active {
+      background: var(--md-surface);
+      color: var(--md-on-surface);
+      box-shadow: var(--md-elevation-1);
+    }
+
+    /* --- Token table --- */
+    .token-table { width: 100%; border-collapse: collapse; }
+    .token-table td {
+      padding: var(--md-spacing-2) var(--md-spacing-4);
+      font-size: var(--md-body-medium-size);
+      border-bottom: 1px solid var(--md-outline-variant);
+      vertical-align: middle;
+    }
+    .token-table tr:last-child td { border-bottom: none; }
+    .token-name {
+      font-family: var(--md-font-mono);
+      font-size: 12px;
+      color: var(--md-primary);
+      font-weight: 500;
+    }
+    .token-value {
+      font-family: var(--md-font-mono);
+      font-size: 12px;
+      color: var(--md-on-surface-variant);
+    }
+    .token-swatch {
+      width: 28px; height: 28px; border-radius: var(--md-shape-extra-small);
+      border: 1px solid var(--md-outline-variant);
+    }
+
+    /* --- CTA section --- */
+    .cta-section {
+      background: var(--md-primary);
+      color: var(--md-on-primary);
+      padding: 80px var(--md-spacing-6);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .cta-inner { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+    .cta-title {
+      font-family: 'Google Sans Display', var(--md-font-brand);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: var(--md-spacing-4);
+    }
+    .cta-desc {
+      font-size: var(--md-body-large-size);
+      opacity: 0.85;
+      margin-bottom: var(--md-spacing-8);
+      line-height: 1.6;
+    }
+    .btn-cta-primary {
+      background: var(--md-on-primary);
+      color: var(--md-primary);
+      height: 48px;
+      padding: 0 var(--md-spacing-8);
+      border-radius: var(--md-shape-full);
+      font-family: var(--md-font-plain);
+      font-size: var(--md-title-small-size);
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: var(--md-spacing-2);
+      transition: box-shadow var(--md-duration-short-4) var(--md-easing-standard),
+                  transform var(--md-duration-short-3) var(--md-easing-spring);
+      position: relative; overflow: hidden;
+    }
+    .btn-cta-primary:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .btn-cta-primary:active { transform: scale(0.97); }
+
+    /* --- Footer --- */
+    footer {
+      background: var(--md-surface-container);
+      padding: var(--md-spacing-10) var(--md-spacing-6) var(--md-spacing-8);
+      border-top: 1px solid var(--md-outline-variant);
+    }
+    .footer-inner { max-width: 1100px; margin: 0 auto; }
+    .footer-logo {
+      font-family: var(--md-font-brand);
+      font-size: var(--md-title-large-size);
+      font-weight: 700;
+      color: var(--md-on-surface);
+      display: flex; align-items: center; gap: var(--md-spacing-2);
+      margin-bottom: var(--md-spacing-2);
+    }
+    .footer-tagline { font-size: var(--md-body-small-size); color: var(--md-on-surface-variant); }
+    .footer-links { display: flex; gap: var(--md-spacing-4); flex-wrap: wrap; }
+    .footer-links a {
+      font-size: var(--md-body-medium-size);
+      color: var(--md-on-surface-variant);
+      transition: color var(--md-duration-short-3);
+    }
+    .footer-links a:hover { color: var(--md-primary); opacity: 1; }
+
+    /* --- Misc --- */
+    .badge-new {
+      display: inline-flex; align-items: center;
+      padding: 2px 8px; border-radius: var(--md-shape-full);
+      background: var(--md-tertiary-container); color: var(--md-on-tertiary-container);
+      font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
+      vertical-align: middle; margin-left: 6px;
+    }
+
+    /* Text fields simplified for demo */
+    .tf-wrap { display: flex; flex-direction: column; gap: 4px; }
+    .tf-label-sm { font-size: var(--md-label-medium-size); color: var(--md-on-surface-variant); }
+    .tf-input-filled {
+      background: var(--md-surface-container-high);
+      border: none; border-bottom: 1px solid var(--md-outline);
+      border-radius: var(--md-shape-extra-small) var(--md-shape-extra-small) 0 0;
+      padding: var(--md-spacing-3) var(--md-spacing-4);
+      color: var(--md-on-surface); font-size: var(--md-body-large-size);
+      outline: none; width: 100%;
+      transition: border-color var(--md-duration-short-3);
+    }
+    .tf-input-filled:focus { border-bottom: 2px solid var(--md-primary); }
+    .tf-input-outlined {
+      background: transparent;
+      border: 1px solid var(--md-outline);
+      border-radius: var(--md-shape-extra-small);
+      padding: var(--md-spacing-3) var(--md-spacing-4);
+      color: var(--md-on-surface); font-size: var(--md-body-large-size);
+      outline: none; width: 100%;
+      transition: border-color var(--md-duration-short-3), border-width var(--md-duration-short-3);
+    }
+    .tf-input-outlined:focus { border: 2px solid var(--md-primary); }
+
+    /* Switch native */
+    .sw { appearance:none; width:52px; height:32px; border-radius:var(--md-shape-full); background:var(--md-surface-variant); border:2px solid var(--md-outline); cursor:pointer; position:relative; transition:background var(--md-duration-short-4),border-color var(--md-duration-short-4); vertical-align:middle; }
+    .sw::after { content:''; position:absolute; top:50%; left:2px; width:24px; height:24px; border-radius:50%; background:var(--md-outline); transform:translateY(-50%); transition:transform var(--md-duration-short-4) var(--md-easing-spring), background var(--md-duration-short-4); }
+    .sw:checked { background:var(--md-primary); border-color:var(--md-primary); }
+    .sw:checked::after { transform:translateY(-50%) translateX(20px); background:var(--md-on-primary); }
+
+    /* Checkbox native */
+    .cb { appearance:none; width:18px; height:18px; border:2px solid var(--md-on-surface-variant); border-radius:2px; cursor:pointer; position:relative; transition:background var(--md-duration-short-3),border-color var(--md-duration-short-3); vertical-align:middle; }
+    .cb:checked { background:var(--md-primary); border-color:var(--md-primary); }
+    .cb:checked::after { content:''; position:absolute; top:1px; left:4px; width:6px; height:10px; border:2px solid var(--md-on-primary); border-top:none; border-left:none; transform:rotate(45deg); }
+
+    /* Radio native */
+    .rb { appearance:none; width:20px; height:20px; border:2px solid var(--md-on-surface-variant); border-radius:50%; cursor:pointer; position:relative; transition:border-color var(--md-duration-short-3); vertical-align:middle; }
+    .rb:checked { border-color:var(--md-primary); }
+    .rb:checked::after { content:''; position:absolute; top:50%; left:50%; width:10px; height:10px; border-radius:50%; background:var(--md-primary); transform:translate(-50%,-50%); }
+
+    /* Dialog backdrop */
+    .dialog-backdrop { position:fixed; inset:0; background:var(--md-scrim); display:flex; align-items:center; justify-content:center; z-index:var(--md-z-modal); animation:kenai-fade-in var(--md-duration-short-4) var(--md-easing-standard); }
+    .dialog { background:var(--md-surface-container-high); border-radius:var(--md-shape-dialog); padding:var(--md-spacing-6); max-width:560px; width:calc(100% - 48px); box-shadow:var(--md-elevation-3); }
+    @keyframes dialog-enter { from{transform:scale(0.9);opacity:0} to{transform:scale(1);opacity:1} }
+    .dialog-title { font-family:var(--md-font-brand); font-size:var(--md-headline-small-size); font-weight:400; margin-bottom:var(--md-spacing-4); color:var(--md-on-surface); }
+    .dialog-body { color:var(--md-on-surface-variant); font-size:var(--md-body-medium-size); line-height:var(--md-body-medium-line); margin-bottom:var(--md-spacing-6); }
+    .dialog-actions { display:flex; justify-content:flex-end; gap:var(--md-spacing-2); }
+
+    /* Tooltip */
+    .tt-wrap { position:relative; display:inline-flex; }
+    .tt { position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%) translateY(4px); background:var(--md-inverse-surface); color:var(--md-inverse-on-surface); padding:4px 8px; border-radius:var(--md-shape-extra-small); font-size:var(--md-label-small-size); font-weight:500; white-space:nowrap; pointer-events:none; opacity:0; z-index:var(--md-z-tooltip); transition:opacity var(--md-duration-short-3) var(--md-easing-standard),transform var(--md-duration-short-3) var(--md-easing-standard); }
+    .tt-wrap:hover .tt { opacity:1; transform:translateX(-50%) translateY(0); }
+
+    /* Tabs demo */
+    .tabs-demo { display:flex; border-bottom:1px solid var(--md-outline-variant); overflow-x:auto; }
+    .tab-d { flex:1; min-width:90px; display:flex; align-items:center; justify-content:center; gap:var(--md-spacing-2); padding:14px var(--md-spacing-4); font-size:var(--md-title-small-size); font-weight:500; color:var(--md-on-surface-variant); cursor:pointer; border:none; background:none; position:relative; white-space:nowrap; transition:color var(--md-duration-short-3); }
+    .tab-d::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; border-radius:3px 3px 0 0; background:var(--md-primary); transform:scaleX(0); transition:transform var(--md-duration-short-4) var(--md-easing-standard); }
+    .tab-d.active { color:var(--md-primary); }
+    .tab-d.active::after { transform:scaleX(1); }
+
+    /* Entrance animation */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+    .fade-up { opacity:0; animation:fadeUp var(--md-duration-long-1) var(--md-easing-emphasized-decel) forwards; }
+    .fade-up-1 { animation-delay: 0ms; }
+    .fade-up-2 { animation-delay: 80ms; }
+    .fade-up-3 { animation-delay: 160ms; }
+    .fade-up-4 { animation-delay: 240ms; }
   </style>
 </head>
-
 <body>
 
-  <!-- TOP APP BAR -->
-  <header class="top-app-bar" id="appBar">
-    <button class="icon-btn ripple" aria-label="Menu" data-ripple>
-      <span class="material-symbols-rounded">menu</span>
+<!-- ================================================================
+     TOP APP BAR
+================================================================ -->
+<header class="app-bar" id="appBar">
+  <a class="app-bar-logo ripple" href="#" data-ripple>
+    <div class="app-bar-logo-mark">K</div>
+    KENAI
+  </a>
+  <nav class="app-bar-nav">
+    <a href="#features">Features</a>
+    <a href="#components">Components</a>
+    <a href="#tokens">Tokens</a>
+    <a href="#docs">Docs</a>
+  </nav>
+  <div class="spacer"></div>
+  <div class="flex items-center gap-2">
+    <a href="https://github.com" class="btn btn-outlined btn-sm ripple" data-ripple style="text-decoration:none;">
+      <span class="material-symbols-rounded" style="font-size:18px;">code</span>
+      GitHub
+    </a>
+    <button class="kenai-theme-toggle" data-kenai-theme-toggle aria-label="Toggle theme">
+      <span class="material-symbols-rounded icon-dark">dark_mode</span>
+      <span class="material-symbols-rounded icon-light">light_mode</span>
     </button>
-    <span class="top-app-bar-title">KENAI</span>
-    <div style="display:flex;gap:4px;align-items:center;">
-      <button class="icon-btn ripple" aria-label="Search" data-ripple>
-        <span class="material-symbols-rounded">search</span>
-      </button>
-      <button class="kenai-theme-toggle ripple" data-kenai-theme-toggle data-ripple aria-label="Switch theme">
-        <span class="material-symbols-rounded icon-dark">dark_mode</span>
-        <span class="material-symbols-rounded icon-light">light_mode</span>
+  </div>
+</header>
+
+
+<!-- ================================================================
+     HERO
+================================================================ -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow fade-up fade-up-1">
+      <span class="material-symbols-rounded" style="font-size:14px;">new_releases</span>
+      Version 0.2.0 — Now with 20 components
+    </div>
+    <h1 class="hero-title fade-up fade-up-2">
+      Material Design 3<br><strong>for the web.</strong><br>Just link it.
+    </h1>
+    <p class="hero-subtitle fade-up fade-up-3">
+      KENAI is a stock Android / Pixel-inspired CSS framework built on the M3 spec.
+      No build step. No dependencies. One stylesheet and you're live.
+    </p>
+    <div class="hero-actions fade-up fade-up-4">
+      <a href="#components" class="btn btn-filled btn-lg ripple" data-ripple style="text-decoration:none;">
+        <span class="material-symbols-rounded">explore</span>
+        Explore Components
+      </a>
+      <button class="btn btn-outlined btn-lg ripple" data-ripple onclick="copyInstall()">
+        <span class="material-symbols-rounded">content_copy</span>
+        Copy CDN link
       </button>
     </div>
-  </header>
 
-  <!-- HERO -->
-  <section class="demo-hero">
-    <div class="container max-w-md mx-auto">
-      <div class="version-chip">
-        <span class="material-symbols-rounded" style="font-size:14px;">auto_awesome</span>
-        v0.2.0
-      </div>
-      <h1 class="display-small" style="margin-bottom:var(--md-spacing-4);">
-        Material Design 3<br>for the web
-      </h1>
-      <p class="body-large text-on-surface-variant" style="max-width:480px;margin:0 auto var(--md-spacing-8);">
-        KENAI is a stock Android &amp; Pixel-inspired CSS framework implementing the full M3 design system — tokens, typography, components, and motion.
-      </p>
-      <div class="component-row" style="justify-content:center;">
-        <button class="btn btn-filled ripple" data-ripple>
-          <span class="material-symbols-rounded">rocket_launch</span>
-          Get started
-        </button>
-        <button class="btn btn-outlined ripple" data-ripple>
-          <span class="material-symbols-rounded">code</span>
-          GitHub
-        </button>
+    <!-- Install code card -->
+    <div style="max-width:620px;margin:var(--md-spacing-10) auto 0;" class="fade-up fade-up-4">
+      <div class="code-card">
+        <div class="code-bar">
+          <div class="code-bar-dots">
+            <div class="code-bar-dot dot-red"></div>
+            <div class="code-bar-dot dot-yellow"></div>
+            <div class="code-bar-dot dot-green"></div>
+          </div>
+          <span class="code-bar-lang">HTML</span>
+          <button class="code-copy-btn" onclick="copyInstall()">Copy</button>
+        </div>
+        <div class="code-body"><pre><span class="t-cmt">&lt;!-- Drop this in your &lt;head&gt; --&gt;</span>
+<span class="t-tag">&lt;link</span> <span class="t-attr">rel</span>=<span class="t-str">"stylesheet"</span> <span class="t-attr">href</span>=<span class="t-str">"kenai.css"</span> <span class="t-tag">/&gt;</span>
+
+<span class="t-cmt">&lt;!-- Optional: Roboto + Google Sans --&gt;</span>
+<span class="t-tag">&lt;link</span> <span class="t-attr">href</span>=<span class="t-str">"https://fonts.googleapis.com/css2?<br>       family=Google+Sans&amp;family=Roboto&amp;display=swap"</span>
+      <span class="t-attr">rel</span>=<span class="t-str">"stylesheet"</span> <span class="t-tag">/&gt;</span>
+
+<span class="t-cmt">&lt;!-- Add the runtime for theme toggle + ripple --&gt;</span>
+<span class="t-tag">&lt;script</span> <span class="t-attr">src</span>=<span class="t-str">"kenai.js"</span><span class="t-tag">&gt;&lt;/script&gt;</span></pre></div>
       </div>
     </div>
-  </section>
 
-  <main class="container" style="padding-top:var(--md-spacing-4);">
+    <div class="hero-stats fade-up fade-up-4">
+      <div><div class="hero-stat-value">20+</div><div class="hero-stat-label">Components</div></div>
+      <div><div class="hero-stat-value">150+</div><div class="hero-stat-label">Utility Classes</div></div>
+      <div><div class="hero-stat-value">0</div><div class="hero-stat-label">Dependencies</div></div>
+      <div><div class="hero-stat-value">M3</div><div class="hero-stat-label">Spec Compliant</div></div>
+    </div>
+  </div>
+</section>
 
-    <!-- COLOR SYSTEM -->
-    <section class="demo-section">
-      <div class="section-header">
-        <span class="section-tag">Design Tokens</span>
-        <h2>Color System</h2>
-        <p class="body-medium text-on-surface-variant" style="margin-top:var(--md-spacing-2);">Dynamic color roles from the M3 tonal palette system.</p>
+
+<!-- ================================================================
+     COMPARE STRIP
+================================================================ -->
+<div style="background:var(--md-surface-container-low);border-bottom:1px solid var(--md-outline-variant);padding:var(--md-spacing-4) var(--md-spacing-6);">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="compare-bar">
+      <span class="body-small text-on-surface-variant" style="font-weight:500;margin-right:var(--md-spacing-2);">Why KENAI over Bootstrap/Tailwind?</span>
+      <div class="compare-item"><span class="compare-check material-symbols-rounded">check_circle</span> <span>True M3 color system with tonal palettes</span></div>
+      <div class="compare-item"><span class="compare-check material-symbols-rounded">check_circle</span> <span>Real M3 motion tokens &amp; easing curves</span></div>
+      <div class="compare-item"><span class="compare-check material-symbols-rounded">check_circle</span> <span>Dynamic color from any seed hex</span></div>
+      <div class="compare-item"><span class="compare-check material-symbols-rounded">check_circle</span> <span>Zero build step required</span></div>
+      <div class="compare-item"><span class="compare-cross material-symbols-rounded">cancel</span> <span style="text-decoration:line-through;opacity:.6;">Generic Bootstrap look</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================================================================
+     FEATURES
+================================================================ -->
+<section class="section" id="features">
+  <div class="section-inner">
+    <div class="section-eyebrow">Why KENAI</div>
+    <h2 class="section-title">Everything you need.<br>Nothing you don't.</h2>
+    <p class="section-desc">Built directly from the Material Design 3 specification. Every token, every component, every motion curve — exactly as Google intended.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--md-spacing-4);">
+      <div class="feature-card">
+        <div class="feature-icon"><span class="material-symbols-rounded">palette</span></div>
+        <div class="feature-title">Full M3 Color System</div>
+        <p class="feature-desc">Primary, secondary, tertiary, error, surface containers — all 30+ color roles, light and dark, with proper tonal elevation overlays.</p>
       </div>
-
-      <div class="demo-label">Primary, Secondary &amp; Tertiary</div>
-      <div class="component-row" style="flex-wrap:wrap;">
-        <div class="color-swatch" style="background:var(--md-primary);color:var(--md-on-primary);">Primary</div>
-        <div class="color-swatch" style="background:var(--md-primary-container);color:var(--md-on-primary-container);">P-Container</div>
-        <div class="color-swatch" style="background:var(--md-secondary);color:var(--md-on-secondary);">Secondary</div>
-        <div class="color-swatch" style="background:var(--md-secondary-container);color:var(--md-on-secondary-container);">S-Container</div>
-        <div class="color-swatch" style="background:var(--md-tertiary);color:var(--md-on-tertiary);">Tertiary</div>
-        <div class="color-swatch" style="background:var(--md-tertiary-container);color:var(--md-on-tertiary-container);">T-Container</div>
-        <div class="color-swatch" style="background:var(--md-error);color:var(--md-on-error);">Error</div>
-        <div class="color-swatch" style="background:var(--md-error-container);color:var(--md-on-error-container);">E-Container</div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:var(--md-secondary-container);color:var(--md-on-secondary-container)"><span class="material-symbols-rounded">text_fields</span></div>
+        <div class="feature-title">15-Role Typography Scale</div>
+        <p class="feature-desc">Display, Headline, Title, Body, Label — 3 sizes each. Powered by Google Sans + Roboto, with exact M3 tracking and line heights.</p>
       </div>
-
-      <div class="demo-label" style="margin-top:var(--md-spacing-6);">Surface Container Hierarchy <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--md-on-surface-variant);font-size:var(--md-body-small-size);"> — new in v0.2.0</span></div>
-      <div class="component-row">
-        <div class="color-swatch" style="background:var(--md-surface-container-lowest);color:var(--md-on-surface);font-size:9px;">Lowest</div>
-        <div class="color-swatch" style="background:var(--md-surface-container-low);color:var(--md-on-surface);font-size:9px;">Low</div>
-        <div class="color-swatch" style="background:var(--md-surface-container);color:var(--md-on-surface);">Default</div>
-        <div class="color-swatch" style="background:var(--md-surface-container-high);color:var(--md-on-surface);">High</div>
-        <div class="color-swatch" style="background:var(--md-surface-container-highest);color:var(--md-on-surface);font-size:9px;">Highest</div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:var(--md-tertiary-container);color:var(--md-on-tertiary-container)"><span class="material-symbols-rounded">animation</span></div>
+        <div class="feature-title">M3 Motion Tokens</div>
+        <p class="feature-desc">All 16 duration steps and 9 named easing curves — including Emphasized Decelerate, Standard, and Spring — as CSS custom properties.</p>
       </div>
-
-      <div class="demo-label" style="margin-top:var(--md-spacing-6);">Surface Tones (Tonal Elevation)</div>
-      <div class="component-row">
-        <div class="color-swatch" style="background:var(--md-surface);color:var(--md-on-surface);">Surface</div>
-        <div class="color-swatch" style="background:var(--md-surface-1);color:var(--md-on-surface);">Surface 1</div>
-        <div class="color-swatch" style="background:var(--md-surface-2);color:var(--md-on-surface);">Surface 2</div>
-        <div class="color-swatch" style="background:var(--md-surface-3);color:var(--md-on-surface);">Surface 3</div>
-        <div class="color-swatch" style="background:var(--md-surface-4);color:var(--md-on-surface);">Surface 4</div>
-        <div class="color-swatch" style="background:var(--md-surface-5);color:var(--md-on-surface);">Surface 5</div>
+      <div class="feature-card">
+        <div class="feature-icon"><span class="material-symbols-rounded">water_drop</span></div>
+        <div class="feature-title">Ripple + State Layers</div>
+        <p class="feature-desc">Pixel-perfect M3 ink ripple engine via <code>kenai.js</code>. Every interactive element automatically gets correct hover (8%) and pressed (12%) state layers.</p>
       </div>
-
-      <div class="demo-label" style="margin-top:var(--md-spacing-6);">Dynamic Color Seed</div>
-      <div class="component-row" style="align-items:flex-end;gap:var(--md-spacing-3);">
-        <div class="text-field text-field-outlined" style="width:200px;">
-          <div class="tf-container">
-            <div class="tf-label">Seed color</div>
-            <input class="tf-input" type="color" id="colorSeed" value="#1B6EF3" style="height:28px;padding:0;cursor:pointer;" />
-          </div>
-        </div>
-        <button class="btn btn-tonal ripple" data-ripple onclick="applySeed()">Apply palette</button>
-        <button class="btn btn-text ripple" data-ripple onclick="resetSeed()">Reset</button>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:var(--md-secondary-container);color:var(--md-on-secondary-container)"><span class="material-symbols-rounded">dark_mode</span></div>
+        <div class="feature-title">Light &amp; Dark — Automatic</div>
+        <p class="feature-desc">Flip a single <code>data-theme</code> attribute. Respects <code>prefers-color-scheme</code>, persists to localStorage, fires a custom event.</p>
       </div>
-      <p class="body-small text-on-surface-variant" style="margin-top:var(--md-spacing-2);">Powered by <code>KENAI.Color.applyPalette(hex)</code> — HSL-based M3 palette generation.</p>
-    </section>
-
-    <!-- TYPOGRAPHY -->
-    <section class="demo-section">
-      <div class="section-header">
-        <span class="section-tag">Design Tokens</span>
-        <h2>Typography Scale</h2>
-        <p class="body-medium text-on-surface-variant" style="margin-top:var(--md-spacing-2);">5 roles × 3 sizes — Display, Headline, Title, Body, Label.</p>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:var(--md-tertiary-container);color:var(--md-on-tertiary-container)"><span class="material-symbols-rounded">bolt</span></div>
+        <div class="feature-title">Zero Build Step</div>
+        <p class="feature-desc">Pure CSS custom properties — no Sass, no PostCSS, no webpack required. Drop two files in your project and ship.</p>
       </div>
-      <div class="type-row"><span class="display-large">Display Large</span></div>
-      <div class="type-row"><span class="display-medium">Display Medium</span></div>
-      <div class="type-row"><span class="display-small">Display Small</span></div>
-      <div class="type-row"><span class="headline-large">Headline Large</span></div>
-      <div class="type-row"><span class="headline-medium">Headline Medium</span></div>
-      <div class="type-row"><span class="headline-small">Headline Small</span></div>
-      <div class="type-row"><span class="title-large">Title Large</span></div>
-      <div class="type-row"><span class="title-medium">Title Medium</span></div>
-      <div class="type-row"><span class="title-small">Title Small</span></div>
-      <div class="type-row"><span class="body-large">Body Large — The quick brown fox jumps over the lazy dog.</span></div>
-      <div class="type-row"><span class="body-medium">Body Medium — The quick brown fox jumps over the lazy dog.</span></div>
-      <div class="type-row"><span class="body-small">Body Small — The quick brown fox jumps over the lazy dog.</span></div>
-      <div class="type-row"><span class="label-large">Label Large</span></div>
-      <div class="type-row"><span class="label-medium">Label Medium</span></div>
-      <div class="type-row"><span class="label-small">Label Small</span></div>
-    </section>
+    </div>
+  </div>
+</section>
 
-    <!-- ELEVATION & SHAPE -->
-    <section class="demo-section">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--md-spacing-10);">
-        <div>
-          <div class="section-header">
-            <span class="section-tag">Tokens</span>
-            <h2>Elevation</h2>
-          </div>
-          <div class="component-row">
-            <div class="elevation-box" style="box-shadow:var(--md-elevation-0);background:var(--md-surface);">0</div>
-            <div class="elevation-box elevation-1">1</div>
-            <div class="elevation-box elevation-2">2</div>
-            <div class="elevation-box elevation-3">3</div>
-            <div class="elevation-box elevation-4">4</div>
-            <div class="elevation-box elevation-5">5</div>
-          </div>
-        </div>
-        <div>
-          <div class="section-header">
-            <span class="section-tag">Tokens</span>
-            <h2>Shape</h2>
-          </div>
-          <div class="component-row">
-            <div class="shape-box rounded-none">None</div>
-            <div class="shape-box rounded-xs">XS</div>
-            <div class="shape-box rounded-sm">SM</div>
-            <div class="shape-box rounded-md">MD</div>
-            <div class="shape-box rounded-lg">LG</div>
-            <div class="shape-box rounded-xl">XL</div>
-            <div class="shape-box rounded-full">Full</div>
-          </div>
-        </div>
-      </div>
-    </section>
+
+<!-- ================================================================
+     COMPONENTS SHOWCASE
+================================================================ -->
+<section class="section" id="components" style="background:var(--md-surface-container-low);">
+  <div class="section-inner">
+    <div class="section-eyebrow">Components</div>
+    <h2 class="section-title">Copy the class. Get the component.</h2>
+    <p class="section-desc">Every component shows a live preview alongside the exact markup. No configuration, no props — just HTML classes.</p>
 
     <!-- BUTTONS -->
-    <section class="demo-section">
-      <div class="section-header">
-        <span class="section-tag">Components</span>
-        <h2>Buttons</h2>
+    <div style="margin-bottom:var(--md-spacing-12);">
+      <div style="display:flex;align-items:center;gap:var(--md-spacing-3);margin-bottom:var(--md-spacing-4);">
+        <h3 class="title-large">Buttons</h3>
+        <span class="badge-new">5 variants</span>
       </div>
+      <div class="component-showcase">
+        <div class="preview-panel">
+          <div class="preview-label">Live preview</div>
+          <div style="display:flex;flex-wrap:wrap;gap:var(--md-spacing-3);align-items:center;">
+            <button class="btn btn-filled ripple" data-ripple>Filled</button>
+            <button class="btn btn-tonal ripple" data-ripple>Tonal</button>
+            <button class="btn btn-outlined ripple" data-ripple>Outlined</button>
+            <button class="btn btn-elevated ripple" data-ripple>Elevated</button>
+            <button class="btn btn-text ripple" data-ripple>Text</button>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:var(--md-spacing-3);align-items:center;margin-top:var(--md-spacing-2);">
+            <button class="btn btn-filled ripple" data-ripple><span class="material-symbols-rounded" style="font-size:18px;">add</span>Create</button>
+            <button class="btn btn-tonal ripple" data-ripple><span class="material-symbols-rounded" style="font-size:18px;">send</span>Send</button>
+            <button class="btn btn-filled btn-sm ripple" data-ripple>Small</button>
+            <button class="btn btn-filled btn-lg ripple" data-ripple>Large</button>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:var(--md-spacing-3);align-items:center;margin-top:var(--md-spacing-2);">
+            <button class="fab fab-sm ripple" data-ripple><span class="material-symbols-rounded">add</span></button>
+            <button class="fab ripple" data-ripple><span class="material-symbols-rounded">edit</span></button>
+            <button class="fab fab-extended ripple" data-ripple><span class="material-symbols-rounded">add</span>New doc</button>
+          </div>
+        </div>
+        <div class="code-card">
+          <div class="code-bar">
+            <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
+            <span class="code-bar-lang">HTML</span>
+            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <div class="code-body"><pre><span class="t-cmt">&lt;!-- Variants --&gt;</span>
+<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"btn btn-filled ripple"</span><span class="t-tag">&gt;</span>Filled<span class="t-tag">&lt;/button&gt;</span>
+<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"btn btn-tonal ripple"</span><span class="t-tag">&gt;</span>Tonal<span class="t-tag">&lt;/button&gt;</span>
+<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"btn btn-outlined ripple"</span><span class="t-tag">&gt;</span>Outlined<span class="t-tag">&lt;/button&gt;</span>
+<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"btn btn-elevated ripple"</span><span class="t-tag">&gt;</span>Elevated<span class="t-tag">&lt;/button&gt;</span>
+<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"btn btn-text ripple"</span><span class="t-tag">&gt;</span>Text<span class="t-tag">&lt;/button&gt;</span>
 
-      <div class="demo-label">Common Buttons</div>
-      <div class="component-row">
-        <button class="btn btn-elevated ripple" data-ripple>Elevated</button>
-        <button class="btn btn-filled ripple" data-ripple>Filled</button>
-        <button class="btn btn-tonal ripple" data-ripple>Tonal</button>
-        <button class="btn btn-outlined ripple" data-ripple>Outlined</button>
-        <button class="btn btn-text ripple" data-ripple>Text</button>
-      </div>
+<span class="t-cmt">&lt;!-- With icon --&gt;</span>
+<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"btn btn-filled ripple"</span><span class="t-tag">&gt;</span>
+  <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"material-symbols-rounded"</span><span class="t-tag">&gt;</span>add<span class="t-tag">&lt;/span&gt;</span>
+  Create
+<span class="t-tag">&lt;/button&gt;</span>
 
-      <div class="demo-label" style="margin-top:var(--md-spacing-4);">With Icons</div>
-      <div class="component-row">
-        <button class="btn btn-filled ripple" data-ripple><span class="material-symbols-rounded">add</span>Create</button>
-        <button class="btn btn-tonal ripple" data-ripple><span class="material-symbols-rounded">send</span>Send</button>
-        <button class="btn btn-outlined ripple" data-ripple><span class="material-symbols-rounded">bookmark</span>Save</button>
-        <button class="btn btn-text ripple" data-ripple><span class="material-symbols-rounded">share</span>Share</button>
+<span class="t-cmt">&lt;!-- FAB --&gt;</span>
+<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"fab fab-extended ripple"</span><span class="t-tag">&gt;</span>
+  <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"material-symbols-rounded"</span><span class="t-tag">&gt;</span>add<span class="t-tag">&lt;/span&gt;</span>
+  New doc
+<span class="t-tag">&lt;/button&gt;</span></pre></div>
+        </div>
       </div>
-
-      <div class="demo-label" style="margin-top:var(--md-spacing-4);">Sizes</div>
-      <div class="component-row" style="align-items:center;">
-        <button class="btn btn-filled btn-sm ripple" data-ripple>Small</button>
-        <button class="btn btn-filled ripple" data-ripple>Default</button>
-        <button class="btn btn-filled btn-lg ripple" data-ripple>Large</button>
-      </div>
-
-      <div class="demo-label" style="margin-top:var(--md-spacing-4);">Error / Destructive</div>
-      <div class="component-row">
-        <button class="btn btn-filled btn-error ripple" data-ripple><span class="material-symbols-rounded">delete</span>Delete</button>
-        <button class="btn btn-tonal btn-error ripple" data-ripple><span class="material-symbols-rounded">warning</span>Warning</button>
-      </div>
-
-      <div class="demo-label" style="margin-top:var(--md-spacing-4);">Disabled</div>
-      <div class="component-row">
-        <button class="btn btn-filled opacity-disabled">Filled</button>
-        <button class="btn btn-tonal opacity-disabled">Tonal</button>
-        <button class="btn btn-outlined opacity-disabled">Outlined</button>
-        <button class="btn btn-text opacity-disabled">Text</button>
-      </div>
-
-      <div class="demo-label" style="margin-top:var(--md-spacing-4);">FAB</div>
-      <div class="component-row" style="align-items:center;">
-        <button class="fab fab-sm ripple" data-ripple aria-label="Add"><span class="material-symbols-rounded">add</span></button>
-        <button class="fab ripple" data-ripple aria-label="Edit"><span class="material-symbols-rounded">edit</span></button>
-        <button class="fab fab-lg ripple" data-ripple aria-label="Create"><span class="material-symbols-rounded">create</span></button>
-        <button class="fab fab-extended ripple" data-ripple><span class="material-symbols-rounded">add</span>New document</button>
-      </div>
-
-      <div class="demo-label" style="margin-top:var(--md-spacing-2);">FAB Color Variants</div>
-      <div class="component-row">
-        <button class="fab ripple" data-ripple aria-label="Primary FAB"><span class="material-symbols-rounded">star</span></button>
-        <button class="fab fab-surface ripple" data-ripple aria-label="Surface FAB"><span class="material-symbols-rounded">home</span></button>
-        <button class="fab fab-secondary ripple" data-ripple aria-label="Secondary FAB"><span class="material-symbols-rounded">favorite</span></button>
-        <button class="fab fab-tertiary ripple" data-ripple aria-label="Tertiary FAB"><span class="material-symbols-rounded">palette</span></button>
-      </div>
-
-      <div class="demo-label" style="margin-top:var(--md-spacing-4);">Icon Buttons</div>
-      <div class="component-row">
-        <button class="icon-btn ripple" data-ripple aria-label="Standard"><span class="material-symbols-rounded">favorite</span></button>
-        <button class="icon-btn icon-btn-filled ripple" data-ripple aria-label="Filled"><span class="material-symbols-rounded">favorite</span></button>
-        <button class="icon-btn icon-btn-tonal ripple" data-ripple aria-label="Tonal"><span class="material-symbols-rounded">settings</span></button>
-        <button class="icon-btn icon-btn-outlined ripple" data-ripple aria-label="Outlined"><span class="material-symbols-rounded">bookmark</span></button>
-        <button class="icon-btn icon-btn-sm ripple" data-ripple aria-label="Small"><span class="material-symbols-rounded">close</span></button>
-        <button class="icon-btn icon-btn-lg ripple" data-ripple aria-label="Large"><span class="material-symbols-rounded">more_vert</span></button>
-        <button class="icon-btn ripple" data-ripple aria-label="Toggled" aria-pressed="true"><span class="material-symbols-rounded">thumb_up</span></button>
-      </div>
-    </section>
-
-    <!-- CHIPS -->
-    <section class="demo-section">
-      <div class="section-header">
-        <span class="section-tag">Components</span>
-        <h2>Chips</h2>
-      </div>
-      <div class="chip-group">
-        <button class="chip chip-assist ripple" data-ripple><span class="material-symbols-rounded chip-icon">location_on</span>Add location</button>
-        <button class="chip chip-filter ripple selected" data-ripple aria-pressed="true"><span class="material-symbols-rounded chip-icon">check</span>Selected</button>
-        <button class="chip chip-filter ripple" data-ripple aria-pressed="false">Unselected</button>
-        <button class="chip chip-elevated ripple" data-ripple>Elevated</button>
-        <button class="chip ripple" data-ripple>Suggestion</button>
-        <button class="chip ripple" data-ripple>Sounds good 👍</button>
-        <button class="chip ripple" data-ripple>
-          Anna
-          <span class="chip-remove material-symbols-rounded" style="font-size:16px;">close</span>
-        </button>
-      </div>
-      <div class="chip-group" style="margin-top:var(--md-spacing-3);">
-        <button class="chip opacity-disabled" aria-disabled="true">Disabled</button>
-        <button class="chip chip-filter ripple" data-ripple>Electronics</button>
-        <button class="chip chip-filter ripple" data-ripple>Clothing</button>
-        <button class="chip chip-filter ripple selected" data-ripple aria-pressed="true"><span class="material-symbols-rounded chip-icon">check</span>Books</button>
-        <button class="chip chip-filter ripple" data-ripple>Food</button>
-      </div>
-    </section>
+    </div>
 
     <!-- CARDS -->
-    <section class="demo-section">
-      <div class="section-header">
-        <span class="section-tag">Components</span>
-        <h2>Cards</h2>
+    <div style="margin-bottom:var(--md-spacing-12);">
+      <div style="display:flex;align-items:center;gap:var(--md-spacing-3);margin-bottom:var(--md-spacing-4);">
+        <h3 class="title-large">Cards</h3>
+        <span class="badge-new">3 variants</span>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--md-spacing-4);">
-
-        <!-- Elevated Card — new anatomy -->
-        <div class="card card-elevated card-interactive ripple" data-ripple id="mc1">
-          <div class="card-header">
-            <span class="material-symbols-rounded text-primary" style="font-size:32px;">cloud</span>
-            <div class="card-header-text">
-              <p class="card-title">Elevated Card</p>
-              <p class="card-subtitle">Cloud Storage</p>
+      <div class="component-showcase">
+        <div class="preview-panel" style="gap:var(--md-spacing-3);">
+          <div class="preview-label">Live preview</div>
+          <div class="card card-elevated card-interactive ripple" data-ripple>
+            <div class="card-header">
+              <div style="width:40px;height:40px;border-radius:50%;background:var(--md-primary-container);display:flex;align-items:center;justify-content:center;">
+                <span class="material-symbols-rounded" style="color:var(--md-on-primary-container)">cloud</span>
+              </div>
+              <div class="card-header-text">
+                <p class="card-title">Elevated Card</p>
+                <p class="card-subtitle">Interactive · Ripple enabled</p>
+              </div>
+              <div class="badge-wrapper"><span class="badge-count">3</span></div>
             </div>
-            <div class="badge-wrapper">
-              <span class="badge-count">3</span>
+            <div class="card-body">Elevated cards lift off the surface with shadow and a tinted background. Click anywhere to trigger the ripple.</div>
+            <div class="card-actions card-actions-end">
+              <button class="btn btn-text ripple" data-ripple>Learn more</button>
+              <button class="btn btn-tonal ripple" data-ripple>Enable</button>
             </div>
           </div>
-          <div class="card-body">Elevated cards use shadow and a tinted surface to separate from the background. They support the new <code>card-header</code> anatomy.</div>
-          <div class="card-actions card-actions-end">
-            <button class="btn btn-text ripple" data-ripple>Learn more</button>
-            <button class="btn btn-tonal ripple" data-ripple>Enable</button>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--md-spacing-3);">
+            <div class="card card-filled" style="padding:var(--md-spacing-4);">
+              <span class="material-symbols-rounded text-tertiary" style="font-size:28px;margin-bottom:8px;">palette</span>
+              <p class="title-small">Filled Card</p>
+              <p class="body-small text-on-surface-variant" style="margin-top:4px;">Uses surface-container-highest</p>
+            </div>
+            <div class="card card-outlined" style="padding:var(--md-spacing-4);">
+              <span class="material-symbols-rounded text-secondary" style="font-size:28px;margin-bottom:8px;">border_outer</span>
+              <p class="title-small">Outlined Card</p>
+              <p class="body-small text-on-surface-variant" style="margin-top:4px;">Lowest visual emphasis</p>
+            </div>
           </div>
         </div>
+        <div class="code-card">
+          <div class="code-bar">
+            <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
+            <span class="code-bar-lang">HTML</span>
+            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <div class="code-body"><pre><span class="t-cmt">&lt;!-- Elevated + interactive --&gt;</span>
+<span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"card card-elevated card-interactive ripple"</span><span class="t-tag">&gt;</span>
+  <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"card-header"</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"card-header-text"</span><span class="t-tag">&gt;</span>
+      <span class="t-tag">&lt;p</span> <span class="t-attr">class</span>=<span class="t-str">"card-title"</span><span class="t-tag">&gt;</span>Title<span class="t-tag">&lt;/p&gt;</span>
+      <span class="t-tag">&lt;p</span> <span class="t-attr">class</span>=<span class="t-str">"card-subtitle"</span><span class="t-tag">&gt;</span>Subtitle<span class="t-tag">&lt;/p&gt;</span>
+    <span class="t-tag">&lt;/div&gt;</span>
+  <span class="t-tag">&lt;/div&gt;</span>
+  <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"card-body"</span><span class="t-tag">&gt;</span>Content<span class="t-tag">&lt;/div&gt;</span>
+  <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"card-actions card-actions-end"</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"btn btn-text ripple"</span><span class="t-tag">&gt;</span>Cancel<span class="t-tag">&lt;/button&gt;</span>
+    <span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"btn btn-tonal ripple"</span><span class="t-tag">&gt;</span>OK<span class="t-tag">&lt;/button&gt;</span>
+  <span class="t-tag">&lt;/div&gt;</span>
+<span class="t-tag">&lt;/div&gt;</span>
 
-        <!-- Filled Card — new anatomy -->
-        <div class="card card-filled" id="mc2">
-          <div class="card-header">
-            <div style="width:40px;height:40px;border-radius:50%;background:var(--md-tertiary-container);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <span class="material-symbols-rounded" style="color:var(--md-on-tertiary-container);">palette</span>
-            </div>
-            <div class="card-header-text">
-              <p class="card-title">Filled Card</p>
-              <p class="card-subtitle">Design System</p>
-            </div>
-          </div>
-          <div class="card-body">Filled cards use <code>surface-container-highest</code> as the background, updated in v0.2.0 to use the proper M3 container hierarchy.</div>
-          <div class="card-actions">
-            <button class="btn btn-text ripple" data-ripple>Dismiss</button>
-            <button class="btn btn-text ripple" data-ripple>Open</button>
-          </div>
+<span class="t-cmt">&lt;!-- Filled --&gt;</span>
+<span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"card card-filled"</span><span class="t-tag">&gt;</span>...<span class="t-tag">&lt;/div&gt;</span>
+
+<span class="t-cmt">&lt;!-- Outlined --&gt;</span>
+<span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"card card-outlined"</span><span class="t-tag">&gt;</span>...<span class="t-tag">&lt;/div&gt;</span></pre></div>
         </div>
-
-        <!-- Outlined Card with media -->
-        <div class="card card-outlined" id="mc3">
-          <div style="height:160px;background:linear-gradient(135deg,var(--md-primary-container),var(--md-tertiary-container));display:flex;align-items:center;justify-content:center;">
-            <span class="material-symbols-rounded" style="font-size:48px;color:var(--md-on-primary-container);">image</span>
-          </div>
-          <div class="card-header">
-            <div class="card-header-text">
-              <p class="card-title">Outlined Card</p>
-              <p class="card-subtitle">With media</p>
-            </div>
-          </div>
-          <div class="card-body">Outlined cards use a border to separate from the background — lowest visual emphasis variant.</div>
-          <div class="card-actions">
-            <button class="icon-btn ripple" data-ripple aria-label="Like"><span class="material-symbols-rounded">favorite_border</span></button>
-            <button class="icon-btn ripple" data-ripple aria-label="Bookmark"><span class="material-symbols-rounded">bookmark_border</span></button>
-            <button class="icon-btn ripple" data-ripple aria-label="Share"><span class="material-symbols-rounded">share</span></button>
-          </div>
-        </div>
-
       </div>
-    </section>
+    </div>
 
-    <!-- INPUTS -->
-    <section class="demo-section">
-      <div class="section-header">
-        <span class="section-tag">Components</span>
-        <h2>Text Fields, Checkboxes, Switches</h2>
+    <!-- CHIPS -->
+    <div style="margin-bottom:var(--md-spacing-12);">
+      <div style="display:flex;align-items:center;gap:var(--md-spacing-3);margin-bottom:var(--md-spacing-4);">
+        <h3 class="title-large">Chips</h3>
+        <span class="badge-new">4 types</span>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--md-spacing-6);">
-
-        <div style="display:flex;flex-direction:column;gap:var(--md-spacing-4);">
-          <div class="demo-label">Filled Text Fields</div>
-          <div class="text-field text-field-filled">
-            <div class="tf-container">
-              <div class="tf-label">Username</div>
-              <input class="tf-input" type="text" placeholder="e.g. pixel_user" />
-            </div>
-            <span class="tf-support">Must be unique</span>
+      <div class="component-showcase">
+        <div class="preview-panel">
+          <div class="preview-label">Live preview</div>
+          <div class="chip-group">
+            <button class="chip chip-assist ripple" data-ripple><span class="material-symbols-rounded chip-icon">location_on</span>Add location</button>
+            <button class="chip chip-filter ripple selected" data-ripple aria-pressed="true"><span class="material-symbols-rounded chip-icon">check</span>Selected</button>
+            <button class="chip chip-filter ripple" data-ripple>Unselected</button>
+            <button class="chip chip-elevated ripple" data-ripple>Elevated</button>
+            <button class="chip ripple" data-ripple>Sounds good 👍</button>
           </div>
-          <div class="text-field text-field-filled">
-            <div class="tf-container">
-              <div class="tf-label">Password</div>
-              <input class="tf-input" type="password" placeholder="Min 8 characters" />
-            </div>
-          </div>
-          <div class="text-field text-field-filled error">
-            <div class="tf-container">
-              <div class="tf-label">Email</div>
-              <input class="tf-input" type="email" value="bad@" />
-            </div>
-            <span class="tf-support error">Invalid email address</span>
+          <div class="chip-group" style="margin-top:var(--md-spacing-2);">
+            <button class="chip chip-filter ripple" data-ripple>Electronics</button>
+            <button class="chip chip-filter ripple" data-ripple>Clothing</button>
+            <button class="chip chip-filter ripple selected" data-ripple aria-pressed="true"><span class="material-symbols-rounded chip-icon">check</span>Books</button>
+            <button class="chip chip-filter ripple" data-ripple>Food</button>
+            <button class="chip chip-filter ripple" data-ripple>Travel</button>
           </div>
         </div>
+        <div class="code-card">
+          <div class="code-bar">
+            <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
+            <span class="code-bar-lang">HTML</span>
+            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <div class="code-body"><pre><span class="t-cmt">&lt;!-- Chip types --&gt;</span>
+<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"chip chip-assist ripple"</span><span class="t-tag">&gt;</span>
+  <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"material-symbols-rounded chip-icon"</span><span class="t-tag">&gt;</span>
+    location_on
+  <span class="t-tag">&lt;/span&gt;</span>
+  Add location
+<span class="t-tag">&lt;/button&gt;</span>
 
-        <div style="display:flex;flex-direction:column;gap:var(--md-spacing-4);">
-          <div class="demo-label">Outlined Text Fields</div>
-          <div class="text-field text-field-outlined">
-            <div class="tf-container">
-              <div class="tf-label">Full name</div>
-              <input class="tf-input" type="text" placeholder="Jane Doe" />
+<span class="t-cmt">&lt;!-- Filter chip — selected state --&gt;</span>
+<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"chip chip-filter ripple selected"</span>
+        <span class="t-attr">aria-pressed</span>=<span class="t-str">"true"</span><span class="t-tag">&gt;</span>
+  <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"material-symbols-rounded chip-icon"</span><span class="t-tag">&gt;</span>
+    check
+  <span class="t-tag">&lt;/span&gt;</span>
+  Selected
+<span class="t-tag">&lt;/button&gt;</span>
+
+<span class="t-cmt">&lt;!-- Input chip with remove --&gt;</span>
+<span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"chip chip-input"</span><span class="t-tag">&gt;</span>
+  Anna
+  <span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"chip-remove"</span><span class="t-tag">&gt;</span>✕<span class="t-tag">&lt;/button&gt;</span>
+<span class="t-tag">&lt;/span&gt;</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEXT FIELDS + FORM -->
+    <div style="margin-bottom:var(--md-spacing-12);">
+      <div style="display:flex;align-items:center;gap:var(--md-spacing-3);margin-bottom:var(--md-spacing-4);">
+        <h3 class="title-large">Form Controls</h3>
+        <span class="badge-new">Filled · Outlined · Switch · Checkbox · Radio</span>
+      </div>
+      <div class="component-showcase">
+        <div class="preview-panel" style="gap:var(--md-spacing-5);">
+          <div class="preview-label">Live preview</div>
+          <div style="display:flex;flex-direction:column;gap:var(--md-spacing-3);">
+            <div class="tf-wrap">
+              <label class="tf-label-sm">Username (filled)</label>
+              <input class="tf-input-filled" type="text" placeholder="e.g. pixel_user" />
+            </div>
+            <div class="tf-wrap">
+              <label class="tf-label-sm">Email (outlined)</label>
+              <input class="tf-input-outlined" type="email" placeholder="hello@kenai.dev" />
             </div>
           </div>
-          <div class="text-field text-field-outlined">
-            <div class="tf-container">
-              <div class="tf-label">Message</div>
-              <textarea class="tf-input" rows="3" placeholder="Write something..." style="resize:none;"></textarea>
-            </div>
+          <div style="display:flex;flex-direction:column;gap:var(--md-spacing-3);">
+            <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
+              <input type="checkbox" class="cb" checked /> Notifications enabled
+            </label>
+            <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
+              <input type="checkbox" class="cb" /> Dark mode override
+            </label>
+            <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
+              <input type="checkbox" class="cb" checked /> Accept terms
+            </label>
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--md-spacing-6);">
+            <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
+              <input type="radio" class="rb" name="r1" checked /> Option A
+            </label>
+            <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
+              <input type="radio" class="rb" name="r1" /> Option B
+            </label>
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--md-spacing-4);">
+            <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
+              <input type="checkbox" class="sw" checked role="switch" /> Airplane mode
+            </label>
+            <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
+              <input type="checkbox" class="sw" role="switch" /> Wi-Fi
+            </label>
           </div>
         </div>
+        <div class="code-card">
+          <div class="code-bar">
+            <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
+            <span class="code-bar-lang">HTML</span>
+            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <div class="code-body"><pre><span class="t-cmt">&lt;!-- Filled text field --&gt;</span>
+<span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"text-field text-field-filled"</span><span class="t-tag">&gt;</span>
+  <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"text-field-container"</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;label</span> <span class="t-attr">class</span>=<span class="t-str">"text-field-label"</span><span class="t-tag">&gt;</span>Username<span class="t-tag">&lt;/label&gt;</span>
+    <span class="t-tag">&lt;input</span> <span class="t-attr">type</span>=<span class="t-str">"text"</span> <span class="t-tag">/&gt;</span>
+  <span class="t-tag">&lt;/div&gt;</span>
+  <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"text-field-support"</span><span class="t-tag">&gt;</span>Must be unique<span class="t-tag">&lt;/span&gt;</span>
+<span class="t-tag">&lt;/div&gt;</span>
 
-        <div style="display:flex;flex-direction:column;gap:var(--md-spacing-6);">
+<span class="t-cmt">&lt;!-- Switch --&gt;</span>
+<span class="t-tag">&lt;label</span> <span class="t-attr">class</span>=<span class="t-str">"switch"</span><span class="t-tag">&gt;</span>
+  <span class="t-tag">&lt;input</span> <span class="t-attr">type</span>=<span class="t-str">"checkbox"</span> <span class="t-attr">checked</span> <span class="t-tag">/&gt;</span>
+  <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"switch-track"</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"switch-thumb"</span><span class="t-tag">&gt;&lt;/span&gt;</span>
+  <span class="t-tag">&lt;/span&gt;</span>
+  Airplane mode
+<span class="t-tag">&lt;/label&gt;</span>
+
+<span class="t-cmt">&lt;!-- Checkbox --&gt;</span>
+<span class="t-tag">&lt;label</span> <span class="t-attr">class</span>=<span class="t-str">"checkbox"</span><span class="t-tag">&gt;</span>
+  <span class="t-tag">&lt;input</span> <span class="t-attr">type</span>=<span class="t-str">"checkbox"</span> <span class="t-attr">checked</span> <span class="t-tag">/&gt;</span>
+  <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"checkbox-box"</span><span class="t-tag">&gt;&lt;/span&gt;</span>
+  Accept terms
+<span class="t-tag">&lt;/label&gt;</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEEDBACK -->
+    <div style="margin-bottom:var(--md-spacing-12);">
+      <div style="display:flex;align-items:center;gap:var(--md-spacing-3);margin-bottom:var(--md-spacing-4);">
+        <h3 class="title-large">Feedback &amp; Overlays</h3>
+        <span class="badge-new">Snackbar · Dialog · Tooltip · Progress</span>
+      </div>
+      <div class="component-showcase">
+        <div class="preview-panel" style="gap:var(--md-spacing-5);">
+          <div class="preview-label">Live preview</div>
+
           <div>
-            <div class="demo-label">Checkboxes</div>
-            <div style="display:flex;flex-direction:column;gap:var(--md-spacing-3);">
-              <label class="checkbox-wrapper"><input type="checkbox" class="checkbox" checked /> Checked</label>
-              <label class="checkbox-wrapper"><input type="checkbox" class="checkbox" /> Unchecked</label>
-              <label class="checkbox-wrapper opacity-disabled"><input type="checkbox" class="checkbox" disabled /> Disabled</label>
+            <p class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Snackbar</p>
+            <div class="snackbar" style="position:relative;animation:none;min-width:0;max-width:100%;">
+              <span class="snackbar-text">File "report.pdf" deleted</span>
+              <button class="snackbar-action">Undo</button>
+            </div>
+            <div style="display:flex;gap:var(--md-spacing-2);margin-top:var(--md-spacing-3);">
+              <button class="btn btn-tonal btn-sm ripple" data-ripple onclick="KENAI.Snackbar.show('Message sent!')">Show</button>
+              <button class="btn btn-outlined btn-sm ripple" data-ripple onclick="KENAI.Snackbar.show('Item deleted',{action:'Undo',onAction:()=>KENAI.Snackbar.show('Restored!')})">With Action</button>
             </div>
           </div>
+
           <div>
-            <div class="demo-label">Switches</div>
-            <div style="display:flex;flex-direction:column;gap:var(--md-spacing-3);">
-              <label class="switch-wrapper"><input type="checkbox" class="switch" checked /> Wi-Fi</label>
-              <label class="switch-wrapper"><input type="checkbox" class="switch" /> Bluetooth</label>
-              <label class="switch-wrapper opacity-disabled"><input type="checkbox" class="switch" disabled /> Airplane mode</label>
+            <p class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Tooltips</p>
+            <div style="display:flex;gap:var(--md-spacing-4);">
+              <div class="tt-wrap">
+                <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">help</span></button>
+                <span class="tt">Help &amp; support</span>
+              </div>
+              <div class="tt-wrap">
+                <button class="icon-btn icon-btn-tonal ripple" data-ripple><span class="material-symbols-rounded">settings</span></button>
+                <span class="tt">Settings</span>
+              </div>
+              <div class="tt-wrap">
+                <button class="btn btn-tonal btn-sm ripple" data-ripple>Hover me</button>
+                <span class="tt">I'm a tooltip!</span>
+              </div>
             </div>
           </div>
+
           <div>
-            <div class="demo-label">Radio Buttons</div>
-            <div style="display:flex;flex-direction:column;gap:var(--md-spacing-3);">
-              <label class="radio-wrapper"><input type="radio" name="r1" class="radio" checked /> Option A</label>
-              <label class="radio-wrapper"><input type="radio" name="r1" class="radio" /> Option B</label>
-              <label class="radio-wrapper"><input type="radio" name="r1" class="radio" /> Option C</label>
+            <p class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Progress</p>
+            <div class="progress-linear" style="margin-bottom:var(--md-spacing-2);">
+              <div class="progress-linear-track" id="demoProgress" style="width:65%;"></div>
+            </div>
+            <div class="progress-linear progress-linear-indeterminate">
+              <div class="progress-linear-track"></div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:var(--md-spacing-3);">
+            <button class="btn btn-filled ripple" data-ripple onclick="document.getElementById('demoDialog').style.display='flex'">Open Dialog</button>
+            <button class="btn btn-outlined ripple" data-ripple onclick="triggerProgress()">Animate Progress</button>
+          </div>
+        </div>
+        <div class="code-card">
+          <div class="code-bar">
+            <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
+            <span class="code-bar-lang">JS + HTML</span>
+            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <div class="code-body"><pre><span class="t-cmt">// Snackbar — fire and forget</span>
+<span class="t-fn">KENAI</span><span class="t-punc">.</span><span class="t-fn">Snackbar</span><span class="t-punc">.</span><span class="t-fn">show</span><span class="t-punc">(</span><span class="t-str">'File deleted'</span><span class="t-punc">, {</span>
+  <span class="t-prop">action</span><span class="t-punc">:</span> <span class="t-str">'Undo'</span><span class="t-punc">,</span>
+  <span class="t-prop">onAction</span><span class="t-punc">:</span> <span class="t-punc">() =&gt;</span> <span class="t-fn">restoreFile</span><span class="t-punc">(),</span>
+  <span class="t-prop">duration</span><span class="t-punc">:</span> <span class="t-val">5000</span>
+<span class="t-punc">});</span>
+
+<span class="t-cmt">// Progress — determinate</span>
+<span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"progress-linear"</span><span class="t-tag">&gt;</span>
+  <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"progress-linear-track"</span>
+       <span class="t-attr">style</span>=<span class="t-str">"width: 65%"</span><span class="t-tag">&gt;&lt;/div&gt;</span>
+<span class="t-tag">&lt;/div&gt;</span>
+
+<span class="t-cmt">// Progress — indeterminate</span>
+<span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"progress-linear</span>
+            <span class="t-str">progress-linear-indeterminate"</span><span class="t-tag">&gt;</span>
+  <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"progress-linear-track"</span><span class="t-tag">&gt;&lt;/div&gt;</span>
+<span class="t-tag">&lt;/div&gt;</span>
+
+<span class="t-cmt">// Tooltip</span>
+<span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"tooltip-anchor"</span><span class="t-tag">&gt;</span>
+  <span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"icon-btn"</span><span class="t-tag">&gt;</span>...<span class="t-tag">&lt;/button&gt;</span>
+  <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"tooltip"</span><span class="t-tag">&gt;</span>Help<span class="t-tag">&lt;/span&gt;</span>
+<span class="t-tag">&lt;/div&gt;</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS + LISTS -->
+    <div style="margin-bottom:var(--md-spacing-12);">
+      <div style="display:flex;align-items:center;gap:var(--md-spacing-3);margin-bottom:var(--md-spacing-4);">
+        <h3 class="title-large">Tabs &amp; Lists</h3>
+      </div>
+      <div class="component-showcase">
+        <div class="preview-panel" style="gap:var(--md-spacing-5);">
+          <div class="preview-label">Live preview</div>
+          <div class="tabs-demo" id="tabsDemo">
+            <button class="tab-d active ripple" data-ripple><span class="material-symbols-rounded" style="font-size:20px;">home</span>Home</button>
+            <button class="tab-d ripple" data-ripple><span class="material-symbols-rounded" style="font-size:20px;">explore</span>Explore</button>
+            <button class="tab-d ripple" data-ripple><span class="material-symbols-rounded" style="font-size:20px;">favorite</span>Saved</button>
+            <button class="tab-d ripple" data-ripple><span class="material-symbols-rounded" style="font-size:20px;">person</span>Profile</button>
+          </div>
+          <div class="card card-outlined" style="overflow:hidden;">
+            <div class="list-item ripple" data-ripple style="display:flex;align-items:center;gap:var(--md-spacing-4);padding:var(--md-spacing-3) var(--md-spacing-4);min-height:56px;cursor:pointer;position:relative;overflow:hidden;">
+              <div style="width:40px;height:40px;border-radius:50%;background:var(--md-primary-container);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="material-symbols-rounded" style="color:var(--md-on-primary-container);font-size:20px;">person</span></div>
+              <div style="flex:1;min-width:0;"><div class="body-large">Alex Johnson</div><div class="body-medium text-on-surface-variant">Hey, are you free tonight?</div></div>
+              <div class="label-small text-on-surface-variant">2 min</div>
+            </div>
+            <div class="divider divider-inset"></div>
+            <div class="list-item ripple" data-ripple style="display:flex;align-items:center;gap:var(--md-spacing-4);padding:var(--md-spacing-3) var(--md-spacing-4);min-height:56px;cursor:pointer;position:relative;overflow:hidden;">
+              <div style="width:40px;height:40px;border-radius:50%;background:var(--md-secondary-container);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="material-symbols-rounded" style="color:var(--md-on-secondary-container);font-size:20px;">person</span></div>
+              <div style="flex:1;min-width:0;"><div class="body-large">Sam Rivera</div><div class="body-medium text-on-surface-variant">Check out this M3 update!</div></div>
+              <div class="label-small text-on-surface-variant">1 hr</div>
+            </div>
+            <div class="divider divider-inset"></div>
+            <div class="list-item ripple" data-ripple style="display:flex;align-items:center;gap:var(--md-spacing-4);padding:var(--md-spacing-3) var(--md-spacing-4);min-height:56px;cursor:pointer;position:relative;overflow:hidden;">
+              <div style="width:40px;height:40px;border-radius:50%;background:var(--md-tertiary-container);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="material-symbols-rounded" style="color:var(--md-on-tertiary-container);font-size:20px;">person</span></div>
+              <div style="flex:1;min-width:0;"><div class="body-large">Jordan Patel</div><div class="body-medium text-on-surface-variant">Sounds great, see you then!</div></div>
+              <div class="label-small text-on-surface-variant">3 hr</div>
             </div>
           </div>
         </div>
-
-      </div>
-
-      <div class="demo-label" style="margin-top:var(--md-spacing-8);">Slider</div>
-      <div style="max-width:400px;">
-        <input type="range" class="slider" min="0" max="100" value="40" id="sliderDemo" />
-        <p class="body-small text-on-surface-variant" style="margin-top:var(--md-spacing-2);">Value: <span id="sliderVal">40</span></p>
-      </div>
-    </section>
-
-    <!-- PROGRESS & BADGES -->
-    <section class="demo-section">
-      <div class="section-header">
-        <span class="section-tag">Components</span>
-        <h2>Progress Indicators &amp; Badges</h2>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--md-spacing-8);">
-        <div>
-          <div class="demo-label">Linear — Determinate</div>
-          <div style="display:flex;flex-direction:column;gap:var(--md-spacing-4);">
-            <div class="progress-linear"><div class="progress-linear-track" style="width:25%"></div></div>
-            <div class="progress-linear"><div class="progress-linear-track" style="width:50%"></div></div>
-            <div class="progress-linear"><div class="progress-linear-track" style="width:75%"></div></div>
-            <div class="progress-linear"><div class="progress-linear-track" style="width:100%"></div></div>
+        <div class="code-card">
+          <div class="code-bar">
+            <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
+            <span class="code-bar-lang">HTML</span>
+            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
           </div>
-          <div class="demo-label" style="margin-top:var(--md-spacing-6);">Linear — Indeterminate</div>
-          <div class="progress-linear progress-linear-indeterminate"><div class="progress-linear-track"></div></div>
-        </div>
-        <div>
-          <div class="demo-label">Circular</div>
-          <div class="component-row" style="align-items:center;">
-            <div class="progress-circular progress-circular-sm">
-              <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" /></svg>
-            </div>
-            <div class="progress-circular">
-              <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" /></svg>
-            </div>
-            <div class="progress-circular progress-circular-lg">
-              <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" /></svg>
-            </div>
-          </div>
-          <div class="demo-label" style="margin-top:var(--md-spacing-6);">Badges</div>
-          <div class="component-row">
-            <div class="badge-wrapper">
-              <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">notifications</span></button>
-              <span class="badge-count">5</span>
-            </div>
-            <div class="badge-wrapper">
-              <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">mail</span></button>
-              <span class="badge"></span>
-            </div>
-            <div class="badge-wrapper">
-              <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">shopping_cart</span></button>
-              <span class="badge-count">99+</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+          <div class="code-body"><pre><span class="t-cmt">&lt;!-- Tabs --&gt;</span>
+<span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"tabs-list"</span><span class="t-tag">&gt;</span>
+  <span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"tab active"</span>
+          <span class="t-attr">data-tab</span>=<span class="t-str">"panel-home"</span><span class="t-tag">&gt;</span>Home<span class="t-tag">&lt;/button&gt;</span>
+  <span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"tab"</span>
+          <span class="t-attr">data-tab</span>=<span class="t-str">"panel-explore"</span><span class="t-tag">&gt;</span>Explore<span class="t-tag">&lt;/button&gt;</span>
+<span class="t-tag">&lt;/div&gt;</span>
 
-    <!-- NAVIGATION -->
-    <section class="demo-section">
-      <div class="section-header">
-        <span class="section-tag">Components</span>
-        <h2>Navigation</h2>
+<span class="t-cmt">&lt;!-- List --&gt;</span>
+<span class="t-tag">&lt;ul</span> <span class="t-attr">class</span>=<span class="t-str">"list"</span><span class="t-tag">&gt;</span>
+  <span class="t-tag">&lt;li</span> <span class="t-attr">class</span>=<span class="t-str">"list-item list-item-interactive"</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"list-item-leading-avatar"</span><span class="t-tag">&gt;</span>
+      AJ
+    <span class="t-tag">&lt;/div&gt;</span>
+    <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"list-item-content"</span><span class="t-tag">&gt;</span>
+      <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"list-item-headline"</span><span class="t-tag">&gt;</span>Alex<span class="t-tag">&lt;/div&gt;</span>
+      <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"list-item-supporting"</span><span class="t-tag">&gt;</span>
+        Hey, free tonight?
+      <span class="t-tag">&lt;/div&gt;</span>
+    <span class="t-tag">&lt;/div&gt;</span>
+    <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"list-item-trailing"</span><span class="t-tag">&gt;</span>2 min<span class="t-tag">&lt;/div&gt;</span>
+  <span class="t-tag">&lt;/li&gt;</span>
+<span class="t-tag">&lt;/ul&gt;</span></pre></div>
+        </div>
       </div>
+    </div>
 
-      <div class="demo-label">Navigation Bar</div>
-      <div class="nav-bar rounded-xl" style="max-width:480px;margin-bottom:var(--md-spacing-8);">
-        <div class="nav-item active ripple" data-ripple>
-          <div class="nav-item-indicator"></div>
-          <span class="material-symbols-rounded nav-item-icon">home</span>
-          <span class="nav-item-label">Home</span>
-        </div>
-        <div class="nav-item ripple" data-ripple>
-          <div class="nav-item-indicator"></div>
-          <span class="material-symbols-rounded nav-item-icon">search</span>
-          <span class="nav-item-label">Explore</span>
-        </div>
-        <div class="nav-item ripple" data-ripple style="position:relative;">
-          <div class="nav-item-indicator"></div>
-          <span class="material-symbols-rounded nav-item-icon">notifications</span>
-          <div class="badge-wrapper" style="position:absolute;top:10px;right:30%;">
-            <span class="badge"></span>
-          </div>
-          <span class="nav-item-label">Alerts</span>
-        </div>
-        <div class="nav-item ripple" data-ripple>
-          <div class="nav-item-indicator"></div>
-          <span class="material-symbols-rounded nav-item-icon">account_circle</span>
-          <span class="nav-item-label">Profile</span>
-        </div>
-      </div>
-
-      <div class="demo-label">Navigation Drawer</div>
-      <div class="nav-drawer elevation-1" style="max-width:320px;border-radius:var(--md-shape-extra-large);">
-        <div style="padding:var(--md-spacing-4) var(--md-spacing-4) var(--md-spacing-2);">
-          <p class="headline-small" style="margin-bottom:4px;">KENAI</p>
-          <p class="body-small text-on-surface-variant">v0.2.0 — Material Design 3</p>
-        </div>
-        <div class="divider" style="margin:var(--md-spacing-2) 0;"></div>
-        <span class="drawer-section-title">Components</span>
-        <div class="drawer-item active ripple" data-ripple>
-          <span class="material-symbols-rounded">widgets</span> Buttons
-        </div>
-        <div class="drawer-item ripple" data-ripple>
-          <span class="material-symbols-rounded">credit_card</span> Cards
-          <span class="badge-count drawer-badge">New</span>
-        </div>
-        <div class="drawer-item ripple" data-ripple>
-          <span class="material-symbols-rounded">text_fields</span> Text Fields
-        </div>
-        <div class="drawer-item ripple" data-ripple>
-          <span class="material-symbols-rounded">navigation</span> Navigation
-        </div>
-        <div class="divider" style="margin:var(--md-spacing-2) 0;"></div>
-        <span class="drawer-section-title">Settings</span>
-        <div class="drawer-item ripple" data-ripple>
-          <span class="material-symbols-rounded">palette</span> Theming
-        </div>
-        <div class="drawer-item ripple" data-ripple>
-          <span class="material-symbols-rounded">info</span> About
-        </div>
-      </div>
-    </section>
-
-    <!-- TABS & LISTS -->
-    <section class="demo-section">
-      <div class="section-header">
-        <span class="section-tag">Components</span>
-        <h2>Tabs &amp; Lists</h2>
-      </div>
-
-      <div class="demo-label">Tabs</div>
-      <div class="tabs rounded-sm" style="max-width:480px;margin-bottom:var(--md-spacing-8);" id="tabsDemo">
-        <button class="tab active ripple" data-ripple data-tab="0">
-          <span class="material-symbols-rounded">home</span> Home
-        </button>
-        <button class="tab ripple" data-ripple data-tab="1">
-          <span class="material-symbols-rounded">explore</span> Explore
-        </button>
-        <button class="tab ripple" data-ripple data-tab="2">
-          <span class="material-symbols-rounded">favorite</span> Saved
-        </button>
-        <button class="tab ripple" data-ripple data-tab="3">
-          <span class="material-symbols-rounded">person</span> Profile
-        </button>
-      </div>
-
-      <div class="demo-label">List</div>
-      <div class="list card card-outlined" style="max-width:480px;">
-        <div class="list-item ripple" data-ripple>
-          <div class="list-item-leading"><span class="material-symbols-rounded">account_circle</span></div>
-          <div class="list-item-content">
-            <div class="list-item-headline">Alex Johnson</div>
-            <div class="list-item-supporting">Last message: Hey, are you free tonight?</div>
-          </div>
-          <div class="list-item-trailing">2 min</div>
-        </div>
-        <div class="divider divider-inset"></div>
-        <div class="list-item ripple" data-ripple>
-          <div class="list-item-leading"><span class="material-symbols-rounded">account_circle</span></div>
-          <div class="list-item-content">
-            <div class="list-item-headline">Sam Rivera</div>
-            <div class="list-item-supporting">Check out this Material Design update!</div>
-          </div>
-          <div class="list-item-trailing">1 hr</div>
-        </div>
-        <div class="divider divider-inset"></div>
-        <div class="list-item ripple" data-ripple>
-          <div class="list-item-leading"><span class="material-symbols-rounded">account_circle</span></div>
-          <div class="list-item-content">
-            <div class="list-item-headline">Jordan Patel</div>
-            <div class="list-item-supporting">Sounds great, see you then!</div>
-          </div>
-          <div class="list-item-trailing">3 hrs</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- OVERLAYS & FEEDBACK -->
-    <section class="demo-section">
-      <div class="section-header">
-        <span class="section-tag">Components</span>
-        <h2>Overlays &amp; Feedback</h2>
-      </div>
-
-      <div class="demo-label">Snackbar — Static Preview</div>
-      <div style="max-width:600px;margin-bottom:var(--md-spacing-6);">
-        <div class="snackbar" style="position:relative;animation:none;">
-          <span class="snackbar-text">File "report.pdf" deleted</span>
-          <button class="snackbar-action">Undo</button>
-        </div>
-      </div>
-
-      <div class="demo-label">Snackbar — Live (via <code>KENAI.Snackbar.show()</code>)</div>
-      <div class="component-row" style="margin-bottom:var(--md-spacing-8);">
-        <button class="btn btn-filled ripple" data-ripple onclick="KENAI.Snackbar.show('Message sent successfully')">Show Snackbar</button>
-        <button class="btn btn-tonal ripple" data-ripple onclick="KENAI.Snackbar.show('Item deleted', { action: 'Undo', onAction: () => KENAI.Snackbar.show('Restored!') })">With Action</button>
-        <button class="btn btn-outlined ripple" data-ripple onclick="KENAI.Snackbar.show('Hover me to pause the timer', { duration: 6000 })">Long Duration</button>
-      </div>
-
-      <div class="demo-label">Code Usage</div>
-      <div class="code-block" style="margin-bottom:var(--md-spacing-8);">
-        KENAI.Snackbar.show('File deleted', {<br>
-        &nbsp;&nbsp;action: 'Undo',<br>
-        &nbsp;&nbsp;onAction: () =&gt; restoreFile(),<br>
-        &nbsp;&nbsp;duration: 5000<br>
-        });
-      </div>
-
-      <div class="demo-label">Dialog</div>
-      <div class="component-row">
-        <button class="btn btn-filled ripple" data-ripple onclick="document.getElementById('demoDialog').style.display='flex'">Open Dialog</button>
-        <button class="btn btn-outlined ripple" data-ripple onclick="document.getElementById('alertDialog').style.display='flex'">Alert Dialog</button>
-      </div>
-
-      <div class="demo-label" style="margin-top:var(--md-spacing-6);">Tooltips</div>
-      <div class="component-row">
-        <div class="tooltip-wrapper">
-          <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">help</span></button>
-          <span class="tooltip">Help &amp; support</span>
-        </div>
-        <div class="tooltip-wrapper">
-          <button class="icon-btn icon-btn-tonal ripple" data-ripple><span class="material-symbols-rounded">settings</span></button>
-          <span class="tooltip">Settings</span>
-        </div>
-        <div class="tooltip-wrapper">
-          <button class="btn btn-tonal ripple" data-ripple>Hover me</button>
-          <span class="tooltip">I'm a tooltip!</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- MOTION DEMO -->
-    <section class="demo-section">
-      <div class="section-header">
-        <span class="section-tag">Tokens</span>
-        <h2>Motion &amp; Interaction</h2>
-        <p class="body-medium text-on-surface-variant" style="margin-top:var(--md-spacing-2);">All buttons, chips, and interactive surfaces respond with M3 ripple ink and state layers. v0.2.0 adds <code>--md-easing-spring</code> and extra-long durations.</p>
-      </div>
-      <div class="component-row">
-        <button class="btn btn-filled ripple" data-ripple onclick="animateCards()">Animate Cards</button>
-        <button class="btn btn-tonal ripple" data-ripple onclick="triggerProgress()">Progress Demo</button>
-      </div>
-      <div id="motionCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--md-spacing-4);margin-top:var(--md-spacing-6);">
-        <div class="card card-elevated" id="mc1" style="padding:var(--md-spacing-4);transition:transform 300ms var(--md-easing-emphasized-decel),box-shadow 300ms var(--md-easing-standard);">
-          <span class="material-symbols-rounded text-primary" style="font-size:32px;margin-bottom:8px;">speed</span>
-          <p class="title-medium">Short 1 — 50ms</p>
-          <p class="body-small text-on-surface-variant">Micro-interactions</p>
-        </div>
-        <div class="card card-elevated" id="mc2" style="padding:var(--md-spacing-4);transition:transform 300ms var(--md-easing-emphasized-decel),box-shadow 300ms var(--md-easing-standard);transition-delay:80ms;">
-          <span class="material-symbols-rounded text-primary" style="font-size:32px;margin-bottom:8px;">motion_photos_on</span>
-          <p class="title-medium">Medium 2 — 300ms</p>
-          <p class="body-small text-on-surface-variant">Enter / Exit transitions</p>
-        </div>
-        <div class="card card-elevated" id="mc3" style="padding:var(--md-spacing-4);transition:transform 300ms var(--md-easing-emphasized-decel),box-shadow 300ms var(--md-easing-standard);transition-delay:160ms;">
-          <span class="material-symbols-rounded text-primary" style="font-size:32px;margin-bottom:8px;">animation</span>
-          <p class="title-medium">Spring easing</p>
-          <p class="body-small text-on-surface-variant">New in v0.2.0</p>
-        </div>
-      </div>
-      <div id="progressContainer" style="margin-top:var(--md-spacing-6);display:none;">
-        <div class="progress-linear"><div class="progress-linear-track" id="demoProgress" style="width:0%;transition:width 600ms var(--md-easing-standard)"></div></div>
-      </div>
-    </section>
-
-    <!-- UTILITIES SHOWCASE -->
-    <section class="demo-section">
-      <div class="section-header">
-        <span class="section-tag">Utilities</span>
-        <h2>Utility Classes</h2>
-        <p class="body-medium text-on-surface-variant" style="margin-top:var(--md-spacing-2);">v0.2.0 ships a comprehensive set of layout and styling utilities.</p>
-      </div>
-
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--md-spacing-8);">
-        <div>
-          <div class="demo-label">Background Colors</div>
-          <div style="display:flex;flex-direction:column;gap:var(--md-spacing-2);">
-            <div class="p-3 rounded-md bg-primary-container text-on-surface">.bg-primary-container</div>
-            <div class="p-3 rounded-md bg-secondary-container text-on-surface">.bg-secondary-container</div>
-            <div class="p-3 rounded-md bg-tertiary-container text-on-surface">.bg-tertiary-container</div>
-            <div class="p-3 rounded-md bg-error-container text-on-surface">.bg-error-container</div>
-            <div class="p-3 rounded-md bg-surface-container text-on-surface">.bg-surface-container</div>
-            <div class="p-3 rounded-md bg-surface-container-high text-on-surface">.bg-surface-container-high</div>
-          </div>
-        </div>
-        <div>
-          <div class="demo-label">Z-Index Scale</div>
-          <div style="display:flex;flex-direction:column;gap:var(--md-spacing-2);">
-            <div class="token-row"><span class="token-name">--md-z-dropdown</span><span class="token-value">10</span></div>
-            <div class="token-row"><span class="token-name">--md-z-sticky</span><span class="token-value">20</span></div>
-            <div class="token-row"><span class="token-name">--md-z-fixed</span><span class="token-value">30</span></div>
-            <div class="token-row"><span class="token-name">--md-z-modal-bg</span><span class="token-value">40</span></div>
-            <div class="token-row"><span class="token-name">--md-z-modal</span><span class="token-value">50</span></div>
-            <div class="token-row"><span class="token-name">--md-z-toast</span><span class="token-value">70</span></div>
-            <div class="token-row"><span class="token-name">--md-z-tooltip</span><span class="token-value">80</span></div>
-          </div>
-
-          <div class="demo-label" style="margin-top:var(--md-spacing-6);">Grid Classes</div>
-          <div class="grid grid-3 gap-2" style="max-width:320px;">
-            <div class="p-3 rounded-sm bg-surface-container text-center body-small">.grid-3</div>
-            <div class="p-3 rounded-sm bg-surface-container text-center body-small">col</div>
-            <div class="p-3 rounded-sm bg-surface-container text-center body-small">col</div>
-          </div>
-          <div class="grid grid-2 gap-2 mt-2" style="max-width:320px;">
-            <div class="p-3 rounded-sm bg-primary-container text-center body-small">.grid-2</div>
-            <div class="p-3 rounded-sm bg-primary-container text-center body-small">col</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FAB fixed -->
-  <div style="position:fixed;bottom:24px;right:24px;z-index:var(--md-z-fixed);">
-    <button class="fab ripple" data-ripple aria-label="Compose" onclick="KENAI.Snackbar.show('Compose new message')">
-      <span class="material-symbols-rounded">edit</span>
-    </button>
   </div>
+</section>
 
-  <!-- DIALOG: Full -->
-  <div id="demoDialog" class="dialog-backdrop" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
-    <div class="dialog">
-      <h3 class="dialog-title">Permanently delete?</h3>
-      <p class="dialog-body">Deleting "Work documents" will also delete all its contents. You cannot undo this action.</p>
-      <div class="dialog-actions">
-        <button class="btn btn-text ripple" data-ripple onclick="document.getElementById('demoDialog').style.display='none'">Cancel</button>
-        <button class="btn btn-filled btn-error ripple" data-ripple onclick="document.getElementById('demoDialog').style.display='none';KENAI.Snackbar.show('Folder deleted', { action: 'Undo' })">Delete</button>
+
+<!-- ================================================================
+     DESIGN TOKENS
+================================================================ -->
+<section class="section" id="tokens">
+  <div class="section-inner">
+    <div class="section-eyebrow">Design Tokens</div>
+    <h2 class="section-title">Every value is a CSS variable.</h2>
+    <p class="section-desc">Access the full M3 token system directly. Override anything with one line of CSS. No configuration files required.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:var(--md-spacing-6);">
+
+      <!-- Color tokens -->
+      <div class="code-card">
+        <div class="code-bar">
+          <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
+          <span class="code-bar-lang">Color Tokens</span>
+        </div>
+        <div class="code-body"><pre><span class="t-prop">--md-primary</span><span class="t-punc">:           </span><span class="t-str">#1B6EF3</span><span class="t-punc">;</span>
+<span class="t-prop">--md-on-primary</span><span class="t-punc">:        </span><span class="t-str">#FFFFFF</span><span class="t-punc">;</span>
+<span class="t-prop">--md-primary-container</span><span class="t-punc">: </span><span class="t-str">#D8E3FF</span><span class="t-punc">;</span>
+<span class="t-prop">--md-secondary</span><span class="t-punc">:         </span><span class="t-str">#565F71</span><span class="t-punc">;</span>
+<span class="t-prop">--md-surface</span><span class="t-punc">:           </span><span class="t-str">#F9F9FF</span><span class="t-punc">;</span>
+<span class="t-prop">--md-surface-container</span><span class="t-punc">: </span><span class="t-str">#EDEDF4</span><span class="t-punc">;</span>
+<span class="t-prop">--md-outline</span><span class="t-punc">:           </span><span class="t-str">#74777F</span><span class="t-punc">;</span>
+<span class="t-prop">--md-error</span><span class="t-punc">:             </span><span class="t-str">#BA1A1A</span><span class="t-punc">;</span>
+
+<span class="t-cmt">/* Usage */</span>
+<span class="t-fn">.my-button</span> <span class="t-punc">{</span>
+  <span class="t-prop">background</span><span class="t-punc">:</span> <span class="t-fn">var</span><span class="t-punc">(</span><span class="t-val">--md-primary</span><span class="t-punc">);</span>
+  <span class="t-prop">color</span><span class="t-punc">:</span> <span class="t-fn">var</span><span class="t-punc">(</span><span class="t-val">--md-on-primary</span><span class="t-punc">);</span>
+<span class="t-punc">}</span></pre></div>
+      </div>
+
+      <!-- Motion tokens -->
+      <div class="code-card">
+        <div class="code-bar">
+          <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
+          <span class="code-bar-lang">Motion Tokens</span>
+        </div>
+        <div class="code-body"><pre><span class="t-prop">--md-duration-short-4</span><span class="t-punc">:  </span><span class="t-val">200ms</span><span class="t-punc">;</span>
+<span class="t-prop">--md-duration-medium-2</span><span class="t-punc">: </span><span class="t-val">300ms</span><span class="t-punc">;</span>
+<span class="t-prop">--md-duration-long-2</span><span class="t-punc">:   </span><span class="t-val">500ms</span><span class="t-punc">;</span>
+
+<span class="t-prop">--md-easing-standard</span><span class="t-punc">:</span>
+  <span class="t-fn">cubic-bezier</span><span class="t-punc">(</span><span class="t-val">0.2</span><span class="t-punc">, </span><span class="t-val">0</span><span class="t-punc">, </span><span class="t-val">0</span><span class="t-punc">, </span><span class="t-val">1</span><span class="t-punc">);</span>
+<span class="t-prop">--md-easing-emphasized-decel</span><span class="t-punc">:</span>
+  <span class="t-fn">cubic-bezier</span><span class="t-punc">(</span><span class="t-val">0.05</span><span class="t-punc">, </span><span class="t-val">0.7</span><span class="t-punc">, </span><span class="t-val">0.1</span><span class="t-punc">, </span><span class="t-val">1</span><span class="t-punc">);</span>
+<span class="t-prop">--md-easing-spring</span><span class="t-punc">:</span>
+  <span class="t-fn">cubic-bezier</span><span class="t-punc">(</span><span class="t-val">0.34</span><span class="t-punc">, </span><span class="t-val">1.56</span><span class="t-punc">, </span><span class="t-val">0.64</span><span class="t-punc">, </span><span class="t-val">1</span><span class="t-punc">);</span>
+
+<span class="t-cmt">/* Usage */</span>
+<span class="t-fn">.panel</span> <span class="t-punc">{</span>
+  <span class="t-prop">transition</span><span class="t-punc">: transform</span>
+    <span class="t-fn">var</span><span class="t-punc">(</span><span class="t-val">--md-duration-medium-2</span><span class="t-punc">)</span>
+    <span class="t-fn">var</span><span class="t-punc">(</span><span class="t-val">--md-easing-emphasized-decel</span><span class="t-punc">);</span>
+<span class="t-punc">}</span></pre></div>
+      </div>
+
+      <!-- Dynamic color JS -->
+      <div class="code-card">
+        <div class="code-bar">
+          <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
+          <span class="code-bar-lang">Dynamic Color</span>
+        </div>
+        <div class="code-body"><pre><span class="t-cmt">// Generate full M3 palette</span>
+<span class="t-cmt">// from any seed hex color</span>
+<span class="t-fn">KENAI</span><span class="t-punc">.</span><span class="t-fn">Color</span><span class="t-punc">.</span><span class="t-fn">applyPalette</span><span class="t-punc">(</span><span class="t-str">'#4CAF50'</span><span class="t-punc">);</span>
+
+<span class="t-cmt">// Reset to KENAI defaults</span>
+<span class="t-fn">KENAI</span><span class="t-punc">.</span><span class="t-fn">Color</span><span class="t-punc">.</span><span class="t-fn">reset</span><span class="t-punc">();</span>
+
+<span class="t-cmt">// Theme management</span>
+<span class="t-fn">KENAI</span><span class="t-punc">.</span><span class="t-fn">Theme</span><span class="t-punc">.</span><span class="t-fn">toggle</span><span class="t-punc">();</span>
+<span class="t-fn">KENAI</span><span class="t-punc">.</span><span class="t-fn">Theme</span><span class="t-punc">.</span><span class="t-fn">apply</span><span class="t-punc">(</span><span class="t-str">'dark'</span><span class="t-punc">);</span>
+<span class="t-fn">KENAI</span><span class="t-punc">.</span><span class="t-fn">Theme</span><span class="t-punc">.</span><span class="t-fn">current</span><span class="t-punc">();</span> <span class="t-cmt">// → 'dark'</span>
+
+<span class="t-cmt">// Listen for changes</span>
+<span class="t-kw">document</span><span class="t-punc">.</span>documentElement
+  <span class="t-punc">.</span><span class="t-fn">addEventListener</span><span class="t-punc">(</span>
+    <span class="t-str">'kenai:themechange'</span><span class="t-punc">,</span>
+    <span class="t-punc">e =&gt; </span><span class="t-fn">console</span><span class="t-punc">.</span><span class="t-fn">log</span><span class="t-punc">(</span>e<span class="t-punc">.</span>detail<span class="t-punc">.</span>theme<span class="t-punc">)</span>
+  <span class="t-punc">);</span></pre></div>
+      </div>
+
+      <!-- Shape tokens -->
+      <div class="code-card">
+        <div class="code-bar">
+          <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
+          <span class="code-bar-lang">Shape + Elevation</span>
+        </div>
+        <div class="code-body"><pre><span class="t-cmt">/* Shape scale */</span>
+<span class="t-prop">--md-shape-extra-small</span><span class="t-punc">: </span><span class="t-val">4px</span><span class="t-punc">;</span>
+<span class="t-prop">--md-shape-small</span><span class="t-punc">:       </span><span class="t-val">8px</span><span class="t-punc">;</span>
+<span class="t-prop">--md-shape-medium</span><span class="t-punc">:      </span><span class="t-val">12px</span><span class="t-punc">;</span>
+<span class="t-prop">--md-shape-large</span><span class="t-punc">:       </span><span class="t-val">16px</span><span class="t-punc">;</span>
+<span class="t-prop">--md-shape-extra-large</span><span class="t-punc">: </span><span class="t-val">28px</span><span class="t-punc">;</span>
+<span class="t-prop">--md-shape-full</span><span class="t-punc">:        </span><span class="t-val">9999px</span><span class="t-punc">;</span>
+
+<span class="t-cmt">/* Elevation */</span>
+<span class="t-prop">--md-elevation-1</span><span class="t-punc">: </span>
+  <span class="t-val">0px 1px 2px rgba(0,0,0,.3)</span><span class="t-punc">,</span>
+  <span class="t-val">0px 1px 3px 1px rgba(0,0,0,.15)</span><span class="t-punc">;</span>
+
+<span class="t-cmt">/* Utility classes */</span>
+<span class="t-fn">.rounded-lg</span>  <span class="t-cmt">→ border-radius: 16px</span>
+<span class="t-fn">.elevation-2</span> <span class="t-cmt">→ shadow + tinted bg</span>
+<span class="t-fn">.p-4</span>         <span class="t-cmt">→ padding: 16px</span>
+<span class="t-fn">.gap-3</span>       <span class="t-cmt">→ gap: 12px</span></pre></div>
+      </div>
+
+    </div>
+
+    <!-- Dynamic color picker -->
+    <div style="margin-top:var(--md-spacing-12);background:var(--md-surface-container-low);border-radius:var(--md-shape-extra-large);padding:var(--md-spacing-8);border:1px solid var(--md-outline-variant);">
+      <h3 class="title-large" style="margin-bottom:var(--md-spacing-2);">Dynamic Color Seed</h3>
+      <p class="body-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-6);">Pick any color and KENAI generates the full M3 tonal palette in real time.</p>
+      <div style="display:flex;align-items:center;gap:var(--md-spacing-4);flex-wrap:wrap;">
+        <input type="color" id="colorSeed" value="#1B6EF3" style="width:56px;height:56px;border:none;border-radius:var(--md-shape-medium);cursor:pointer;background:none;padding:0;" />
+        <div>
+          <p class="title-medium" id="seedLabel">Seed: #1B6EF3</p>
+          <p class="body-small text-on-surface-variant">Click color swatch to change</p>
+        </div>
+        <button class="btn btn-tonal ripple" data-ripple onclick="applySeed()">Apply Palette</button>
+        <button class="btn btn-outlined ripple" data-ripple onclick="resetSeed()">Reset to Default</button>
+      </div>
+      <div style="display:flex;gap:var(--md-spacing-3);margin-top:var(--md-spacing-6);flex-wrap:wrap;">
+        <div style="width:80px;height:80px;border-radius:var(--md-shape-medium);background:var(--md-primary);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;">
+          <span style="font-size:10px;font-weight:500;color:var(--md-on-primary);">Primary</span>
+        </div>
+        <div style="width:80px;height:80px;border-radius:var(--md-shape-medium);background:var(--md-primary-container);display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:10px;font-weight:500;color:var(--md-on-primary-container);">Container</span>
+        </div>
+        <div style="width:80px;height:80px;border-radius:var(--md-shape-medium);background:var(--md-secondary-container);display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:10px;font-weight:500;color:var(--md-on-secondary-container);">Secondary</span>
+        </div>
+        <div style="width:80px;height:80px;border-radius:var(--md-shape-medium);background:var(--md-surface);border:1px solid var(--md-outline-variant);display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:10px;font-weight:500;color:var(--md-on-surface);">Surface</span>
+        </div>
+        <div style="width:80px;height:80px;border-radius:var(--md-shape-medium);background:var(--md-surface-container-highest);display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:10px;font-weight:500;color:var(--md-on-surface);">S-Highest</span>
+        </div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- DIALOG: Alert -->
-  <div id="alertDialog" class="dialog-backdrop" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
-    <div class="dialog">
-      <div style="margin-bottom:var(--md-spacing-4);">
-        <span class="material-symbols-rounded text-error" style="font-size:40px;">warning</span>
-      </div>
-      <h3 class="dialog-title">Location access</h3>
-      <p class="dialog-body">Allow KENAI to access your location while you're using the app? Your location will be used to show relevant content.</p>
-      <div class="dialog-actions">
-        <button class="btn btn-text ripple" data-ripple onclick="document.getElementById('alertDialog').style.display='none'">Deny</button>
-        <button class="btn btn-tonal ripple" data-ripple onclick="document.getElementById('alertDialog').style.display='none';KENAI.Snackbar.show('Location access granted')">Allow</button>
-      </div>
+
+<!-- ================================================================
+     CTA
+================================================================ -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-title">Start building with KENAI today.</h2>
+    <p class="cta-desc">Two files. Zero build step. Full Material Design 3. Link it, use it, ship it.</p>
+    <div style="display:flex;gap:var(--md-spacing-3);justify-content:center;flex-wrap:wrap;">
+      <button class="btn-cta-primary ripple" data-ripple onclick="copyInstall()">
+        <span class="material-symbols-rounded">download</span>
+        Download kenai.css
+      </button>
+      <button class="btn btn-outlined ripple" data-ripple style="height:48px;padding:0 var(--md-spacing-8);color:var(--md-on-primary);border-color:rgba(255,255,255,0.4);font-size:var(--md-title-small-size);" onclick="KENAI.Snackbar.show('Docs coming soon 📄')">
+        Read the docs →
+      </button>
     </div>
   </div>
+</section>
 
-  <!-- KENAI v0.2.0 runtime -->
-  <script src="kenai0.2.0.js"></script>
 
-  <script>
-  // ============================================================
-  // DEMO PAGE INTERACTIVITY
-  // ============================================================
+<!-- ================================================================
+     FOOTER
+================================================================ -->
+<footer>
+  <div class="footer-inner">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:var(--md-spacing-8);">
+      <div>
+        <div class="footer-logo">
+          <div class="app-bar-logo-mark" style="width:28px;height:28px;font-size:15px;">K</div>
+          KENAI
+        </div>
+        <p class="footer-tagline">Material Design 3 · Stock Android / Pixel aesthetic<br>MIT License · v0.2.0</p>
+      </div>
+      <div style="display:flex;gap:var(--md-spacing-12);flex-wrap:wrap;">
+        <div>
+          <p class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Framework</p>
+          <div class="flex flex-col gap-2 footer-links">
+            <a href="#">Components</a>
+            <a href="#">Tokens</a>
+            <a href="#">Utilities</a>
+            <a href="#">JavaScript API</a>
+          </div>
+        </div>
+        <div>
+          <p class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Resources</p>
+          <div class="flex flex-col gap-2 footer-links">
+            <a href="#">GitHub</a>
+            <a href="#">Changelog</a>
+            <a href="#">M3 Spec ↗</a>
+            <a href="#">Report a bug</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="divider" style="margin:var(--md-spacing-8) 0 var(--md-spacing-4);"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--md-spacing-4);">
+      <p class="body-small text-on-surface-variant">© 2025 KENAI Framework. MIT License. Built with ❤️ for the Android design community.</p>
+      <p class="body-small text-on-surface-variant">Not affiliated with Google LLC or Material Design.</p>
+    </div>
+  </div>
+</footer>
 
-  // Scroll-reactive top app bar
+
+<!-- Fixed FAB -->
+<div style="position:fixed;bottom:24px;right:24px;z-index:var(--md-z-fixed);">
+  <button class="fab ripple" data-ripple aria-label="Compose" onclick="KENAI.Snackbar.show('KENAI v0.2.0 — 20 components, zero deps 🚀')">
+    <span class="material-symbols-rounded">rocket_launch</span>
+  </button>
+</div>
+
+<!-- Dialog -->
+<div id="demoDialog" class="dialog-backdrop" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
+  <div class="dialog">
+    <div style="display:flex;justify-content:center;margin-bottom:var(--md-spacing-4);">
+      <span class="material-symbols-rounded text-error" style="font-size:40px;">delete_forever</span>
+    </div>
+    <h3 class="dialog-title" style="text-align:center;">Permanently delete?</h3>
+    <p class="dialog-body" style="text-align:center;">Deleting "Work documents" will also remove all contents. This cannot be undone.</p>
+    <div class="dialog-actions">
+      <button class="btn btn-text ripple" data-ripple onclick="document.getElementById('demoDialog').style.display='none'">Cancel</button>
+      <button class="btn btn-filled btn-error ripple" data-ripple onclick="document.getElementById('demoDialog').style.display='none';KENAI.Snackbar.show('Folder deleted',{action:'Undo'})">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- KENAI runtime -->
+<script src="kenai.js"></script>
+
+<script>
+  // App bar scroll
   window.addEventListener('scroll', () => {
-    const bar = document.getElementById('appBar');
-    if (window.scrollY > 8) bar.classList.add('scrolled');
-    else bar.classList.remove('scrolled');
-  });
+    document.getElementById('appBar').classList.toggle('scrolled', window.scrollY > 8);
+  }, { passive: true });
 
   // Tabs
   document.getElementById('tabsDemo').addEventListener('click', e => {
-    const tab = e.target.closest('.tab');
-    if (!tab) return;
-    document.querySelectorAll('#tabsDemo .tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
+    const t = e.target.closest('.tab-d');
+    if (!t) return;
+    document.querySelectorAll('#tabsDemo .tab-d').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
   });
 
-  // Nav bar items
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', () => {
-      item.closest('.nav-bar').querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-    });
+  // Color seed
+  const seedInput = document.getElementById('colorSeed');
+  const seedLabel = document.getElementById('seedLabel');
+  seedInput.addEventListener('input', () => {
+    seedLabel.textContent = 'Seed: ' + seedInput.value.toUpperCase();
   });
-
-  // Drawer items
-  document.querySelectorAll('.drawer-item').forEach(item => {
-    item.addEventListener('click', () => {
-      item.closest('.nav-drawer').querySelectorAll('.drawer-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-    });
-  });
-
-  // Slider
-  const slider = document.getElementById('sliderDemo');
-  const sliderVal = document.getElementById('sliderVal');
-  slider.addEventListener('input', () => sliderVal.textContent = slider.value);
-
-  // Color seed — uses KENAI.Color.applyPalette() from v0.2.0
   function applySeed() {
-    const hex = document.getElementById('colorSeed').value;
+    const hex = seedInput.value;
     KENAI.Color.applyPalette(hex);
-    KENAI.Snackbar.show('Palette applied from seed ' + hex);
+    KENAI.Snackbar.show('Palette applied from ' + hex.toUpperCase());
   }
-
-  // Color reset — uses KENAI.Color.reset() from v0.2.0
   function resetSeed() {
     KENAI.Color.reset();
-    document.getElementById('colorSeed').value = '#1B6EF3';
-    KENAI.Snackbar.show('Palette reset to default');
+    seedInput.value = '#1B6EF3';
+    seedLabel.textContent = 'Seed: #1B6EF3';
+    KENAI.Snackbar.show('Palette reset to Pixel Blue');
   }
 
-  // Animate cards
-  function animateCards() {
-    ['mc1','mc2','mc3'].forEach((id, i) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.style.transform = 'translateY(-12px) scale(1.03)';
-      el.style.boxShadow = 'var(--md-elevation-3)';
-      setTimeout(() => {
-        el.style.transform = '';
-        el.style.boxShadow = '';
-      }, 400 + i * 80);
-    });
-  }
-
-  // Progress demo — uses new .progress-linear / .progress-linear-track classes
+  // Progress animation
   function triggerProgress() {
-    const container = document.getElementById('progressContainer');
     const bar = document.getElementById('demoProgress');
-    container.style.display = 'block';
+    bar.style.transition = 'none';
     bar.style.width = '0%';
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        bar.style.width = '30%';
-        setTimeout(() => { bar.style.width = '65%';
-          setTimeout(() => { bar.style.width = '100%';
-            setTimeout(() => { container.style.display = 'none'; bar.style.width = '0%'; }, 800);
-          }, 600);
+    requestAnimationFrame(() => setTimeout(() => {
+      bar.style.transition = 'width 500ms var(--md-easing-standard)';
+      bar.style.width = '35%';
+      setTimeout(() => { bar.style.width = '70%';
+        setTimeout(() => { bar.style.width = '100%';
+          setTimeout(() => { bar.style.width = '65%'; }, 700);
         }, 500);
-      }, 50);
+      }, 400);
+    }, 16));
+  }
+
+  // Copy install snippet
+  function copyInstall() {
+    const code = `<link rel="stylesheet" href="kenai.css" />\n<script src="kenai.js"><\/script>`;
+    navigator.clipboard.writeText(code).then(() => {
+      KENAI.Snackbar.show('Install snippet copied to clipboard!');
+    }).catch(() => {
+      KENAI.Snackbar.show('Copy from the code card above');
     });
   }
-  </script>
+
+  // Copy code block
+  function copyCode(btn) {
+    const pre = btn.closest('.code-card').querySelector('pre');
+    const text = pre.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      KENAI.Snackbar.show('Code copied to clipboard');
+    });
+  }
+</script>
 </body>
 </html>
