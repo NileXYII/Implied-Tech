@@ -10,1280 +10,1901 @@
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="kenai0.2.0.css" />
 
-  <style>
-    /* ================================================================
-       PAGE-LEVEL STYLES — not part of kenai.css
-    ================================================================ */
+<style>
+/* ============================================================
+   PAGE TOKENS & OVERRIDES
+============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
 
-    /* --- Code block / syntax highlight --- */
-    .code-card {
-      background: #0D1117;
-      border-radius: var(--md-shape-medium);
-      overflow: hidden;
-      font-family: var(--md-font-mono);
-      font-size: 13px;
-      line-height: 1.7;
-      box-shadow: var(--md-elevation-3);
-      position: relative;
-    }
-    [data-theme="light"] .code-card { background: #1A1E27; }
+:root {
+  --page-max: 1120px;
+  --page-gutter: clamp(16px, 5vw, 64px);
+}
 
-    .code-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px var(--md-spacing-4);
-      background: rgba(255,255,255,0.06);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-    .code-bar-dots { display: flex; gap: 6px; }
-    .code-bar-dot {
-      width: 12px; height: 12px; border-radius: 50%;
-    }
-    .dot-red    { background: #FF5F57; }
-    .dot-yellow { background: #FEBC2E; }
-    .dot-green  { background: #28C840; }
-    .code-bar-lang {
-      font-size: 11px;
-      font-weight: 500;
-      color: rgba(255,255,255,0.4);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-    .code-copy-btn {
-      background: rgba(255,255,255,0.08);
-      border: none;
-      border-radius: var(--md-shape-extra-small);
-      color: rgba(255,255,255,0.5);
-      font-size: 11px;
-      padding: 3px 8px;
-      cursor: pointer;
-      font-family: var(--md-font-mono);
-      transition: background 150ms, color 150ms;
-    }
-    .code-copy-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
-    .code-body {
-      padding: var(--md-spacing-4) var(--md-spacing-5);
-      overflow-x: auto;
-      color: #CDD9E5;
-    }
-    .code-body pre { margin: 0; white-space: pre; }
+/* ============================================================
+   LAYOUT
+============================================================ */
+.page-wrap {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
 
-    /* Syntax tokens */
-    .t-kw   { color: #FF7B72; }   /* keyword */
-    .t-fn   { color: #D2A8FF; }   /* function / class */
-    .t-str  { color: #A5D6FF; }   /* string */
-    .t-val  { color: #79C0FF; }   /* value / number */
-    .t-cmt  { color: #8B949E; font-style: italic; }  /* comment */
-    .t-tag  { color: #7EE787; }   /* html tag */
-    .t-attr { color: #FF7B72; }   /* attribute */
-    .t-cls  { color: #FFA657; }   /* class name */
-    .t-prop { color: #79C0FF; }   /* css property */
-    .t-punc { color: #CDD9E5; }   /* punctuation */
+/* ============================================================
+   APP BAR
+============================================================ */
+.top-bar {
+  position: sticky; top: 0; z-index: var(--md-z-fixed);
+  background: var(--md-surface-container);
+  border-bottom: 1px solid transparent;
+  transition:
+    border-color var(--md-duration-medium-2) var(--md-easing-standard),
+    box-shadow   var(--md-duration-medium-2) var(--md-easing-standard),
+    background   var(--md-duration-medium-2) var(--md-easing-standard);
+}
+.top-bar.scrolled {
+  border-color: var(--md-outline-variant);
+  box-shadow: var(--md-elevation-2);
+}
+.top-bar-inner {
+  display: flex; align-items: center; gap: var(--md-spacing-2);
+  height: 64px;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+.bar-logo {
+  display: inline-flex; align-items: center; gap: var(--md-spacing-2);
+  text-decoration: none;
+  font-family: var(--md-font-brand);
+  font-size: var(--md-title-large-size);
+  font-weight: 700;
+  color: var(--md-on-surface);
+  flex-shrink: 0;
+}
+.bar-logo-mark {
+  width: 32px; height: 32px;
+  border-radius: var(--md-shape-small);
+  background: var(--md-primary);
+  color: var(--md-on-primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: 700; font-family: var(--md-font-brand);
+}
+.bar-nav {
+  display: flex; align-items: center; gap: 2px;
+  margin-left: var(--md-spacing-6);
+}
+.bar-nav-link {
+  padding: 8px 14px;
+  border-radius: var(--md-shape-full);
+  font-family: var(--md-font-plain);
+  font-size: var(--md-label-large-size);
+  font-weight: 500;
+  color: var(--md-on-surface-variant);
+  text-decoration: none;
+  position: relative; overflow: hidden;
+  transition: color var(--md-duration-short-3) var(--md-easing-standard);
+}
+.bar-nav-link::after {
+  content: ''; position: absolute; inset: 0;
+  background: currentColor; opacity: 0; border-radius: inherit;
+  transition: opacity var(--md-duration-short-3);
+}
+.bar-nav-link:hover { color: var(--md-on-surface); opacity: 1; }
+.bar-nav-link:hover::after { opacity: 0.08; }
+@media (max-width: 700px) { .bar-nav { display: none; } }
 
-    /* --- App Bar --- */
-    .app-bar {
-      position: sticky; top: 0; z-index: var(--md-z-fixed);
-      display: flex; align-items: center; gap: var(--md-spacing-1);
-      padding: 0 var(--md-spacing-2);
-      height: 64px;
-      background: var(--md-surface-container);
-      transition: background-color var(--md-duration-medium-2) var(--md-easing-standard),
-                  box-shadow var(--md-duration-short-4) var(--md-easing-standard);
-    }
-    .app-bar.scrolled {
-      background: var(--md-surface-container-high);
-      box-shadow: var(--md-elevation-2);
-    }
-    .app-bar-logo {
-      display: flex; align-items: center; gap: var(--md-spacing-2);
-      font-family: var(--md-font-brand); font-size: var(--md-title-large-size);
-      font-weight: 700; color: var(--md-on-surface);
-      text-decoration: none; padding: 0 var(--md-spacing-2);
-    }
-    .app-bar-logo-mark {
-      width: 32px; height: 32px; border-radius: var(--md-shape-small);
-      background: var(--md-primary); color: var(--md-on-primary);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; font-weight: 700;
-    }
-    .app-bar-nav {
-      display: flex; align-items: center; gap: var(--md-spacing-1);
-      margin-left: var(--md-spacing-4);
-    }
-    .app-bar-nav a {
-      padding: var(--md-spacing-2) var(--md-spacing-3);
-      border-radius: var(--md-shape-full);
-      font-size: var(--md-label-large-size);
-      font-weight: 500;
-      color: var(--md-on-surface-variant);
-      transition: background var(--md-duration-short-3) var(--md-easing-standard), color var(--md-duration-short-3);
-    }
-    .app-bar-nav a:hover { background: color-mix(in srgb, var(--md-on-surface) 8%, transparent); color: var(--md-on-surface); opacity: 1; }
-    .spacer { flex: 1; }
+/* ============================================================
+   HERO
+============================================================ */
+.hero {
+  position: relative; overflow: hidden;
+  padding: clamp(56px, 10vw, 120px) var(--page-gutter) clamp(48px, 8vw, 96px);
+  background: var(--md-surface);
+  text-align: center;
+}
+.hero-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(var(--md-outline-variant) 1px, transparent 1px),
+    linear-gradient(90deg, var(--md-outline-variant) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.3;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 30%, transparent 100%);
+}
+.hero-glow {
+  position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+  width: min(900px, 110vw); height: 480px;
+  background: radial-gradient(ellipse,
+    color-mix(in srgb, var(--md-primary) 16%, transparent) 0%,
+    transparent 70%);
+  pointer-events: none;
+}
+.hero-inner {
+  position: relative; z-index: 1;
+  max-width: 740px; margin-inline: auto;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: var(--md-spacing-2);
+  padding: 6px 16px;
+  border-radius: var(--md-shape-full);
+  background: var(--md-primary-container);
+  color: var(--md-on-primary-container);
+  font-size: var(--md-label-medium-size); font-weight: 500;
+  margin-bottom: var(--md-spacing-6);
+  border: 1px solid color-mix(in srgb, var(--md-primary) 25%, transparent);
+  animation: fadeUp 500ms var(--md-easing-emphasized-decel) both;
+}
+.hero-h1 {
+  font-family: 'Google Sans Display', var(--md-font-brand);
+  font-size: clamp(2.4rem, 6.5vw, 4.75rem);
+  line-height: 1.08;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--md-on-surface);
+  margin-bottom: var(--md-spacing-5);
+  animation: fadeUp 550ms 60ms var(--md-easing-emphasized-decel) both;
+}
+.hero-h1 strong { font-weight: 700; color: var(--md-primary); }
+.hero-sub {
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  line-height: 1.65;
+  color: var(--md-on-surface-variant);
+  max-width: 520px; margin-inline: auto;
+  margin-bottom: var(--md-spacing-8);
+  animation: fadeUp 600ms 120ms var(--md-easing-emphasized-decel) both;
+}
+.hero-actions {
+  display: flex; flex-wrap: wrap; gap: var(--md-spacing-3);
+  justify-content: center;
+  animation: fadeUp 650ms 180ms var(--md-easing-emphasized-decel) both;
+}
+.hero-stats {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: clamp(24px, 6vw, 64px);
+  padding-top: var(--md-spacing-10);
+  margin-top: var(--md-spacing-12);
+  border-top: 1px solid var(--md-outline-variant);
+  animation: fadeUp 700ms 240ms var(--md-easing-emphasized-decel) both;
+}
+.stat-val {
+  font-family: var(--md-font-brand);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700; line-height: 1;
+  color: var(--md-on-surface);
+}
+.stat-lbl {
+  font-size: var(--md-body-small-size);
+  color: var(--md-on-surface-variant);
+  margin-top: 4px;
+}
 
-    /* --- Hero --- */
-    .hero {
-      position: relative;
-      overflow: hidden;
-      padding: 100px var(--md-spacing-6) 80px;
-      text-align: center;
-      background: var(--md-surface);
-    }
-    .hero-grid-bg {
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(var(--md-outline-variant) 1px, transparent 1px),
-        linear-gradient(90deg, var(--md-outline-variant) 1px, transparent 1px);
-      background-size: 40px 40px;
-      opacity: 0.35;
-      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
-    }
-    .hero-glow {
-      position: absolute;
-      top: -120px; left: 50%; transform: translateX(-50%);
-      width: 800px; height: 500px;
-      background: radial-gradient(ellipse, color-mix(in srgb, var(--md-primary) 18%, transparent) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .hero-content { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: var(--md-spacing-2);
-      padding: 6px 14px; border-radius: var(--md-shape-full);
-      background: var(--md-primary-container); color: var(--md-on-primary-container);
-      font-size: var(--md-label-medium-size); font-weight: 500;
-      margin-bottom: var(--md-spacing-6);
-      letter-spacing: 0.03em;
-      border: 1px solid color-mix(in srgb, var(--md-primary) 30%, transparent);
-    }
-    .hero-title {
-      font-family: 'Google Sans Display', var(--md-font-brand);
-      font-size: clamp(2.5rem, 7vw, 5rem);
-      line-height: 1.1;
-      font-weight: 400;
-      letter-spacing: -0.02em;
-      color: var(--md-on-surface);
-      margin-bottom: var(--md-spacing-6);
-    }
-    .hero-title strong { font-weight: 700; color: var(--md-primary); }
-    .hero-subtitle {
-      font-size: clamp(1rem, 2vw, 1.25rem);
-      line-height: 1.6;
-      color: var(--md-on-surface-variant);
-      max-width: 540px;
-      margin: 0 auto var(--md-spacing-10);
-    }
-    .hero-actions { display: flex; align-items: center; justify-content: center; gap: var(--md-spacing-3); flex-wrap: wrap; }
-    .hero-stats {
-      display: flex; align-items: center; justify-content: center; gap: var(--md-spacing-8);
-      margin-top: var(--md-spacing-16);
-      padding-top: var(--md-spacing-8);
-      border-top: 1px solid var(--md-outline-variant);
-      flex-wrap: wrap;
-    }
-    .hero-stat-value {
-      font-family: var(--md-font-brand);
-      font-size: 2rem; font-weight: 700;
-      color: var(--md-on-surface);
-      line-height: 1;
-    }
-    .hero-stat-label {
-      font-size: var(--md-body-small-size);
-      color: var(--md-on-surface-variant);
-      margin-top: 4px;
-    }
+/* ============================================================
+   SECTION WRAPPER
+============================================================ */
+.section {
+  padding: clamp(48px, 8vw, 96px) var(--page-gutter);
+  border-bottom: 1px solid var(--md-outline-variant);
+}
+.section:last-of-type { border-bottom: none; }
+.section-alt { background: var(--md-surface-container-low); }
 
-    /* --- Section layout --- */
-    .section {
-      padding: 80px var(--md-spacing-6);
-      border-bottom: 1px solid var(--md-outline-variant);
-    }
-    .section:last-of-type { border-bottom: none; }
-    .section-inner { max-width: 1100px; margin: 0 auto; }
-    .section-eyebrow {
-      font-size: var(--md-label-medium-size);
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--md-primary);
-      margin-bottom: var(--md-spacing-2);
-    }
-    .section-title {
-      font-family: var(--md-font-brand);
-      font-size: clamp(1.75rem, 4vw, 2.5rem);
-      font-weight: 400;
-      color: var(--md-on-surface);
-      line-height: 1.2;
-      margin-bottom: var(--md-spacing-3);
-    }
-    .section-desc {
-      font-size: var(--md-body-large-size);
-      color: var(--md-on-surface-variant);
-      max-width: 560px;
-      line-height: 1.6;
-      margin-bottom: var(--md-spacing-10);
-    }
+.sec-eyebrow {
+  font-size: var(--md-label-medium-size); font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--md-primary);
+  margin-bottom: var(--md-spacing-2);
+}
+.sec-title {
+  font-family: var(--md-font-brand);
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 400; line-height: 1.2;
+  color: var(--md-on-surface);
+  margin-bottom: var(--md-spacing-3);
+}
+.sec-desc {
+  font-size: var(--md-body-large-size);
+  color: var(--md-on-surface-variant);
+  max-width: 560px; line-height: 1.65;
+  margin-bottom: var(--md-spacing-10);
+}
+.sec-label {
+  font-size: var(--md-label-large-size); font-weight: 500;
+  color: var(--md-on-surface-variant);
+  letter-spacing: 0.04em;
+  margin-bottom: var(--md-spacing-3);
+  margin-top: var(--md-spacing-8);
+  display: flex; align-items: center; gap: var(--md-spacing-2);
+}
+.sec-label:first-of-type { margin-top: 0; }
 
-    /* --- Compare banner (vs Bootstrap / Tailwind) --- */
-    .compare-bar {
-      background: var(--md-surface-container-high);
-      border-radius: var(--md-shape-large);
-      padding: var(--md-spacing-4) var(--md-spacing-6);
-      display: flex; align-items: center; gap: var(--md-spacing-4);
-      flex-wrap: wrap;
-      border: 1px solid var(--md-outline-variant);
-    }
-    .compare-item {
-      display: flex; align-items: center; gap: var(--md-spacing-2);
-      font-size: var(--md-body-medium-size); color: var(--md-on-surface-variant);
-    }
-    .compare-item strong { color: var(--md-on-surface); }
-    .compare-check { color: #28A745; font-size: 18px; }
-    .compare-cross { color: var(--md-error); font-size: 18px; }
+/* ============================================================
+   SHOWCASE CARD  — M3 native, no dark boxes
+============================================================ */
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: var(--md-spacing-4);
+}
+.showcase-grid-wide {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
+  gap: var(--md-spacing-4);
+}
+.showcase-card {
+  background: var(--md-surface-container-low);
+  border: 1px solid var(--md-outline-variant);
+  border-radius: var(--md-shape-large);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.showcase-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--md-spacing-4) var(--md-spacing-5);
+  border-bottom: 1px solid var(--md-outline-variant);
+  background: var(--md-surface-container);
+}
+.showcase-card-title {
+  font-family: var(--md-font-plain);
+  font-size: var(--md-label-large-size); font-weight: 500;
+  color: var(--md-on-surface-variant);
+}
+.showcase-card-tag {
+  font-family: var(--md-font-mono);
+  font-size: 11px;
+  color: var(--md-primary);
+  background: var(--md-primary-container);
+  padding: 3px 8px;
+  border-radius: var(--md-shape-full);
+  font-weight: 500;
+}
+.showcase-card-body {
+  padding: var(--md-spacing-6) var(--md-spacing-5);
+  flex: 1;
+  display: flex; flex-direction: column;
+  gap: var(--md-spacing-4);
+}
+.showcase-card-row {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--md-spacing-3);
+}
 
-    /* --- Feature cards --- */
-    .feature-card {
-      background: var(--md-surface-container-low);
-      border-radius: var(--md-shape-large);
-      padding: var(--md-spacing-6);
-      border: 1px solid var(--md-outline-variant);
-      transition: box-shadow var(--md-duration-medium-1) var(--md-easing-standard),
-                  border-color var(--md-duration-medium-1) var(--md-easing-standard),
-                  background var(--md-duration-medium-1) var(--md-easing-standard);
-    }
-    .feature-card:hover {
-      box-shadow: var(--md-elevation-2);
-      border-color: var(--md-primary);
-      background: var(--md-surface-container);
-    }
-    .feature-icon {
-      width: 48px; height: 48px; border-radius: var(--md-shape-medium);
-      background: var(--md-primary-container);
-      color: var(--md-on-primary-container);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px;
-      margin-bottom: var(--md-spacing-4);
-    }
-    .feature-title {
-      font-family: var(--md-font-brand);
-      font-size: var(--md-title-medium-size);
-      font-weight: 500;
-      color: var(--md-on-surface);
-      margin-bottom: var(--md-spacing-2);
-    }
-    .feature-desc {
-      font-size: var(--md-body-medium-size);
-      color: var(--md-on-surface-variant);
-      line-height: 1.6;
-    }
+/* ============================================================
+   FEATURE GRID
+============================================================ */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: var(--md-spacing-4);
+}
+.feat-card {
+  padding: var(--md-spacing-6);
+  background: var(--md-surface-container-low);
+  border: 1px solid var(--md-outline-variant);
+  border-radius: var(--md-shape-large);
+  transition:
+    box-shadow   var(--md-duration-medium-1) var(--md-easing-standard),
+    border-color var(--md-duration-medium-1) var(--md-easing-standard),
+    background   var(--md-duration-medium-1) var(--md-easing-standard);
+}
+.feat-card:hover {
+  box-shadow: var(--md-elevation-2);
+  border-color: var(--md-outline);
+  background: var(--md-surface-container);
+}
+.feat-icon {
+  width: 48px; height: 48px; border-radius: var(--md-shape-medium);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; margin-bottom: var(--md-spacing-4);
+}
+.feat-title {
+  font-family: var(--md-font-brand);
+  font-size: var(--md-title-medium-size); font-weight: 500;
+  color: var(--md-on-surface);
+  margin-bottom: var(--md-spacing-2);
+}
+.feat-desc {
+  font-size: var(--md-body-medium-size);
+  color: var(--md-on-surface-variant);
+  line-height: 1.6;
+}
 
-    /* --- Component preview + code --- */
-    .component-showcase {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--md-spacing-4);
-      align-items: start;
-    }
-    @media (max-width: 760px) {
-      .component-showcase { grid-template-columns: 1fr; }
-      .app-bar-nav { display: none; }
-      .hero { padding: 64px var(--md-spacing-4) 48px; }
-      .section { padding: 56px var(--md-spacing-4); }
-    }
-    .preview-panel {
-      background: var(--md-surface-container-low);
-      border-radius: var(--md-shape-large);
-      padding: var(--md-spacing-6);
-      border: 1px solid var(--md-outline-variant);
-      display: flex; flex-direction: column; gap: var(--md-spacing-4);
-      min-height: 240px;
-      justify-content: center;
-    }
-    .preview-label {
-      font-size: var(--md-label-small-size);
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--md-on-surface-variant);
-      margin-bottom: var(--md-spacing-2);
-    }
+/* ============================================================
+   COLOR SWATCHES
+============================================================ */
+.swatch-row {
+  display: flex; flex-wrap: wrap; gap: var(--md-spacing-2);
+}
+.swatch {
+  width: 72px; height: 72px;
+  border-radius: var(--md-shape-medium);
+  display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: flex-end;
+  padding: 6px;
+  font-size: 10px; font-weight: 500;
+  line-height: 1.3;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+.swatch-wide {
+  width: auto; flex: 1; min-width: 100px; height: 56px;
+  flex-direction: row; justify-content: space-between; align-items: center;
+  padding: 0 var(--md-spacing-3);
+  font-size: 11px;
+}
 
-    /* --- Demo section tabs nav --- */
-    .demo-tabs {
-      display: flex; gap: 2px;
-      background: var(--md-surface-container);
-      border-radius: var(--md-shape-medium);
-      padding: 4px;
-      width: fit-content;
-      margin-bottom: var(--md-spacing-8);
-    }
-    .demo-tab {
-      padding: var(--md-spacing-2) var(--md-spacing-4);
-      border-radius: calc(var(--md-shape-medium) - 2px);
-      font-size: var(--md-label-large-size);
-      font-weight: 500;
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      color: var(--md-on-surface-variant);
-      transition: background var(--md-duration-short-3) var(--md-easing-standard), color var(--md-duration-short-3);
-    }
-    .demo-tab.active {
-      background: var(--md-surface);
-      color: var(--md-on-surface);
-      box-shadow: var(--md-elevation-1);
-    }
+/* ============================================================
+   TOKEN TABLE
+============================================================ */
+.token-list { display: flex; flex-direction: column; gap: 2px; }
+.token-row {
+  display: flex; align-items: center; gap: var(--md-spacing-3);
+  padding: var(--md-spacing-2) var(--md-spacing-3);
+  border-radius: var(--md-shape-small);
+  background: var(--md-surface-container);
+  font-size: var(--md-body-small-size);
+}
+.token-row:hover { background: var(--md-surface-container-high); }
+.t-name {
+  font-family: var(--md-font-mono); font-size: 12px;
+  color: var(--md-primary); flex: 1;
+}
+.t-val {
+  font-family: var(--md-font-mono); font-size: 12px;
+  color: var(--md-on-surface-variant);
+}
 
-    /* --- Token table --- */
-    .token-table { width: 100%; border-collapse: collapse; }
-    .token-table td {
-      padding: var(--md-spacing-2) var(--md-spacing-4);
-      font-size: var(--md-body-medium-size);
-      border-bottom: 1px solid var(--md-outline-variant);
-      vertical-align: middle;
-    }
-    .token-table tr:last-child td { border-bottom: none; }
-    .token-name {
-      font-family: var(--md-font-mono);
-      font-size: 12px;
-      color: var(--md-primary);
-      font-weight: 500;
-    }
-    .token-value {
-      font-family: var(--md-font-mono);
-      font-size: 12px;
-      color: var(--md-on-surface-variant);
-    }
-    .token-swatch {
-      width: 28px; height: 28px; border-radius: var(--md-shape-extra-small);
-      border: 1px solid var(--md-outline-variant);
-    }
+/* ============================================================
+   TYPE SPECIMEN
+============================================================ */
+.type-row {
+  padding: var(--md-spacing-3) 0;
+  border-bottom: 1px solid var(--md-outline-variant);
+  display: flex; align-items: baseline; gap: var(--md-spacing-6);
+}
+.type-row:last-child { border-bottom: none; }
+.type-meta {
+  font-family: var(--md-font-mono); font-size: 11px;
+  color: var(--md-on-surface-variant);
+  min-width: 120px; flex-shrink: 0;
+}
 
-    /* --- CTA section --- */
-    .cta-section {
-      background: var(--md-primary);
-      color: var(--md-on-primary);
-      padding: 80px var(--md-spacing-6);
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .cta-section::before {
-      content: '';
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-      background-size: 32px 32px;
-    }
-    .cta-inner { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
-    .cta-title {
-      font-family: 'Google Sans Display', var(--md-font-brand);
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 400;
-      line-height: 1.15;
-      margin-bottom: var(--md-spacing-4);
-    }
-    .cta-desc {
-      font-size: var(--md-body-large-size);
-      opacity: 0.85;
-      margin-bottom: var(--md-spacing-8);
-      line-height: 1.6;
-    }
-    .btn-cta-primary {
-      background: var(--md-on-primary);
-      color: var(--md-primary);
-      height: 48px;
-      padding: 0 var(--md-spacing-8);
-      border-radius: var(--md-shape-full);
-      font-family: var(--md-font-plain);
-      font-size: var(--md-title-small-size);
-      font-weight: 500;
-      border: none;
-      cursor: pointer;
-      display: inline-flex; align-items: center; gap: var(--md-spacing-2);
-      transition: box-shadow var(--md-duration-short-4) var(--md-easing-standard),
-                  transform var(--md-duration-short-3) var(--md-easing-spring);
-      position: relative; overflow: hidden;
-    }
-    .btn-cta-primary:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
-    .btn-cta-primary:active { transform: scale(0.97); }
+/* ============================================================
+   NATIVE FORM CONTROLS (demo-only, minimal)
+============================================================ */
+.sw { appearance: none; width: 52px; height: 32px; border-radius: var(--md-shape-full); background: var(--md-surface-variant); border: 2px solid var(--md-outline); cursor: pointer; position: relative; transition: background var(--md-duration-short-4) var(--md-easing-spring), border-color var(--md-duration-short-4); flex-shrink: 0; }
+.sw::after { content: ''; position: absolute; top: 50%; left: 2px; width: 24px; height: 24px; border-radius: 50%; background: var(--md-outline); transform: translateY(-50%); transition: transform var(--md-duration-medium-1) var(--md-easing-spring), background var(--md-duration-short-4); }
+.sw:checked { background: var(--md-primary); border-color: var(--md-primary); }
+.sw:checked::after { transform: translateY(-50%) translateX(20px); background: var(--md-on-primary); }
+.cb { appearance: none; width: 18px; height: 18px; border: 2px solid var(--md-on-surface-variant); border-radius: 2px; cursor: pointer; position: relative; transition: background var(--md-duration-short-3), border-color var(--md-duration-short-3); flex-shrink: 0; }
+.cb:checked { background: var(--md-primary); border-color: var(--md-primary); }
+.cb:checked::after { content: ''; position: absolute; top: 1px; left: 4px; width: 6px; height: 10px; border: 2px solid var(--md-on-primary); border-top: none; border-left: none; transform: rotate(45deg); }
+.rb { appearance: none; width: 20px; height: 20px; border: 2px solid var(--md-on-surface-variant); border-radius: 50%; cursor: pointer; position: relative; transition: border-color var(--md-duration-short-3); flex-shrink: 0; }
+.rb:checked { border-color: var(--md-primary); }
+.rb:checked::after { content: ''; position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; border-radius: 50%; background: var(--md-primary); transform: translate(-50%, -50%); }
+.sl { appearance: none; width: 100%; height: 4px; border-radius: var(--md-shape-full); background: var(--md-secondary-container); cursor: pointer; outline: none; accent-color: var(--md-primary); }
+.sl::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--md-primary); cursor: pointer; box-shadow: var(--md-elevation-1); }
 
-    /* --- Footer --- */
-    footer {
-      background: var(--md-surface-container);
-      padding: var(--md-spacing-10) var(--md-spacing-6) var(--md-spacing-8);
-      border-top: 1px solid var(--md-outline-variant);
-    }
-    .footer-inner { max-width: 1100px; margin: 0 auto; }
-    .footer-logo {
-      font-family: var(--md-font-brand);
-      font-size: var(--md-title-large-size);
-      font-weight: 700;
-      color: var(--md-on-surface);
-      display: flex; align-items: center; gap: var(--md-spacing-2);
-      margin-bottom: var(--md-spacing-2);
-    }
-    .footer-tagline { font-size: var(--md-body-small-size); color: var(--md-on-surface-variant); }
-    .footer-links { display: flex; gap: var(--md-spacing-4); flex-wrap: wrap; }
-    .footer-links a {
-      font-size: var(--md-body-medium-size);
-      color: var(--md-on-surface-variant);
-      transition: color var(--md-duration-short-3);
-    }
-    .footer-links a:hover { color: var(--md-primary); opacity: 1; }
+/* ============================================================
+   TEXT FIELD DEMO
+============================================================ */
+.tf-filled {
+  background: var(--md-surface-container-high);
+  border: none; border-bottom: 1px solid var(--md-outline);
+  border-radius: var(--md-shape-extra-small) var(--md-shape-extra-small) 0 0;
+  padding: 12px 16px; color: var(--md-on-surface);
+  font-size: var(--md-body-large-size); font-family: var(--md-font-plain);
+  outline: none; width: 100%;
+  transition: border-color var(--md-duration-short-3);
+}
+.tf-filled:focus { border-bottom: 2px solid var(--md-primary); }
+.tf-outlined {
+  background: transparent;
+  border: 1px solid var(--md-outline);
+  border-radius: var(--md-shape-extra-small);
+  padding: 12px 16px; color: var(--md-on-surface);
+  font-size: var(--md-body-large-size); font-family: var(--md-font-plain);
+  outline: none; width: 100%;
+  transition: border-color var(--md-duration-short-3), border-width var(--md-duration-short-3);
+}
+.tf-outlined:focus { border: 2px solid var(--md-primary); }
+.tf-label { font-size: var(--md-label-medium-size); color: var(--md-on-surface-variant); margin-bottom: 4px; display: block; }
+.tf-support { font-size: var(--md-body-small-size); color: var(--md-on-surface-variant); margin-top: 4px; padding-left: 16px; }
 
-    /* --- Misc --- */
-    .badge-new {
-      display: inline-flex; align-items: center;
-      padding: 2px 8px; border-radius: var(--md-shape-full);
-      background: var(--md-tertiary-container); color: var(--md-on-tertiary-container);
-      font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
-      vertical-align: middle; margin-left: 6px;
-    }
+/* ============================================================
+   TABS DEMO
+============================================================ */
+.tabs-bar {
+  display: flex; overflow-x: auto; scrollbar-width: none;
+  border-bottom: 1px solid var(--md-outline-variant);
+}
+.tabs-bar::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0; display: flex; align-items: center; gap: var(--md-spacing-2);
+  padding: 14px var(--md-spacing-5); min-width: 80px;
+  font-family: var(--md-font-plain); font-size: var(--md-title-small-size); font-weight: 500;
+  color: var(--md-on-surface-variant); cursor: pointer; border: none; background: none;
+  position: relative; white-space: nowrap; overflow: hidden;
+  transition: color var(--md-duration-short-3);
+}
+.tab-btn::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; border-radius: 3px 3px 0 0; background: var(--md-primary); transform: scaleX(0); transform-origin: center; transition: transform var(--md-duration-short-4) var(--md-easing-standard); }
+.tab-btn.active { color: var(--md-primary); }
+.tab-btn.active::after { transform: scaleX(1); }
+.tab-btn-state { position: absolute; inset: 0; background: currentColor; opacity: 0; border-radius: inherit; pointer-events: none; transition: opacity var(--md-duration-short-3); }
+.tab-btn:hover .tab-btn-state { opacity: 0.08; }
 
-    /* Text fields simplified for demo */
-    .tf-wrap { display: flex; flex-direction: column; gap: 4px; }
-    .tf-label-sm { font-size: var(--md-label-medium-size); color: var(--md-on-surface-variant); }
-    .tf-input-filled {
-      background: var(--md-surface-container-high);
-      border: none; border-bottom: 1px solid var(--md-outline);
-      border-radius: var(--md-shape-extra-small) var(--md-shape-extra-small) 0 0;
-      padding: var(--md-spacing-3) var(--md-spacing-4);
-      color: var(--md-on-surface); font-size: var(--md-body-large-size);
-      outline: none; width: 100%;
-      transition: border-color var(--md-duration-short-3);
-    }
-    .tf-input-filled:focus { border-bottom: 2px solid var(--md-primary); }
-    .tf-input-outlined {
-      background: transparent;
-      border: 1px solid var(--md-outline);
-      border-radius: var(--md-shape-extra-small);
-      padding: var(--md-spacing-3) var(--md-spacing-4);
-      color: var(--md-on-surface); font-size: var(--md-body-large-size);
-      outline: none; width: 100%;
-      transition: border-color var(--md-duration-short-3), border-width var(--md-duration-short-3);
-    }
-    .tf-input-outlined:focus { border: 2px solid var(--md-primary); }
+/* ============================================================
+   LIST ITEM DEMO (inline, no .list class conflict)
+============================================================ */
+.list-demo-item {
+  display: flex; align-items: center; gap: var(--md-spacing-4);
+  padding: var(--md-spacing-3) var(--md-spacing-4);
+  min-height: 56px; cursor: pointer; position: relative; overflow: hidden;
+  transition: background var(--md-duration-short-3);
+}
+.list-demo-item::after { content: ''; position: absolute; inset: 0; background: var(--md-on-surface); opacity: 0; pointer-events: none; transition: opacity var(--md-duration-short-3); }
+.list-demo-item:hover::after { opacity: 0.08; }
+.list-avatar {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--md-font-brand); font-weight: 500; font-size: 15px;
+}
 
-    /* Switch native */
-    .sw { appearance:none; width:52px; height:32px; border-radius:var(--md-shape-full); background:var(--md-surface-variant); border:2px solid var(--md-outline); cursor:pointer; position:relative; transition:background var(--md-duration-short-4),border-color var(--md-duration-short-4); vertical-align:middle; }
-    .sw::after { content:''; position:absolute; top:50%; left:2px; width:24px; height:24px; border-radius:50%; background:var(--md-outline); transform:translateY(-50%); transition:transform var(--md-duration-short-4) var(--md-easing-spring), background var(--md-duration-short-4); }
-    .sw:checked { background:var(--md-primary); border-color:var(--md-primary); }
-    .sw:checked::after { transform:translateY(-50%) translateX(20px); background:var(--md-on-primary); }
+/* ============================================================
+   DIALOG BACKDROP
+============================================================ */
+.dialog-backdrop {
+  position: fixed; inset: 0;
+  background: var(--md-scrim);
+  display: flex; align-items: center; justify-content: center;
+  z-index: var(--md-z-modal);
+  padding: var(--md-spacing-6);
+  animation: kenai-fade-in var(--md-duration-medium-2) var(--md-easing-standard);
+}
+.demo-dialog {
+  background: var(--md-surface-container-high);
+  border-radius: var(--md-shape-dialog);
+  padding: var(--md-spacing-6);
+  max-width: 480px; width: 100%;
+  box-shadow: var(--md-elevation-3);
+  animation: dlgEnter var(--md-duration-medium-3) var(--md-easing-emphasized-decel);
+}
+@keyframes dlgEnter { from { opacity: 0; transform: scale(0.92) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
-    /* Checkbox native */
-    .cb { appearance:none; width:18px; height:18px; border:2px solid var(--md-on-surface-variant); border-radius:2px; cursor:pointer; position:relative; transition:background var(--md-duration-short-3),border-color var(--md-duration-short-3); vertical-align:middle; }
-    .cb:checked { background:var(--md-primary); border-color:var(--md-primary); }
-    .cb:checked::after { content:''; position:absolute; top:1px; left:4px; width:6px; height:10px; border:2px solid var(--md-on-primary); border-top:none; border-left:none; transform:rotate(45deg); }
+/* ============================================================
+   TOOLTIP DEMO
+============================================================ */
+.tt-anchor { position: relative; display: inline-flex; }
+.tt-tip {
+  position: absolute; bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: var(--md-inverse-surface); color: var(--md-inverse-on-surface);
+  padding: 4px 10px; border-radius: var(--md-shape-extra-small);
+  font-size: var(--md-label-small-size); font-weight: 500;
+  white-space: nowrap; pointer-events: none; opacity: 0;
+  z-index: var(--md-z-tooltip);
+  transition: opacity var(--md-duration-short-3), transform var(--md-duration-short-3);
+}
+.tt-anchor:hover .tt-tip { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* Radio native */
-    .rb { appearance:none; width:20px; height:20px; border:2px solid var(--md-on-surface-variant); border-radius:50%; cursor:pointer; position:relative; transition:border-color var(--md-duration-short-3); vertical-align:middle; }
-    .rb:checked { border-color:var(--md-primary); }
-    .rb:checked::after { content:''; position:absolute; top:50%; left:50%; width:10px; height:10px; border-radius:50%; background:var(--md-primary); transform:translate(-50%,-50%); }
+/* ============================================================
+   NAV BAR DEMO
+============================================================ */
+.nav-bar-demo {
+  display: flex; background: var(--md-surface-container);
+  border-radius: var(--md-shape-large); overflow: hidden;
+}
+.nb-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 4px; padding: 12px 0 14px;
+  cursor: pointer; color: var(--md-on-surface-variant);
+  position: relative; transition: color var(--md-duration-short-3);
+}
+.nb-indicator {
+  position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+  width: 64px; height: 32px; border-radius: var(--md-shape-full);
+  background: transparent;
+  transition: background var(--md-duration-medium-2) var(--md-easing-emphasized);
+}
+.nb-item.active { color: var(--md-on-secondary-container); }
+.nb-item.active .nb-indicator { background: var(--md-secondary-container); }
+.nb-icon { position: relative; z-index: 1; font-size: 24px; }
+.nb-label { font-size: var(--md-label-medium-size); font-weight: 500; }
 
-    /* Dialog backdrop */
-    .dialog-backdrop { position:fixed; inset:0; background:var(--md-scrim); display:flex; align-items:center; justify-content:center; z-index:var(--md-z-modal); animation:kenai-fade-in var(--md-duration-short-4) var(--md-easing-standard); }
-    .dialog { background:var(--md-surface-container-high); border-radius:var(--md-shape-dialog); padding:var(--md-spacing-6); max-width:560px; width:calc(100% - 48px); box-shadow:var(--md-elevation-3); }
-    @keyframes dialog-enter { from{transform:scale(0.9);opacity:0} to{transform:scale(1);opacity:1} }
-    .dialog-title { font-family:var(--md-font-brand); font-size:var(--md-headline-small-size); font-weight:400; margin-bottom:var(--md-spacing-4); color:var(--md-on-surface); }
-    .dialog-body { color:var(--md-on-surface-variant); font-size:var(--md-body-medium-size); line-height:var(--md-body-medium-line); margin-bottom:var(--md-spacing-6); }
-    .dialog-actions { display:flex; justify-content:flex-end; gap:var(--md-spacing-2); }
+/* ============================================================
+   NAV DRAWER DEMO
+============================================================ */
+.drawer-demo {
+  background: var(--md-surface-container-low);
+  border-radius: var(--md-shape-large); overflow: hidden;
+  padding: var(--md-spacing-3);
+}
+.dr-item {
+  display: flex; align-items: center; gap: var(--md-spacing-3);
+  padding: 0 var(--md-spacing-4); height: 56px; border-radius: var(--md-shape-full);
+  font-size: var(--md-label-large-size); font-weight: 500;
+  color: var(--md-on-surface-variant); cursor: pointer;
+  transition: background var(--md-duration-short-3), color var(--md-duration-short-3);
+  position: relative; overflow: hidden;
+}
+.dr-item::after { content: ''; position: absolute; inset: 0; background: currentColor; opacity: 0; border-radius: inherit; pointer-events: none; transition: opacity var(--md-duration-short-3); }
+.dr-item:hover::after { opacity: 0.08; }
+.dr-item.active { background: var(--md-secondary-container); color: var(--md-on-secondary-container); }
 
-    /* Tooltip */
-    .tt-wrap { position:relative; display:inline-flex; }
-    .tt { position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%) translateY(4px); background:var(--md-inverse-surface); color:var(--md-inverse-on-surface); padding:4px 8px; border-radius:var(--md-shape-extra-small); font-size:var(--md-label-small-size); font-weight:500; white-space:nowrap; pointer-events:none; opacity:0; z-index:var(--md-z-tooltip); transition:opacity var(--md-duration-short-3) var(--md-easing-standard),transform var(--md-duration-short-3) var(--md-easing-standard); }
-    .tt-wrap:hover .tt { opacity:1; transform:translateX(-50%) translateY(0); }
+/* ============================================================
+   DATA TABLE DEMO
+============================================================ */
+.demo-table { width: 100%; border-collapse: collapse; font-size: var(--md-body-medium-size); }
+.demo-table thead { background: var(--md-surface-container-highest); }
+.demo-table th { padding: var(--md-spacing-3) var(--md-spacing-4); text-align: left; font-size: var(--md-label-large-size); font-weight: 500; color: var(--md-on-surface-variant); border-bottom: 1px solid var(--md-outline-variant); white-space: nowrap; }
+.demo-table td { padding: var(--md-spacing-3) var(--md-spacing-4); border-bottom: 1px solid var(--md-outline-variant); color: var(--md-on-surface); }
+.demo-table tbody tr:last-child td { border-bottom: none; }
+.demo-table tbody tr { transition: background var(--md-duration-short-3); }
+.demo-table tbody tr:hover { background: color-mix(in srgb, var(--md-on-surface) 6%, transparent); }
+.demo-table .num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--md-font-mono); }
+.status-chip { display: inline-flex; align-items: center; gap: 5px; padding: 2px 10px; border-radius: var(--md-shape-full); font-size: var(--md-label-small-size); font-weight: 500; }
+.status-active { background: color-mix(in srgb, #28A745 15%, transparent); color: #1A6E2E; }
+.status-pending { background: var(--md-secondary-container); color: var(--md-on-secondary-container); }
+.status-inactive { background: var(--md-surface-variant); color: var(--md-on-surface-variant); }
+[data-theme="dark"] .status-active { color: #7EE787; }
 
-    /* Tabs demo */
-    .tabs-demo { display:flex; border-bottom:1px solid var(--md-outline-variant); overflow-x:auto; }
-    .tab-d { flex:1; min-width:90px; display:flex; align-items:center; justify-content:center; gap:var(--md-spacing-2); padding:14px var(--md-spacing-4); font-size:var(--md-title-small-size); font-weight:500; color:var(--md-on-surface-variant); cursor:pointer; border:none; background:none; position:relative; white-space:nowrap; transition:color var(--md-duration-short-3); }
-    .tab-d::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; border-radius:3px 3px 0 0; background:var(--md-primary); transform:scaleX(0); transition:transform var(--md-duration-short-4) var(--md-easing-standard); }
-    .tab-d.active { color:var(--md-primary); }
-    .tab-d.active::after { transform:scaleX(1); }
+/* ============================================================
+   ACCORDION DEMO
+============================================================ */
+.acc-item { border-bottom: 1px solid var(--md-outline-variant); }
+.acc-item:last-child { border-bottom: none; }
+.acc-trigger {
+  display: flex; align-items: center; gap: var(--md-spacing-3);
+  width: 100%; padding: var(--md-spacing-4); background: none; border: none;
+  cursor: pointer; font-family: var(--md-font-plain); font-size: var(--md-body-large-size);
+  font-weight: 500; color: var(--md-on-surface); text-align: left;
+  position: relative; overflow: hidden;
+  transition: background var(--md-duration-short-3);
+}
+.acc-trigger::before { content: ''; position: absolute; inset: 0; background: currentColor; opacity: 0; pointer-events: none; transition: opacity var(--md-duration-short-3); }
+.acc-trigger:hover::before { opacity: 0.08; }
+.acc-chevron { margin-left: auto; font-size: 20px; color: var(--md-on-surface-variant); transition: transform var(--md-duration-medium-2) var(--md-easing-emphasized); flex-shrink: 0; }
+.acc-item.open .acc-chevron { transform: rotate(180deg); }
+.acc-body { overflow: hidden; max-height: 0; transition: max-height var(--md-duration-medium-3) var(--md-easing-emphasized-decel); }
+.acc-item.open .acc-body { max-height: 300px; }
+.acc-content { padding: 0 var(--md-spacing-4) var(--md-spacing-4); color: var(--md-on-surface-variant); font-size: var(--md-body-medium-size); line-height: 1.6; }
 
-    /* Entrance animation */
-    @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
-    .fade-up { opacity:0; animation:fadeUp var(--md-duration-long-1) var(--md-easing-emphasized-decel) forwards; }
-    .fade-up-1 { animation-delay: 0ms; }
-    .fade-up-2 { animation-delay: 80ms; }
-    .fade-up-3 { animation-delay: 160ms; }
-    .fade-up-4 { animation-delay: 240ms; }
-  </style>
+/* ============================================================
+   AVATAR CLUSTER
+============================================================ */
+.avatar-demo {
+  display: flex; align-items: center; gap: var(--md-spacing-3); flex-wrap: wrap;
+}
+.av {
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-family: var(--md-font-brand); font-weight: 500; flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* ============================================================
+   CTA SECTION
+============================================================ */
+.cta-wrap {
+  padding: clamp(48px, 8vw, 96px) var(--page-gutter);
+  background: var(--md-primary);
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.cta-wrap::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.cta-inner { position: relative; z-index: 1; max-width: 600px; margin-inline: auto; }
+.cta-h2 {
+  font-family: 'Google Sans Display', var(--md-font-brand);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 400; line-height: 1.15;
+  color: var(--md-on-primary);
+  margin-bottom: var(--md-spacing-4);
+}
+.cta-sub {
+  font-size: var(--md-body-large-size);
+  color: var(--md-on-primary); opacity: 0.85;
+  margin-bottom: var(--md-spacing-8);
+  line-height: 1.6;
+}
+.btn-cta {
+  display: inline-flex; align-items: center; gap: var(--md-spacing-2);
+  height: 48px; padding: 0 var(--md-spacing-8);
+  background: var(--md-on-primary); color: var(--md-primary);
+  border: none; border-radius: var(--md-shape-full);
+  font-family: var(--md-font-plain); font-size: var(--md-title-small-size); font-weight: 500;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: box-shadow var(--md-duration-short-4) var(--md-easing-standard),
+              transform var(--md-duration-short-3) var(--md-easing-spring);
+}
+.btn-cta::after { content: ''; position: absolute; inset: 0; background: currentColor; opacity: 0; pointer-events: none; transition: opacity var(--md-duration-short-3); }
+.btn-cta:hover::after { opacity: 0.06; }
+.btn-cta:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.25); }
+.btn-cta:active { transform: scale(0.97); }
+
+/* ============================================================
+   FOOTER
+============================================================ */
+footer {
+  background: var(--md-surface-container-low);
+  border-top: 1px solid var(--md-outline-variant);
+  padding: clamp(36px, 6vw, 72px) var(--page-gutter);
+}
+.footer-inner { max-width: var(--page-max); margin-inline: auto; }
+.footer-brand {
+  display: inline-flex; align-items: center; gap: var(--md-spacing-2);
+  font-family: var(--md-font-brand); font-size: var(--md-title-large-size);
+  font-weight: 700; color: var(--md-on-surface); margin-bottom: var(--md-spacing-2);
+}
+.footer-links a {
+  font-size: var(--md-body-medium-size); color: var(--md-on-surface-variant);
+  transition: color var(--md-duration-short-3);
+}
+.footer-links a:hover { color: var(--md-primary); opacity: 1; }
+
+/* ============================================================
+   ANIMATIONS
+============================================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp var(--md-duration-long-1) var(--md-easing-emphasized-decel) both; }
+.d1 { animation-delay: 0ms; }
+.d2 { animation-delay: 70ms; }
+.d3 { animation-delay: 140ms; }
+.d4 { animation-delay: 210ms; }
+.d5 { animation-delay: 280ms; }
+</style>
 </head>
 <body>
 
-<!-- ================================================================
+<!-- ============================================================
      TOP APP BAR
-================================================================ -->
-<header class="app-bar" id="appBar">
-  <a class="app-bar-logo ripple" href="#" data-ripple>
-    <div class="app-bar-logo-mark">K</div>
-    KENAI
-  </a>
-  <nav class="app-bar-nav">
-    <a href="#features">Features</a>
-    <a href="#components">Components</a>
-    <a href="#tokens">Tokens</a>
-    <a href="#docs">Docs</a>
-  </nav>
-  <div class="spacer"></div>
-  <div class="flex items-center gap-2">
-    <a href="https://github.com" class="btn btn-outlined btn-sm ripple" data-ripple style="text-decoration:none;">
-      <span class="material-symbols-rounded" style="font-size:18px;">code</span>
-      GitHub
+============================================================ -->
+<header class="top-bar" id="topBar">
+  <div class="top-bar-inner">
+    <a class="bar-logo ripple" href="#" data-ripple>
+      <div class="bar-logo-mark">K</div>
+      KENAI
     </a>
-    <button class="kenai-theme-toggle" data-kenai-theme-toggle aria-label="Toggle theme">
-      <span class="material-symbols-rounded icon-dark">dark_mode</span>
-      <span class="material-symbols-rounded icon-light">light_mode</span>
-    </button>
+    <nav class="bar-nav">
+      <a class="bar-nav-link" href="#features">Features</a>
+      <a class="bar-nav-link" href="#components">Components</a>
+      <a class="bar-nav-link" href="#navigation">Navigation</a>
+      <a class="bar-nav-link" href="#tokens">Tokens</a>
+    </nav>
+    <div class="spacer"></div>
+    <div class="flex items-center gap-2">
+      <button class="btn btn-outlined btn-sm ripple" data-ripple
+        onclick="KENAI.Snackbar.show('GitHub repo coming soon!')">
+        <span class="material-symbols-rounded" style="font-size:18px;">code_blocks</span>
+        GitHub
+      </button>
+      <button class="kenai-theme-toggle" data-kenai-theme-toggle aria-label="Toggle theme">
+        <span class="material-symbols-rounded icon-dark">dark_mode</span>
+        <span class="material-symbols-rounded icon-light">light_mode</span>
+      </button>
+    </div>
   </div>
 </header>
 
 
-<!-- ================================================================
+<!-- ============================================================
      HERO
-================================================================ -->
+============================================================ -->
 <section class="hero">
-  <div class="hero-grid-bg"></div>
+  <div class="hero-grid"></div>
   <div class="hero-glow"></div>
-  <div class="hero-content">
-    <div class="hero-eyebrow fade-up fade-up-1">
-      <span class="material-symbols-rounded" style="font-size:14px;">new_releases</span>
-      Version 0.2.0 — Now with 20 components
+  <div class="hero-inner">
+
+    <div class="hero-eyebrow">
+      <span class="material-symbols-rounded" style="font-size:15px;">new_releases</span>
+      v0.2.0 — 20 Components · Zero Dependencies
     </div>
-    <h1 class="hero-title fade-up fade-up-2">
-      Material Design 3<br><strong>for the web.</strong><br>Just link it.
+
+    <h1 class="hero-h1">
+      Material Design 3<br>
+      <strong>for the web.</strong>
     </h1>
-    <p class="hero-subtitle fade-up fade-up-3">
-      KENAI is a stock Android / Pixel-inspired CSS framework built on the M3 spec.
-      No build step. No dependencies. One stylesheet and you're live.
+
+    <p class="hero-sub">
+      KENAI is a stock Android / Pixel-inspired CSS framework built directly from the M3 specification.
+      No build step. No dependencies. Link two files and ship.
     </p>
-    <div class="hero-actions fade-up fade-up-4">
+
+    <div class="hero-actions">
       <a href="#components" class="btn btn-filled btn-lg ripple" data-ripple style="text-decoration:none;">
         <span class="material-symbols-rounded">explore</span>
-        Explore Components
+        Browse Components
       </a>
-      <button class="btn btn-outlined btn-lg ripple" data-ripple onclick="copyInstall()">
+      <button class="btn btn-tonal btn-lg ripple" data-ripple onclick="copyInstall()">
         <span class="material-symbols-rounded">content_copy</span>
-        Copy CDN link
+        Copy install snippet
       </button>
     </div>
 
-    <!-- Install code card -->
-    <div style="max-width:620px;margin:var(--md-spacing-10) auto 0;" class="fade-up fade-up-4">
-      <div class="code-card">
-        <div class="code-bar">
-          <div class="code-bar-dots">
-            <div class="code-bar-dot dot-red"></div>
-            <div class="code-bar-dot dot-yellow"></div>
-            <div class="code-bar-dot dot-green"></div>
+    <!-- Install snippet — M3 surface card, no dark box -->
+    <div style="margin-top: var(--md-spacing-10); max-width: 580px; margin-inline: auto;">
+      <div class="card card-outlined" style="text-align:left;">
+        <div class="card-header" style="padding-bottom: var(--md-spacing-3);">
+          <span class="material-symbols-rounded text-primary">integration_instructions</span>
+          <div class="card-header-text">
+            <p class="card-title" style="font-size:var(--md-title-small-size);">Quick start — two lines</p>
           </div>
-          <span class="code-bar-lang">HTML</span>
-          <button class="code-copy-btn" onclick="copyInstall()">Copy</button>
+          <button class="btn btn-text btn-sm ripple" data-ripple onclick="copyInstall()">Copy</button>
         </div>
-        <div class="code-body"><pre><span class="t-cmt">&lt;!-- Drop this in your &lt;head&gt; --&gt;</span>
-<span class="t-tag">&lt;link</span> <span class="t-attr">rel</span>=<span class="t-str">"stylesheet"</span> <span class="t-attr">href</span>=<span class="t-str">"kenai.css"</span> <span class="t-tag">/&gt;</span>
-
-<span class="t-cmt">&lt;!-- Optional: Roboto + Google Sans --&gt;</span>
-<span class="t-tag">&lt;link</span> <span class="t-attr">href</span>=<span class="t-str">"https://fonts.googleapis.com/css2?<br>       family=Google+Sans&amp;family=Roboto&amp;display=swap"</span>
-      <span class="t-attr">rel</span>=<span class="t-str">"stylesheet"</span> <span class="t-tag">/&gt;</span>
-
-<span class="t-cmt">&lt;!-- Add the runtime for theme toggle + ripple --&gt;</span>
-<span class="t-tag">&lt;script</span> <span class="t-attr">src</span>=<span class="t-str">"kenai.js"</span><span class="t-tag">&gt;&lt;/script&gt;</span></pre></div>
+        <div class="card-body" style="padding-top:0;">
+          <pre style="font-family:var(--md-font-mono);font-size:13px;line-height:1.8;color:var(--md-on-surface);white-space:pre-wrap;word-break:break-all;">&lt;link rel="stylesheet" href="kenai.css" /&gt;
+&lt;script src="kenai.js"&gt;&lt;/script&gt;</pre>
+          <p class="body-small text-on-surface-variant" style="margin-top:var(--md-spacing-3);">
+            Optionally add Roboto + Google Sans from Google Fonts for the full Pixel experience.
+          </p>
+        </div>
       </div>
     </div>
 
-    <div class="hero-stats fade-up fade-up-4">
-      <div><div class="hero-stat-value">20+</div><div class="hero-stat-label">Components</div></div>
-      <div><div class="hero-stat-value">150+</div><div class="hero-stat-label">Utility Classes</div></div>
-      <div><div class="hero-stat-value">0</div><div class="hero-stat-label">Dependencies</div></div>
-      <div><div class="hero-stat-value">M3</div><div class="hero-stat-label">Spec Compliant</div></div>
+    <div class="hero-stats">
+      <div><div class="stat-val">20+</div><div class="stat-lbl">Components</div></div>
+      <div><div class="stat-val">150+</div><div class="stat-lbl">Utility classes</div></div>
+      <div><div class="stat-val">30+</div><div class="stat-lbl">Color tokens</div></div>
+      <div><div class="stat-val">0</div><div class="stat-lbl">Dependencies</div></div>
+      <div><div class="stat-val">M3</div><div class="stat-lbl">Spec compliant</div></div>
     </div>
   </div>
 </section>
 
 
-<!-- ================================================================
-     COMPARE STRIP
-================================================================ -->
-<div style="background:var(--md-surface-container-low);border-bottom:1px solid var(--md-outline-variant);padding:var(--md-spacing-4) var(--md-spacing-6);">
-  <div style="max-width:1100px;margin:0 auto;">
-    <div class="compare-bar">
-      <span class="body-small text-on-surface-variant" style="font-weight:500;margin-right:var(--md-spacing-2);">Why KENAI over Bootstrap/Tailwind?</span>
-      <div class="compare-item"><span class="compare-check material-symbols-rounded">check_circle</span> <span>True M3 color system with tonal palettes</span></div>
-      <div class="compare-item"><span class="compare-check material-symbols-rounded">check_circle</span> <span>Real M3 motion tokens &amp; easing curves</span></div>
-      <div class="compare-item"><span class="compare-check material-symbols-rounded">check_circle</span> <span>Dynamic color from any seed hex</span></div>
-      <div class="compare-item"><span class="compare-check material-symbols-rounded">check_circle</span> <span>Zero build step required</span></div>
-      <div class="compare-item"><span class="compare-cross material-symbols-rounded">cancel</span> <span style="text-decoration:line-through;opacity:.6;">Generic Bootstrap look</span></div>
-    </div>
-  </div>
-</div>
-
-
-<!-- ================================================================
+<!-- ============================================================
      FEATURES
-================================================================ -->
-<section class="section" id="features">
-  <div class="section-inner">
-    <div class="section-eyebrow">Why KENAI</div>
-    <h2 class="section-title">Everything you need.<br>Nothing you don't.</h2>
-    <p class="section-desc">Built directly from the Material Design 3 specification. Every token, every component, every motion curve — exactly as Google intended.</p>
+============================================================ -->
+<section class="section section-alt" id="features">
+  <div class="page-wrap">
+    <div class="sec-eyebrow">Why KENAI</div>
+    <h2 class="sec-title">Everything the M3 spec defines.<br>Nothing extra.</h2>
+    <p class="sec-desc">Built token-first from the Material Design 3 guidelines. Every color role, every easing curve, every component shape — exactly as Google specified.</p>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--md-spacing-4);">
-      <div class="feature-card">
-        <div class="feature-icon"><span class="material-symbols-rounded">palette</span></div>
-        <div class="feature-title">Full M3 Color System</div>
-        <p class="feature-desc">Primary, secondary, tertiary, error, surface containers — all 30+ color roles, light and dark, with proper tonal elevation overlays.</p>
+    <div class="feature-grid">
+      <div class="feat-card">
+        <div class="feat-icon" style="background:var(--md-primary-container);color:var(--md-on-primary-container);">
+          <span class="material-symbols-rounded">palette</span>
+        </div>
+        <div class="feat-title">Full M3 Color System</div>
+        <p class="feat-desc">30+ color roles — primary, secondary, tertiary, error, and the full surface container hierarchy. Light and dark themes with tonal elevation overlays.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:var(--md-secondary-container);color:var(--md-on-secondary-container)"><span class="material-symbols-rounded">text_fields</span></div>
-        <div class="feature-title">15-Role Typography Scale</div>
-        <p class="feature-desc">Display, Headline, Title, Body, Label — 3 sizes each. Powered by Google Sans + Roboto, with exact M3 tracking and line heights.</p>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:var(--md-secondary-container);color:var(--md-on-secondary-container);">
+          <span class="material-symbols-rounded">text_fields</span>
+        </div>
+        <div class="feat-title">15-Role Typography Scale</div>
+        <p class="feat-desc">Display, Headline, Title, Body, Label — 3 sizes each with exact M3 optical sizes, weight, tracking, and line heights. Google Sans + Roboto.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:var(--md-tertiary-container);color:var(--md-on-tertiary-container)"><span class="material-symbols-rounded">animation</span></div>
-        <div class="feature-title">M3 Motion Tokens</div>
-        <p class="feature-desc">All 16 duration steps and 9 named easing curves — including Emphasized Decelerate, Standard, and Spring — as CSS custom properties.</p>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:var(--md-tertiary-container);color:var(--md-on-tertiary-container);">
+          <span class="material-symbols-rounded">animation</span>
+        </div>
+        <div class="feat-title">M3 Motion Tokens</div>
+        <p class="feat-desc">16 duration steps and 9 named easing curves — Standard, Emphasized Decelerate, and Spring — wired as CSS custom properties.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon"><span class="material-symbols-rounded">water_drop</span></div>
-        <div class="feature-title">Ripple + State Layers</div>
-        <p class="feature-desc">Pixel-perfect M3 ink ripple engine via <code>kenai.js</code>. Every interactive element automatically gets correct hover (8%) and pressed (12%) state layers.</p>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:var(--md-primary-container);color:var(--md-on-primary-container);">
+          <span class="material-symbols-rounded">water_drop</span>
+        </div>
+        <div class="feat-title">Ink Ripple Engine</div>
+        <p class="feat-desc">Pixel-perfect M3 ripple via <code style="font-family:var(--md-font-mono);font-size:12px;">kenai.js</code>. Add <code style="font-family:var(--md-font-mono);font-size:12px;">.ripple</code> to any element. State layers (8% hover, 12% pressed) are pure CSS.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:var(--md-secondary-container);color:var(--md-on-secondary-container)"><span class="material-symbols-rounded">dark_mode</span></div>
-        <div class="feature-title">Light &amp; Dark — Automatic</div>
-        <p class="feature-desc">Flip a single <code>data-theme</code> attribute. Respects <code>prefers-color-scheme</code>, persists to localStorage, fires a custom event.</p>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:var(--md-secondary-container);color:var(--md-on-secondary-container);">
+          <span class="material-symbols-rounded">dark_mode</span>
+        </div>
+        <div class="feat-title">Automatic Dark Mode</div>
+        <p class="feat-desc">One <code style="font-family:var(--md-font-mono);font-size:12px;">data-theme</code> attribute. Respects <code style="font-family:var(--md-font-mono);font-size:12px;">prefers-color-scheme</code>, persists to localStorage, fires a custom event.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:var(--md-tertiary-container);color:var(--md-on-tertiary-container)"><span class="material-symbols-rounded">bolt</span></div>
-        <div class="feature-title">Zero Build Step</div>
-        <p class="feature-desc">Pure CSS custom properties — no Sass, no PostCSS, no webpack required. Drop two files in your project and ship.</p>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:var(--md-tertiary-container);color:var(--md-on-tertiary-container);">
+          <span class="material-symbols-rounded">bolt</span>
+        </div>
+        <div class="feat-title">Zero Build Step</div>
+        <p class="feat-desc">Pure CSS custom properties and vanilla JS. No Sass, no PostCSS, no webpack. Two files, link them in, done. Override any token with one line.</p>
       </div>
     </div>
   </div>
 </section>
 
 
-<!-- ================================================================
-     COMPONENTS SHOWCASE
-================================================================ -->
-<section class="section" id="components" style="background:var(--md-surface-container-low);">
-  <div class="section-inner">
-    <div class="section-eyebrow">Components</div>
-    <h2 class="section-title">Copy the class. Get the component.</h2>
-    <p class="section-desc">Every component shows a live preview alongside the exact markup. No configuration, no props — just HTML classes.</p>
+<!-- ============================================================
+     COMPONENTS — BUTTONS
+============================================================ -->
+<section class="section" id="components">
+  <div class="page-wrap">
+    <div class="sec-eyebrow">Components</div>
+    <h2 class="sec-title">Buttons</h2>
+    <p class="sec-desc">Five variants covering every use case — from primary actions to subtle navigation. All support icon leading, size modifiers, and disabled states.</p>
 
-    <!-- BUTTONS -->
-    <div style="margin-bottom:var(--md-spacing-12);">
-      <div style="display:flex;align-items:center;gap:var(--md-spacing-3);margin-bottom:var(--md-spacing-4);">
-        <h3 class="title-large">Buttons</h3>
-        <span class="badge-new">5 variants</span>
-      </div>
-      <div class="component-showcase">
-        <div class="preview-panel">
-          <div class="preview-label">Live preview</div>
-          <div style="display:flex;flex-wrap:wrap;gap:var(--md-spacing-3);align-items:center;">
+    <div class="showcase-grid">
+
+      <!-- Common variants -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Common variants</span>
+          <span class="showcase-card-tag">.btn-filled · .btn-tonal · …</span>
+        </div>
+        <div class="showcase-card-body">
+          <div class="showcase-card-row">
             <button class="btn btn-filled ripple" data-ripple>Filled</button>
             <button class="btn btn-tonal ripple" data-ripple>Tonal</button>
             <button class="btn btn-outlined ripple" data-ripple>Outlined</button>
             <button class="btn btn-elevated ripple" data-ripple>Elevated</button>
             <button class="btn btn-text ripple" data-ripple>Text</button>
           </div>
-          <div style="display:flex;flex-wrap:wrap;gap:var(--md-spacing-3);align-items:center;margin-top:var(--md-spacing-2);">
-            <button class="btn btn-filled ripple" data-ripple><span class="material-symbols-rounded" style="font-size:18px;">add</span>Create</button>
-            <button class="btn btn-tonal ripple" data-ripple><span class="material-symbols-rounded" style="font-size:18px;">send</span>Send</button>
+        </div>
+      </div>
+
+      <!-- With icons -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">With leading icons</span>
+          <span class="showcase-card-tag">Material Symbols</span>
+        </div>
+        <div class="showcase-card-body">
+          <div class="showcase-card-row">
+            <button class="btn btn-filled ripple" data-ripple><span class="material-symbols-rounded">add</span>Create</button>
+            <button class="btn btn-tonal ripple" data-ripple><span class="material-symbols-rounded">send</span>Send</button>
+            <button class="btn btn-outlined ripple" data-ripple><span class="material-symbols-rounded">bookmark</span>Save</button>
+            <button class="btn btn-text ripple" data-ripple><span class="material-symbols-rounded">share</span>Share</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sizes -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Sizes</span>
+          <span class="showcase-card-tag">.btn-sm · default · .btn-lg</span>
+        </div>
+        <div class="showcase-card-body">
+          <div class="showcase-card-row" style="align-items:center;">
             <button class="btn btn-filled btn-sm ripple" data-ripple>Small</button>
+            <button class="btn btn-filled ripple" data-ripple>Default</button>
             <button class="btn btn-filled btn-lg ripple" data-ripple>Large</button>
           </div>
-          <div style="display:flex;flex-wrap:wrap;gap:var(--md-spacing-3);align-items:center;margin-top:var(--md-spacing-2);">
-            <button class="fab fab-sm ripple" data-ripple><span class="material-symbols-rounded">add</span></button>
-            <button class="fab ripple" data-ripple><span class="material-symbols-rounded">edit</span></button>
-            <button class="fab fab-extended ripple" data-ripple><span class="material-symbols-rounded">add</span>New doc</button>
-          </div>
-        </div>
-        <div class="code-card">
-          <div class="code-bar">
-            <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
-            <span class="code-bar-lang">HTML</span>
-            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
-          </div>
-          <div class="code-body"><pre><span class="t-cmt">&lt;!-- Variants --&gt;</span>
-<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"btn btn-filled ripple"</span><span class="t-tag">&gt;</span>Filled<span class="t-tag">&lt;/button&gt;</span>
-<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"btn btn-tonal ripple"</span><span class="t-tag">&gt;</span>Tonal<span class="t-tag">&lt;/button&gt;</span>
-<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"btn btn-outlined ripple"</span><span class="t-tag">&gt;</span>Outlined<span class="t-tag">&lt;/button&gt;</span>
-<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"btn btn-elevated ripple"</span><span class="t-tag">&gt;</span>Elevated<span class="t-tag">&lt;/button&gt;</span>
-<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"btn btn-text ripple"</span><span class="t-tag">&gt;</span>Text<span class="t-tag">&lt;/button&gt;</span>
-
-<span class="t-cmt">&lt;!-- With icon --&gt;</span>
-<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"btn btn-filled ripple"</span><span class="t-tag">&gt;</span>
-  <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"material-symbols-rounded"</span><span class="t-tag">&gt;</span>add<span class="t-tag">&lt;/span&gt;</span>
-  Create
-<span class="t-tag">&lt;/button&gt;</span>
-
-<span class="t-cmt">&lt;!-- FAB --&gt;</span>
-<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"fab fab-extended ripple"</span><span class="t-tag">&gt;</span>
-  <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"material-symbols-rounded"</span><span class="t-tag">&gt;</span>add<span class="t-tag">&lt;/span&gt;</span>
-  New doc
-<span class="t-tag">&lt;/button&gt;</span></pre></div>
         </div>
       </div>
+
+      <!-- Destructive + disabled -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Destructive &amp; disabled</span>
+          <span class="showcase-card-tag">.btn-error · :disabled</span>
+        </div>
+        <div class="showcase-card-body">
+          <div class="showcase-card-row">
+            <button class="btn btn-filled btn-error ripple" data-ripple><span class="material-symbols-rounded">delete</span>Delete</button>
+            <button class="btn btn-tonal btn-error ripple" data-ripple><span class="material-symbols-rounded">warning</span>Warning</button>
+          </div>
+          <div class="showcase-card-row">
+            <button class="btn btn-filled opacity-disabled">Disabled</button>
+            <button class="btn btn-outlined opacity-disabled">Disabled</button>
+            <button class="btn btn-text opacity-disabled">Disabled</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAB -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">FAB — Floating Action Button</span>
+          <span class="showcase-card-tag">.fab</span>
+        </div>
+        <div class="showcase-card-body">
+          <div class="showcase-card-row" style="align-items:center;">
+            <button class="fab fab-sm ripple" data-ripple aria-label="Small FAB"><span class="material-symbols-rounded">add</span></button>
+            <button class="fab ripple" data-ripple aria-label="FAB"><span class="material-symbols-rounded">edit</span></button>
+            <button class="fab fab-lg ripple" data-ripple aria-label="Large FAB"><span class="material-symbols-rounded">create</span></button>
+            <button class="fab fab-extended ripple" data-ripple><span class="material-symbols-rounded">add</span>New document</button>
+          </div>
+          <div class="showcase-card-row">
+            <button class="fab fab-surface ripple" data-ripple aria-label="Surface"><span class="material-symbols-rounded">home</span></button>
+            <button class="fab fab-secondary ripple" data-ripple aria-label="Secondary"><span class="material-symbols-rounded">favorite</span></button>
+            <button class="fab fab-tertiary ripple" data-ripple aria-label="Tertiary"><span class="material-symbols-rounded">palette</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Icon buttons -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Icon buttons</span>
+          <span class="showcase-card-tag">.icon-btn</span>
+        </div>
+        <div class="showcase-card-body">
+          <div class="showcase-card-row" style="align-items:center;">
+            <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">favorite</span></button>
+            <button class="icon-btn icon-btn-filled ripple" data-ripple><span class="material-symbols-rounded">favorite</span></button>
+            <button class="icon-btn icon-btn-tonal ripple" data-ripple><span class="material-symbols-rounded">settings</span></button>
+            <button class="icon-btn icon-btn-outlined ripple" data-ripple><span class="material-symbols-rounded">bookmark</span></button>
+            <button class="icon-btn icon-btn-sm ripple" data-ripple><span class="material-symbols-rounded">close</span></button>
+            <button class="icon-btn icon-btn-lg ripple" data-ripple><span class="material-symbols-rounded">more_vert</span></button>
+            <button class="icon-btn ripple" data-ripple aria-pressed="true"><span class="material-symbols-rounded">thumb_up</span></button>
+          </div>
+        </div>
+      </div>
+
     </div>
+  </div>
+</section>
 
-    <!-- CARDS -->
-    <div style="margin-bottom:var(--md-spacing-12);">
-      <div style="display:flex;align-items:center;gap:var(--md-spacing-3);margin-bottom:var(--md-spacing-4);">
-        <h3 class="title-large">Cards</h3>
-        <span class="badge-new">3 variants</span>
-      </div>
-      <div class="component-showcase">
-        <div class="preview-panel" style="gap:var(--md-spacing-3);">
-          <div class="preview-label">Live preview</div>
-          <div class="card card-elevated card-interactive ripple" data-ripple>
-            <div class="card-header">
-              <div style="width:40px;height:40px;border-radius:50%;background:var(--md-primary-container);display:flex;align-items:center;justify-content:center;">
-                <span class="material-symbols-rounded" style="color:var(--md-on-primary-container)">cloud</span>
-              </div>
-              <div class="card-header-text">
-                <p class="card-title">Elevated Card</p>
-                <p class="card-subtitle">Interactive · Ripple enabled</p>
-              </div>
-              <div class="badge-wrapper"><span class="badge-count">3</span></div>
-            </div>
-            <div class="card-body">Elevated cards lift off the surface with shadow and a tinted background. Click anywhere to trigger the ripple.</div>
-            <div class="card-actions card-actions-end">
-              <button class="btn btn-text ripple" data-ripple>Learn more</button>
-              <button class="btn btn-tonal ripple" data-ripple>Enable</button>
-            </div>
+
+<!-- ============================================================
+     CARDS
+============================================================ -->
+<section class="section section-alt">
+  <div class="page-wrap">
+    <div class="sec-eyebrow">Components</div>
+    <h2 class="sec-title">Cards</h2>
+    <p class="sec-desc">Three variants — elevated, filled, and outlined — with a full anatomy system: header, media, body, and actions.</p>
+
+    <div class="showcase-grid">
+
+      <div class="card card-elevated card-interactive ripple" data-ripple id="mc1">
+        <div class="card-header">
+          <div style="width:40px;height:40px;border-radius:50%;background:var(--md-primary-container);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <span class="material-symbols-rounded" style="color:var(--md-on-primary-container);">cloud</span>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--md-spacing-3);">
-            <div class="card card-filled" style="padding:var(--md-spacing-4);">
-              <span class="material-symbols-rounded text-tertiary" style="font-size:28px;margin-bottom:8px;">palette</span>
-              <p class="title-small">Filled Card</p>
-              <p class="body-small text-on-surface-variant" style="margin-top:4px;">Uses surface-container-highest</p>
-            </div>
-            <div class="card card-outlined" style="padding:var(--md-spacing-4);">
-              <span class="material-symbols-rounded text-secondary" style="font-size:28px;margin-bottom:8px;">border_outer</span>
-              <p class="title-small">Outlined Card</p>
-              <p class="body-small text-on-surface-variant" style="margin-top:4px;">Lowest visual emphasis</p>
-            </div>
+          <div class="card-header-text">
+            <p class="card-title">Elevated Card</p>
+            <p class="card-subtitle">Cloud storage · Interactive</p>
+          </div>
+          <div class="badge-wrapper">
+            <span class="badge-count">3</span>
           </div>
         </div>
-        <div class="code-card">
-          <div class="code-bar">
-            <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
-            <span class="code-bar-lang">HTML</span>
-            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
-          </div>
-          <div class="code-body"><pre><span class="t-cmt">&lt;!-- Elevated + interactive --&gt;</span>
-<span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"card card-elevated card-interactive ripple"</span><span class="t-tag">&gt;</span>
-  <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"card-header"</span><span class="t-tag">&gt;</span>
-    <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"card-header-text"</span><span class="t-tag">&gt;</span>
-      <span class="t-tag">&lt;p</span> <span class="t-attr">class</span>=<span class="t-str">"card-title"</span><span class="t-tag">&gt;</span>Title<span class="t-tag">&lt;/p&gt;</span>
-      <span class="t-tag">&lt;p</span> <span class="t-attr">class</span>=<span class="t-str">"card-subtitle"</span><span class="t-tag">&gt;</span>Subtitle<span class="t-tag">&lt;/p&gt;</span>
-    <span class="t-tag">&lt;/div&gt;</span>
-  <span class="t-tag">&lt;/div&gt;</span>
-  <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"card-body"</span><span class="t-tag">&gt;</span>Content<span class="t-tag">&lt;/div&gt;</span>
-  <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"card-actions card-actions-end"</span><span class="t-tag">&gt;</span>
-    <span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"btn btn-text ripple"</span><span class="t-tag">&gt;</span>Cancel<span class="t-tag">&lt;/button&gt;</span>
-    <span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"btn btn-tonal ripple"</span><span class="t-tag">&gt;</span>OK<span class="t-tag">&lt;/button&gt;</span>
-  <span class="t-tag">&lt;/div&gt;</span>
-<span class="t-tag">&lt;/div&gt;</span>
-
-<span class="t-cmt">&lt;!-- Filled --&gt;</span>
-<span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"card card-filled"</span><span class="t-tag">&gt;</span>...<span class="t-tag">&lt;/div&gt;</span>
-
-<span class="t-cmt">&lt;!-- Outlined --&gt;</span>
-<span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"card card-outlined"</span><span class="t-tag">&gt;</span>...<span class="t-tag">&lt;/div&gt;</span></pre></div>
+        <div class="card-body">Uses shadow and a primary-tinted surface to lift off the background. Supports the full <code style="font-family:var(--md-font-mono);font-size:12px;">card-header</code> anatomy. Click to ripple.</div>
+        <div class="card-actions card-actions-end">
+          <button class="btn btn-text ripple" data-ripple>Learn more</button>
+          <button class="btn btn-tonal ripple" data-ripple>Enable</button>
         </div>
       </div>
+
+      <div class="card card-filled" id="mc2">
+        <div class="card-header">
+          <div style="width:40px;height:40px;border-radius:50%;background:var(--md-tertiary-container);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <span class="material-symbols-rounded" style="color:var(--md-on-tertiary-container);">palette</span>
+          </div>
+          <div class="card-header-text">
+            <p class="card-title">Filled Card</p>
+            <p class="card-subtitle">Design system</p>
+          </div>
+        </div>
+        <div class="card-body">Uses <code style="font-family:var(--md-font-mono);font-size:12px;">surface-container-highest</code> — the proper M3 container hierarchy token. Lower emphasis than elevated.</div>
+        <div class="card-actions">
+          <button class="btn btn-text ripple" data-ripple>Dismiss</button>
+          <button class="btn btn-text ripple" data-ripple>Open</button>
+        </div>
+      </div>
+
+      <div class="card card-outlined" id="mc3">
+        <div style="height:140px;background:linear-gradient(135deg,var(--md-primary-container),var(--md-tertiary-container));display:flex;align-items:center;justify-content:center;">
+          <span class="material-symbols-rounded" style="font-size:48px;color:var(--md-on-primary-container);">landscape</span>
+        </div>
+        <div class="card-header">
+          <div class="card-header-text">
+            <p class="card-title">Outlined Card</p>
+            <p class="card-subtitle">With media · Lowest emphasis</p>
+          </div>
+        </div>
+        <div class="card-body">Uses a border stroke instead of shadow. Best for lower-emphasis content or when the background matches the card surface.</div>
+        <div class="card-actions">
+          <button class="icon-btn ripple" data-ripple aria-label="Like"><span class="material-symbols-rounded">favorite_border</span></button>
+          <button class="icon-btn ripple" data-ripple aria-label="Bookmark"><span class="material-symbols-rounded">bookmark_border</span></button>
+          <button class="icon-btn ripple" data-ripple aria-label="Share"><span class="material-symbols-rounded">share</span></button>
+          <button class="btn btn-text ripple" data-ripple style="margin-left:auto;">Read more</button>
+        </div>
+      </div>
+
     </div>
+  </div>
+</section>
 
-    <!-- CHIPS -->
-    <div style="margin-bottom:var(--md-spacing-12);">
-      <div style="display:flex;align-items:center;gap:var(--md-spacing-3);margin-bottom:var(--md-spacing-4);">
-        <h3 class="title-large">Chips</h3>
-        <span class="badge-new">4 types</span>
-      </div>
-      <div class="component-showcase">
-        <div class="preview-panel">
-          <div class="preview-label">Live preview</div>
+
+<!-- ============================================================
+     CHIPS
+============================================================ -->
+<section class="section">
+  <div class="page-wrap">
+    <div class="sec-eyebrow">Components</div>
+    <h2 class="sec-title">Chips</h2>
+    <p class="sec-desc">Four types for different interaction patterns — assist, filter, input, and suggestion. All support icons, avatars, and remove actions.</p>
+
+    <div class="showcase-grid">
+
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Assist &amp; suggestion</span>
+          <span class="showcase-card-tag">.chip-assist</span>
+        </div>
+        <div class="showcase-card-body">
           <div class="chip-group">
             <button class="chip chip-assist ripple" data-ripple><span class="material-symbols-rounded chip-icon">location_on</span>Add location</button>
-            <button class="chip chip-filter ripple selected" data-ripple aria-pressed="true"><span class="material-symbols-rounded chip-icon">check</span>Selected</button>
-            <button class="chip chip-filter ripple" data-ripple>Unselected</button>
+            <button class="chip chip-assist ripple" data-ripple><span class="material-symbols-rounded chip-icon">calendar_today</span>Schedule</button>
             <button class="chip chip-elevated ripple" data-ripple>Elevated</button>
             <button class="chip ripple" data-ripple>Sounds good 👍</button>
+            <button class="chip ripple" data-ripple>See you there!</button>
           </div>
-          <div class="chip-group" style="margin-top:var(--md-spacing-2);">
-            <button class="chip chip-filter ripple" data-ripple>Electronics</button>
-            <button class="chip chip-filter ripple" data-ripple>Clothing</button>
+        </div>
+      </div>
+
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Filter chips</span>
+          <span class="showcase-card-tag">.chip-filter · aria-pressed</span>
+        </div>
+        <div class="showcase-card-body">
+          <div class="chip-group" id="filterChips">
+            <button class="chip chip-filter ripple" data-ripple aria-pressed="false">Electronics</button>
             <button class="chip chip-filter ripple selected" data-ripple aria-pressed="true"><span class="material-symbols-rounded chip-icon">check</span>Books</button>
-            <button class="chip chip-filter ripple" data-ripple>Food</button>
-            <button class="chip chip-filter ripple" data-ripple>Travel</button>
+            <button class="chip chip-filter ripple" data-ripple aria-pressed="false">Clothing</button>
+            <button class="chip chip-filter ripple" data-ripple aria-pressed="false">Food</button>
+            <button class="chip chip-filter ripple" data-ripple aria-pressed="false">Travel</button>
           </div>
-        </div>
-        <div class="code-card">
-          <div class="code-bar">
-            <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
-            <span class="code-bar-lang">HTML</span>
-            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
-          </div>
-          <div class="code-body"><pre><span class="t-cmt">&lt;!-- Chip types --&gt;</span>
-<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"chip chip-assist ripple"</span><span class="t-tag">&gt;</span>
-  <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"material-symbols-rounded chip-icon"</span><span class="t-tag">&gt;</span>
-    location_on
-  <span class="t-tag">&lt;/span&gt;</span>
-  Add location
-<span class="t-tag">&lt;/button&gt;</span>
-
-<span class="t-cmt">&lt;!-- Filter chip — selected state --&gt;</span>
-<span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"chip chip-filter ripple selected"</span>
-        <span class="t-attr">aria-pressed</span>=<span class="t-str">"true"</span><span class="t-tag">&gt;</span>
-  <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"material-symbols-rounded chip-icon"</span><span class="t-tag">&gt;</span>
-    check
-  <span class="t-tag">&lt;/span&gt;</span>
-  Selected
-<span class="t-tag">&lt;/button&gt;</span>
-
-<span class="t-cmt">&lt;!-- Input chip with remove --&gt;</span>
-<span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"chip chip-input"</span><span class="t-tag">&gt;</span>
-  Anna
-  <span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"chip-remove"</span><span class="t-tag">&gt;</span>✕<span class="t-tag">&lt;/button&gt;</span>
-<span class="t-tag">&lt;/span&gt;</span></pre></div>
+          <p class="body-small text-on-surface-variant" style="margin-top:var(--md-spacing-2);">Tap to toggle — selected chips show a checkmark and secondary container background.</p>
         </div>
       </div>
+
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Input chips</span>
+          <span class="showcase-card-tag">.chip-input · .chip-remove</span>
+        </div>
+        <div class="showcase-card-body">
+          <div class="chip-group" id="inputChips">
+            <span class="chip chip-input">Design <button class="chip-remove material-symbols-rounded" style="font-size:15px;background:none;border:none;cursor:pointer;padding:0;color:inherit;" onclick="this.closest('.chip').remove()">close</button></span>
+            <span class="chip chip-input">Engineering <button class="chip-remove material-symbols-rounded" style="font-size:15px;background:none;border:none;cursor:pointer;padding:0;color:inherit;" onclick="this.closest('.chip').remove()">close</button></span>
+            <span class="chip chip-input">Product <button class="chip-remove material-symbols-rounded" style="font-size:15px;background:none;border:none;cursor:pointer;padding:0;color:inherit;" onclick="this.closest('.chip').remove()">close</button></span>
+          </div>
+          <p class="body-small text-on-surface-variant" style="margin-top:var(--md-spacing-2);">Click ✕ to remove each chip.</p>
+        </div>
+      </div>
+
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Badges</span>
+          <span class="showcase-card-tag">.badge · .badge-count</span>
+        </div>
+        <div class="showcase-card-body">
+          <div class="showcase-card-row" style="gap:var(--md-spacing-6);">
+            <div class="badge-wrapper">
+              <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">notifications</span></button>
+              <span class="badge"></span>
+            </div>
+            <div class="badge-wrapper">
+              <button class="icon-btn icon-btn-tonal ripple" data-ripple><span class="material-symbols-rounded">mail</span></button>
+              <span class="badge-count">4</span>
+            </div>
+            <div class="badge-wrapper">
+              <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">shopping_cart</span></button>
+              <span class="badge-count">12</span>
+            </div>
+            <div class="badge-wrapper">
+              <button class="fab fab-sm ripple" data-ripple><span class="material-symbols-rounded">chat</span></button>
+              <span class="badge-count">99+</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
+  </div>
+</section>
 
-    <!-- TEXT FIELDS + FORM -->
-    <div style="margin-bottom:var(--md-spacing-12);">
-      <div style="display:flex;align-items:center;gap:var(--md-spacing-3);margin-bottom:var(--md-spacing-4);">
-        <h3 class="title-large">Form Controls</h3>
-        <span class="badge-new">Filled · Outlined · Switch · Checkbox · Radio</span>
-      </div>
-      <div class="component-showcase">
-        <div class="preview-panel" style="gap:var(--md-spacing-5);">
-          <div class="preview-label">Live preview</div>
-          <div style="display:flex;flex-direction:column;gap:var(--md-spacing-3);">
-            <div class="tf-wrap">
-              <label class="tf-label-sm">Username (filled)</label>
-              <input class="tf-input-filled" type="text" placeholder="e.g. pixel_user" />
+
+<!-- ============================================================
+     FORM CONTROLS
+============================================================ -->
+<section class="section section-alt">
+  <div class="page-wrap">
+    <div class="sec-eyebrow">Components</div>
+    <h2 class="sec-title">Form Controls</h2>
+    <p class="sec-desc">Text fields with floating labels, switches with spring animation, checkboxes with animated checkmarks, radio buttons, and sliders.</p>
+
+    <div class="showcase-grid-wide">
+
+      <!-- Text fields -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Text fields</span>
+          <span class="showcase-card-tag">Filled · Outlined</span>
+        </div>
+        <div class="showcase-card-body">
+          <div style="display:flex;flex-direction:column;gap:var(--md-spacing-4);">
+            <div>
+              <label class="tf-label">Username (filled)</label>
+              <input class="tf-filled" type="text" placeholder="e.g. pixel_user" />
+              <div class="tf-support">Must be unique and lowercase</div>
             </div>
-            <div class="tf-wrap">
-              <label class="tf-label-sm">Email (outlined)</label>
-              <input class="tf-input-outlined" type="email" placeholder="hello@kenai.dev" />
+            <div>
+              <label class="tf-label">Email address (outlined)</label>
+              <input class="tf-outlined" type="email" placeholder="hello@kenai.dev" />
             </div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:var(--md-spacing-3);">
-            <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
-              <input type="checkbox" class="cb" checked /> Notifications enabled
-            </label>
-            <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
-              <input type="checkbox" class="cb" /> Dark mode override
-            </label>
-            <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
-              <input type="checkbox" class="cb" checked /> Accept terms
-            </label>
-          </div>
-          <div style="display:flex;align-items:center;gap:var(--md-spacing-6);">
-            <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
-              <input type="radio" class="rb" name="r1" checked /> Option A
-            </label>
-            <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
-              <input type="radio" class="rb" name="r1" /> Option B
-            </label>
-          </div>
-          <div style="display:flex;align-items:center;gap:var(--md-spacing-4);">
-            <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
-              <input type="checkbox" class="sw" checked role="switch" /> Airplane mode
-            </label>
-            <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
-              <input type="checkbox" class="sw" role="switch" /> Wi-Fi
-            </label>
+            <div>
+              <label class="tf-label">Search (filled + icon)</label>
+              <div style="position:relative;display:flex;align-items:center;">
+                <span class="material-symbols-rounded" style="position:absolute;left:14px;color:var(--md-on-surface-variant);font-size:20px;pointer-events:none;">search</span>
+                <input class="tf-filled" type="search" placeholder="Search components…" style="padding-left:44px;" />
+              </div>
+            </div>
+            <div>
+              <label class="tf-label">Error state</label>
+              <input class="tf-outlined" type="text" value="invalid@" style="border-color:var(--md-error);" />
+              <div class="tf-support" style="color:var(--md-error);">Enter a valid email address</div>
+            </div>
           </div>
         </div>
-        <div class="code-card">
-          <div class="code-bar">
-            <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
-            <span class="code-bar-lang">HTML</span>
-            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+
+      <!-- Switches, checkboxes, radios -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Selection controls</span>
+          <span class="showcase-card-tag">Switch · Checkbox · Radio</span>
+        </div>
+        <div class="showcase-card-body" style="gap:var(--md-spacing-6);">
+          <div>
+            <div class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Switches</div>
+            <div style="display:flex;flex-direction:column;gap:var(--md-spacing-3);">
+              <label style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+                <span class="body-large">Airplane mode</span>
+                <input type="checkbox" class="sw" checked role="switch" />
+              </label>
+              <label style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+                <span class="body-large">Wi-Fi</span>
+                <input type="checkbox" class="sw" role="switch" />
+              </label>
+              <label style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+                <span class="body-large">Bluetooth</span>
+                <input type="checkbox" class="sw" checked role="switch" />
+              </label>
+              <label style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;opacity:0.38;pointer-events:none;">
+                <span class="body-large">Mobile data (disabled)</span>
+                <input type="checkbox" class="sw" role="switch" />
+              </label>
+            </div>
           </div>
-          <div class="code-body"><pre><span class="t-cmt">&lt;!-- Filled text field --&gt;</span>
-<span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"text-field text-field-filled"</span><span class="t-tag">&gt;</span>
-  <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"text-field-container"</span><span class="t-tag">&gt;</span>
-    <span class="t-tag">&lt;label</span> <span class="t-attr">class</span>=<span class="t-str">"text-field-label"</span><span class="t-tag">&gt;</span>Username<span class="t-tag">&lt;/label&gt;</span>
-    <span class="t-tag">&lt;input</span> <span class="t-attr">type</span>=<span class="t-str">"text"</span> <span class="t-tag">/&gt;</span>
-  <span class="t-tag">&lt;/div&gt;</span>
-  <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"text-field-support"</span><span class="t-tag">&gt;</span>Must be unique<span class="t-tag">&lt;/span&gt;</span>
-<span class="t-tag">&lt;/div&gt;</span>
-
-<span class="t-cmt">&lt;!-- Switch --&gt;</span>
-<span class="t-tag">&lt;label</span> <span class="t-attr">class</span>=<span class="t-str">"switch"</span><span class="t-tag">&gt;</span>
-  <span class="t-tag">&lt;input</span> <span class="t-attr">type</span>=<span class="t-str">"checkbox"</span> <span class="t-attr">checked</span> <span class="t-tag">/&gt;</span>
-  <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"switch-track"</span><span class="t-tag">&gt;</span>
-    <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"switch-thumb"</span><span class="t-tag">&gt;&lt;/span&gt;</span>
-  <span class="t-tag">&lt;/span&gt;</span>
-  Airplane mode
-<span class="t-tag">&lt;/label&gt;</span>
-
-<span class="t-cmt">&lt;!-- Checkbox --&gt;</span>
-<span class="t-tag">&lt;label</span> <span class="t-attr">class</span>=<span class="t-str">"checkbox"</span><span class="t-tag">&gt;</span>
-  <span class="t-tag">&lt;input</span> <span class="t-attr">type</span>=<span class="t-str">"checkbox"</span> <span class="t-attr">checked</span> <span class="t-tag">/&gt;</span>
-  <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"checkbox-box"</span><span class="t-tag">&gt;&lt;/span&gt;</span>
-  Accept terms
-<span class="t-tag">&lt;/label&gt;</span></pre></div>
+          <div>
+            <div class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Checkboxes</div>
+            <div style="display:flex;flex-direction:column;gap:var(--md-spacing-3);">
+              <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
+                <input type="checkbox" class="cb" checked />
+                <span class="body-large">Receive notifications</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
+                <input type="checkbox" class="cb" />
+                <span class="body-large">Marketing emails</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
+                <input type="checkbox" class="cb" checked />
+                <span class="body-large">Accept terms of service</span>
+              </label>
+            </div>
+          </div>
+          <div>
+            <div class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Radio buttons</div>
+            <div style="display:flex;flex-direction:column;gap:var(--md-spacing-3);">
+              <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
+                <input type="radio" class="rb" name="theme" checked />
+                <span class="body-large">Light theme</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
+                <input type="radio" class="rb" name="theme" />
+                <span class="body-large">Dark theme</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:var(--md-spacing-3);cursor:pointer;">
+                <input type="radio" class="rb" name="theme" />
+                <span class="body-large">System default</span>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- Slider -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Slider</span>
+          <span class="showcase-card-tag">input[type=range]</span>
+        </div>
+        <div class="showcase-card-body" style="gap:var(--md-spacing-6);">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:var(--md-spacing-2);">
+              <label class="tf-label" style="margin-bottom:0;">Volume</label>
+              <span class="label-large text-primary" id="volVal">68</span>
+            </div>
+            <input class="sl" type="range" min="0" max="100" value="68" id="volSlider" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:var(--md-spacing-2);">
+              <label class="tf-label" style="margin-bottom:0;">Brightness</label>
+              <span class="label-large text-primary" id="briVal">40</span>
+            </div>
+            <input class="sl" type="range" min="0" max="100" value="40" id="briSlider" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:var(--md-spacing-2);">
+              <label class="tf-label" style="margin-bottom:0;">Disabled</label>
+              <span class="label-large text-on-surface-variant">50</span>
+            </div>
+            <input class="sl" type="range" min="0" max="100" value="50" disabled style="opacity:0.38;cursor:not-allowed;" />
+          </div>
+        </div>
+      </div>
+
     </div>
+  </div>
+</section>
 
-    <!-- FEEDBACK -->
-    <div style="margin-bottom:var(--md-spacing-12);">
-      <div style="display:flex;align-items:center;gap:var(--md-spacing-3);margin-bottom:var(--md-spacing-4);">
-        <h3 class="title-large">Feedback &amp; Overlays</h3>
-        <span class="badge-new">Snackbar · Dialog · Tooltip · Progress</span>
-      </div>
-      <div class="component-showcase">
-        <div class="preview-panel" style="gap:var(--md-spacing-5);">
-          <div class="preview-label">Live preview</div>
 
-          <div>
-            <p class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Snackbar</p>
-            <div class="snackbar" style="position:relative;animation:none;min-width:0;max-width:100%;">
-              <span class="snackbar-text">File "report.pdf" deleted</span>
-              <button class="snackbar-action">Undo</button>
+<!-- ============================================================
+     NAVIGATION
+============================================================ -->
+<section class="section" id="navigation">
+  <div class="page-wrap">
+    <div class="sec-eyebrow">Components</div>
+    <h2 class="sec-title">Navigation</h2>
+    <p class="sec-desc">Navigation Bar for mobile, Navigation Drawer for desktop, Navigation Rail for tablet breakpoints. All wired to the same M3 active indicator system.</p>
+
+    <div class="showcase-grid">
+
+      <!-- Nav Bar -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Navigation Bar</span>
+          <span class="showcase-card-tag">.nav-bar · Mobile</span>
+        </div>
+        <div class="showcase-card-body">
+          <div class="nav-bar-demo" id="navBarDemo">
+            <div class="nb-item active" onclick="setNavBar(this)">
+              <div class="nb-indicator"></div>
+              <span class="nb-icon material-symbols-rounded">home</span>
+              <span class="nb-label">Home</span>
             </div>
-            <div style="display:flex;gap:var(--md-spacing-2);margin-top:var(--md-spacing-3);">
-              <button class="btn btn-tonal btn-sm ripple" data-ripple onclick="KENAI.Snackbar.show('Message sent!')">Show</button>
-              <button class="btn btn-outlined btn-sm ripple" data-ripple onclick="KENAI.Snackbar.show('Item deleted',{action:'Undo',onAction:()=>KENAI.Snackbar.show('Restored!')})">With Action</button>
+            <div class="nb-item" onclick="setNavBar(this)">
+              <div class="nb-indicator"></div>
+              <span class="nb-icon material-symbols-rounded">explore</span>
+              <span class="nb-label">Explore</span>
+            </div>
+            <div class="nb-item" onclick="setNavBar(this)">
+              <div class="nb-indicator"></div>
+              <span class="nb-icon material-symbols-rounded">favorite</span>
+              <span class="nb-label">Liked</span>
+            </div>
+            <div class="nb-item" onclick="setNavBar(this)">
+              <div class="nb-indicator"></div>
+              <span class="nb-icon material-symbols-rounded">person</span>
+              <span class="nb-label">Profile</span>
             </div>
           </div>
+          <p class="body-small text-on-surface-variant" style="margin-top:var(--md-spacing-3);">Tap items to switch the active state.</p>
+        </div>
+      </div>
 
+      <!-- Nav Drawer -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Navigation Drawer</span>
+          <span class="showcase-card-tag">.nav-drawer · Desktop</span>
+        </div>
+        <div class="showcase-card-body">
+          <div class="drawer-demo">
+            <div class="label-small text-on-surface-variant" style="padding:var(--md-spacing-2) var(--md-spacing-4) var(--md-spacing-1);">Mail</div>
+            <div class="dr-item active ripple" data-ripple onclick="setDrawer(this)">
+              <span class="material-symbols-rounded">inbox</span>
+              Inbox
+              <span style="margin-left:auto;" class="badge-count" style="position:static;transform:none;">24</span>
+            </div>
+            <div class="dr-item ripple" data-ripple onclick="setDrawer(this)">
+              <span class="material-symbols-rounded">send</span>
+              Sent
+            </div>
+            <div class="dr-item ripple" data-ripple onclick="setDrawer(this)">
+              <span class="material-symbols-rounded">drafts</span>
+              Drafts
+            </div>
+            <div style="height:1px;background:var(--md-outline-variant);margin:var(--md-spacing-2) var(--md-spacing-4);"></div>
+            <div class="label-small text-on-surface-variant" style="padding:var(--md-spacing-2) var(--md-spacing-4) var(--md-spacing-1);">Labels</div>
+            <div class="dr-item ripple" data-ripple onclick="setDrawer(this)">
+              <span class="material-symbols-rounded">label</span>
+              Personal
+            </div>
+            <div class="dr-item ripple" data-ripple onclick="setDrawer(this)">
+              <span class="material-symbols-rounded">work</span>
+              Work
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Tabs</span>
+          <span class="showcase-card-tag">.tab · Primary</span>
+        </div>
+        <div class="showcase-card-body" style="padding-inline:0;padding-block:0;gap:0;">
+          <div class="tabs-bar" id="tabsDemo">
+            <button class="tab-btn active ripple" data-ripple><div class="tab-btn-state"></div><span class="material-symbols-rounded" style="font-size:20px;">home</span>Home</button>
+            <button class="tab-btn ripple" data-ripple><div class="tab-btn-state"></div><span class="material-symbols-rounded" style="font-size:20px;">explore</span>Explore</button>
+            <button class="tab-btn ripple" data-ripple><div class="tab-btn-state"></div><span class="material-symbols-rounded" style="font-size:20px;">favorite</span>Saved</button>
+            <button class="tab-btn ripple" data-ripple><div class="tab-btn-state"></div><span class="material-symbols-rounded" style="font-size:20px;">person</span>Profile</button>
+          </div>
+          <div style="padding:var(--md-spacing-5);">
+            <p class="body-medium text-on-surface-variant">Active tab indicator slides smoothly using CSS transform. Switch between tabs to see the M3 emphasized easing.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     LISTS + DATA TABLE
+============================================================ -->
+<section class="section section-alt">
+  <div class="page-wrap">
+    <div class="sec-eyebrow">Components</div>
+    <h2 class="sec-title">Lists &amp; Data Table</h2>
+    <p class="sec-desc">1-line, 2-line, and 3-line list items with leading avatars, icons, and images. Data table with hover states, sortable headers, and status chips.</p>
+
+    <div class="showcase-grid-wide">
+
+      <!-- List -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Two-line list</span>
+          <span class="showcase-card-tag">.list-item · avatar · trailing</span>
+        </div>
+        <div class="showcase-card-body" style="padding:0;gap:0;">
+          <div class="list-demo-item ripple" data-ripple>
+            <div class="list-avatar" style="background:var(--md-primary-container);color:var(--md-on-primary-container);">AJ</div>
+            <div style="flex:1;min-width:0;">
+              <div class="body-large">Alex Johnson</div>
+              <div class="body-medium text-on-surface-variant" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Hey, are you free tonight? Was thinking we could grab dinner.</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
+              <span class="label-small text-on-surface-variant">2 min</span>
+              <span class="badge-count" style="position:static;transform:none;">2</span>
+            </div>
+          </div>
+          <div class="divider divider-inset"></div>
+          <div class="list-demo-item ripple" data-ripple>
+            <div class="list-avatar" style="background:var(--md-secondary-container);color:var(--md-on-secondary-container);">SR</div>
+            <div style="flex:1;min-width:0;">
+              <div class="body-large">Sam Rivera</div>
+              <div class="body-medium text-on-surface-variant" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Check out this Material Design 3 update — it's incredible!</div>
+            </div>
+            <div style="flex-shrink:0;"><span class="label-small text-on-surface-variant">1 hr</span></div>
+          </div>
+          <div class="divider divider-inset"></div>
+          <div class="list-demo-item ripple" data-ripple>
+            <div class="list-avatar" style="background:var(--md-tertiary-container);color:var(--md-on-tertiary-container);">JP</div>
+            <div style="flex:1;min-width:0;">
+              <div class="body-large">Jordan Patel</div>
+              <div class="body-medium text-on-surface-variant" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Sounds great, see you then! 👋</div>
+            </div>
+            <div style="flex-shrink:0;"><span class="label-small text-on-surface-variant">3 hr</span></div>
+          </div>
+          <div class="divider divider-inset"></div>
+          <div class="list-demo-item ripple" data-ripple>
+            <span class="material-symbols-rounded text-on-surface-variant" style="flex-shrink:0;font-size:24px;">image</span>
+            <div style="flex:1;min-width:0;">
+              <div class="body-large">Project assets.zip</div>
+              <div class="body-medium text-on-surface-variant">48.2 MB · Shared by design team</div>
+            </div>
+            <button class="icon-btn ripple" data-ripple aria-label="Download"><span class="material-symbols-rounded">download</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Data table</span>
+          <span class="showcase-card-tag">.data-table · Sortable headers</span>
+        </div>
+        <div class="showcase-card-body" style="padding:0;gap:0;overflow-x:auto;">
+          <table class="demo-table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" class="cb" /></th>
+                <th>Component</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th class="num">v0.2</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox" class="cb" checked /></td>
+                <td><span class="body-large">Button</span></td>
+                <td><span class="label-medium text-on-surface-variant">Action</span></td>
+                <td><span class="status-chip status-active"><span class="material-symbols-rounded" style="font-size:13px;">check_circle</span>Stable</span></td>
+                <td class="num">5 var.</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="cb" /></td>
+                <td><span class="body-large">Card</span></td>
+                <td><span class="label-medium text-on-surface-variant">Container</span></td>
+                <td><span class="status-chip status-active"><span class="material-symbols-rounded" style="font-size:13px;">check_circle</span>Stable</span></td>
+                <td class="num">3 var.</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="cb" /></td>
+                <td><span class="body-large">Text Field</span></td>
+                <td><span class="label-medium text-on-surface-variant">Input</span></td>
+                <td><span class="status-chip status-pending">In progress</span></td>
+                <td class="num">2 var.</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="cb" /></td>
+                <td><span class="body-large">Dialog</span></td>
+                <td><span class="label-medium text-on-surface-variant">Overlay</span></td>
+                <td><span class="status-chip status-active"><span class="material-symbols-rounded" style="font-size:13px;">check_circle</span>Stable</span></td>
+                <td class="num">2 var.</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="cb" /></td>
+                <td><span class="body-large">Navigation Rail</span></td>
+                <td><span class="label-medium text-on-surface-variant">Navigation</span></td>
+                <td><span class="status-chip status-pending">In progress</span></td>
+                <td class="num">—</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="cb" /></td>
+                <td><span class="body-large">Date Picker</span></td>
+                <td><span class="label-medium text-on-surface-variant">Input</span></td>
+                <td><span class="status-chip status-inactive">Planned</span></td>
+                <td class="num">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     AVATARS + ACCORDION
+============================================================ -->
+<section class="section">
+  <div class="page-wrap">
+    <div class="sec-eyebrow">Components</div>
+    <h2 class="sec-title">Avatars &amp; Accordion</h2>
+
+    <div class="showcase-grid-wide">
+
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Avatars</span>
+          <span class="showcase-card-tag">.avatar · xs · sm · md · lg · xl</span>
+        </div>
+        <div class="showcase-card-body" style="gap:var(--md-spacing-6);">
           <div>
-            <p class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Tooltips</p>
+            <div class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Sizes</div>
+            <div style="display:flex;align-items:center;gap:var(--md-spacing-3);">
+              <div class="av" style="width:24px;height:24px;background:var(--md-primary-container);color:var(--md-on-primary-container);font-size:10px;">A</div>
+              <div class="av" style="width:32px;height:32px;background:var(--md-secondary-container);color:var(--md-on-secondary-container);font-size:12px;">B</div>
+              <div class="av" style="width:40px;height:40px;background:var(--md-tertiary-container);color:var(--md-on-tertiary-container);font-size:15px;">CD</div>
+              <div class="av" style="width:56px;height:56px;background:var(--md-primary-container);color:var(--md-on-primary-container);font-size:18px;">EF</div>
+              <div class="av" style="width:80px;height:80px;background:var(--md-secondary-container);color:var(--md-on-secondary-container);font-size:26px;">GH</div>
+            </div>
+          </div>
+          <div>
+            <div class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Grouped (stacked)</div>
+            <div style="display:flex;">
+              <div class="av" style="width:40px;height:40px;background:var(--md-primary-container);color:var(--md-on-primary-container);font-size:14px;border:2px solid var(--md-surface);margin-left:0;">AJ</div>
+              <div class="av" style="width:40px;height:40px;background:var(--md-secondary-container);color:var(--md-on-secondary-container);font-size:14px;border:2px solid var(--md-surface);margin-left:-8px;">SR</div>
+              <div class="av" style="width:40px;height:40px;background:var(--md-tertiary-container);color:var(--md-on-tertiary-container);font-size:14px;border:2px solid var(--md-surface);margin-left:-8px;">JP</div>
+              <div class="av" style="width:40px;height:40px;background:var(--md-surface-container-highest);color:var(--md-on-surface-variant);font-size:12px;border:2px solid var(--md-surface);margin-left:-8px;">+4</div>
+            </div>
+          </div>
+          <div>
+            <div class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">With presence indicator</div>
             <div style="display:flex;gap:var(--md-spacing-4);">
-              <div class="tt-wrap">
-                <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">help</span></button>
-                <span class="tt">Help &amp; support</span>
+              <div style="position:relative;">
+                <div class="av" style="width:48px;height:48px;background:var(--md-primary-container);color:var(--md-on-primary-container);font-size:16px;">AJ</div>
+                <div style="position:absolute;bottom:1px;right:1px;width:12px;height:12px;border-radius:50%;background:#28A745;border:2px solid var(--md-surface);"></div>
               </div>
-              <div class="tt-wrap">
-                <button class="icon-btn icon-btn-tonal ripple" data-ripple><span class="material-symbols-rounded">settings</span></button>
-                <span class="tt">Settings</span>
+              <div style="position:relative;">
+                <div class="av" style="width:48px;height:48px;background:var(--md-secondary-container);color:var(--md-on-secondary-container);font-size:16px;">SR</div>
+                <div style="position:absolute;bottom:1px;right:1px;width:12px;height:12px;border-radius:50%;background:var(--md-outline);border:2px solid var(--md-surface);"></div>
               </div>
-              <div class="tt-wrap">
-                <button class="btn btn-tonal btn-sm ripple" data-ripple>Hover me</button>
-                <span class="tt">I'm a tooltip!</span>
+              <div style="position:relative;">
+                <div class="av" style="width:48px;height:48px;background:var(--md-tertiary-container);color:var(--md-on-tertiary-container);font-size:16px;">JP</div>
+                <div style="position:absolute;bottom:1px;right:1px;width:12px;height:12px;border-radius:50%;background:#F9A825;border:2px solid var(--md-surface);"></div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div>
-            <p class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Progress</p>
-            <div class="progress-linear" style="margin-bottom:var(--md-spacing-2);">
-              <div class="progress-linear-track" id="demoProgress" style="width:65%;"></div>
+      <!-- Accordion -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Accordion / Expansion panel</span>
+          <span class="showcase-card-tag">.accordion-item · .acc-trigger</span>
+        </div>
+        <div class="showcase-card-body" style="padding:0;gap:0;" id="accordionDemo">
+          <div class="acc-item open">
+            <button class="acc-trigger" onclick="toggleAcc(this)">
+              <span class="material-symbols-rounded text-primary" style="font-size:20px;flex-shrink:0;">palette</span>
+              What color system does KENAI use?
+              <span class="acc-chevron material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="acc-body">
+              <div class="acc-content">KENAI implements the full Material Design 3 color system with 30+ color roles including primary, secondary, tertiary, error, and the complete surface container hierarchy — all as CSS custom properties supporting light and dark modes.</div>
             </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger" onclick="toggleAcc(this)">
+              <span class="material-symbols-rounded text-secondary" style="font-size:20px;flex-shrink:0;">bolt</span>
+              Do I need a build tool?
+              <span class="acc-chevron material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="acc-body">
+              <div class="acc-content">No. KENAI is pure CSS custom properties and vanilla JS. Just link <code style="font-family:var(--md-font-mono)">kenai.css</code> and optionally <code style="font-family:var(--md-font-mono)">kenai.js</code> in your HTML. No Sass, PostCSS, webpack, or Node.js required.</div>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger" onclick="toggleAcc(this)">
+              <span class="material-symbols-rounded text-tertiary" style="font-size:20px;flex-shrink:0;">dark_mode</span>
+              How does dark mode work?
+              <span class="acc-chevron material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="acc-body">
+              <div class="acc-content">Add <code style="font-family:var(--md-font-mono)">data-theme="dark"</code> to your <code style="font-family:var(--md-font-mono)">&lt;html&gt;</code> element. The JS runtime auto-detects <code style="font-family:var(--md-font-mono)">prefers-color-scheme</code>, persists the user's choice to localStorage, and fires a <code style="font-family:var(--md-font-mono)">kenai:themechange</code> event.</div>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger" onclick="toggleAcc(this)">
+              <span class="material-symbols-rounded text-on-surface-variant" style="font-size:20px;flex-shrink:0;">water_drop</span>
+              How do I add ripple to my elements?
+              <span class="acc-chevron material-symbols-rounded">expand_more</span>
+            </button>
+            <div class="acc-body">
+              <div class="acc-content">Add <code style="font-family:var(--md-font-mono)">class="ripple"</code> or <code style="font-family:var(--md-font-mono)">data-ripple</code> to any element. The JS engine automatically attaches pointer-down listeners and spawns the correct M3 ink wave anchored to the click position.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FEEDBACK — Snackbar, Dialog, Tooltips, Progress
+============================================================ -->
+<section class="section section-alt">
+  <div class="page-wrap">
+    <div class="sec-eyebrow">Components</div>
+    <h2 class="sec-title">Feedback &amp; Overlays</h2>
+    <p class="sec-desc">Snackbars, dialogs, tooltips, and progress indicators — all with M3-correct motion timing and entrance animations.</p>
+
+    <div class="showcase-grid">
+
+      <!-- Snackbar -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Snackbar</span>
+          <span class="showcase-card-tag">KENAI.Snackbar.show()</span>
+        </div>
+        <div class="showcase-card-body">
+          <div class="snackbar" style="position:relative;animation:none;">
+            <span class="snackbar-text">File "report.pdf" deleted</span>
+            <button class="snackbar-action">Undo</button>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:var(--md-spacing-2);margin-top:var(--md-spacing-4);">
+            <button class="btn btn-tonal btn-sm ripple" data-ripple
+              onclick="KENAI.Snackbar.show('Message sent successfully')">Simple</button>
+            <button class="btn btn-tonal btn-sm ripple" data-ripple
+              onclick="KENAI.Snackbar.show('Item deleted',{action:'Undo',onAction:()=>KENAI.Snackbar.show('Restored!')})">With action</button>
+            <button class="btn btn-outlined btn-sm ripple" data-ripple
+              onclick="KENAI.Snackbar.show('Hover to pause the timer — works great for long messages',{duration:6000})">Long</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dialog -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Dialog</span>
+          <span class="showcase-card-tag">.dialog · .dialog-scrim</span>
+        </div>
+        <div class="showcase-card-body">
+          <p class="body-medium text-on-surface-variant">Dialogs use the M3 Emphasized Decelerate easing for entrance — scale + translate from 92% to 100%. The scrim fades in independently.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:var(--md-spacing-3);margin-top:var(--md-spacing-4);">
+            <button class="btn btn-filled ripple" data-ripple
+              onclick="document.getElementById('dlg1').style.display='flex'">Delete dialog</button>
+            <button class="btn btn-tonal ripple" data-ripple
+              onclick="document.getElementById('dlg2').style.display='flex'">Location dialog</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tooltips -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Tooltips</span>
+          <span class="showcase-card-tag">.tooltip-anchor · .tooltip</span>
+        </div>
+        <div class="showcase-card-body">
+          <div style="display:flex;flex-wrap:wrap;gap:var(--md-spacing-5);padding-top:var(--md-spacing-4);">
+            <div class="tt-anchor">
+              <button class="icon-btn ripple" data-ripple><span class="material-symbols-rounded">help_outline</span></button>
+              <span class="tt-tip">Help &amp; support</span>
+            </div>
+            <div class="tt-anchor">
+              <button class="icon-btn icon-btn-tonal ripple" data-ripple><span class="material-symbols-rounded">settings</span></button>
+              <span class="tt-tip">Settings</span>
+            </div>
+            <div class="tt-anchor">
+              <button class="icon-btn icon-btn-outlined ripple" data-ripple><span class="material-symbols-rounded">notifications</span></button>
+              <span class="tt-tip">Notifications</span>
+            </div>
+            <div class="tt-anchor">
+              <button class="btn btn-outlined btn-sm ripple" data-ripple>Hover me</button>
+              <span class="tt-tip">I'm a tooltip!</span>
+            </div>
+          </div>
+          <p class="body-small text-on-surface-variant" style="margin-top:var(--md-spacing-4);">Hover each element to reveal its tooltip. Uses CSS-only transitions — no JS needed.</p>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Progress indicators</span>
+          <span class="showcase-card-tag">.progress-linear · .progress-circular</span>
+        </div>
+        <div class="showcase-card-body" style="gap:var(--md-spacing-6);">
+          <div>
+            <div class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Determinate</div>
+            <div class="progress-linear">
+              <div class="progress-linear-track" id="demoProgress" style="width:65%;transition:width 600ms var(--md-easing-standard);"></div>
+            </div>
+          </div>
+          <div>
+            <div class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Indeterminate</div>
             <div class="progress-linear progress-linear-indeterminate">
               <div class="progress-linear-track"></div>
             </div>
           </div>
-
-          <div style="display:flex;gap:var(--md-spacing-3);">
-            <button class="btn btn-filled ripple" data-ripple onclick="document.getElementById('demoDialog').style.display='flex'">Open Dialog</button>
-            <button class="btn btn-outlined ripple" data-ripple onclick="triggerProgress()">Animate Progress</button>
+          <div>
+            <div class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Circular</div>
+            <div style="display:flex;align-items:center;gap:var(--md-spacing-5);">
+              <div class="progress-circular progress-circular-sm"><svg viewBox="22 22 44 44"><circle cx="44" cy="44" r="20.2" /></svg></div>
+              <div class="progress-circular"><svg viewBox="22 22 44 44"><circle cx="44" cy="44" r="20.2" /></svg></div>
+              <div class="progress-circular progress-circular-lg"><svg viewBox="22 22 44 44"><circle cx="44" cy="44" r="20.2" /></svg></div>
+            </div>
           </div>
-        </div>
-        <div class="code-card">
-          <div class="code-bar">
-            <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
-            <span class="code-bar-lang">JS + HTML</span>
-            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
-          </div>
-          <div class="code-body"><pre><span class="t-cmt">// Snackbar — fire and forget</span>
-<span class="t-fn">KENAI</span><span class="t-punc">.</span><span class="t-fn">Snackbar</span><span class="t-punc">.</span><span class="t-fn">show</span><span class="t-punc">(</span><span class="t-str">'File deleted'</span><span class="t-punc">, {</span>
-  <span class="t-prop">action</span><span class="t-punc">:</span> <span class="t-str">'Undo'</span><span class="t-punc">,</span>
-  <span class="t-prop">onAction</span><span class="t-punc">:</span> <span class="t-punc">() =&gt;</span> <span class="t-fn">restoreFile</span><span class="t-punc">(),</span>
-  <span class="t-prop">duration</span><span class="t-punc">:</span> <span class="t-val">5000</span>
-<span class="t-punc">});</span>
-
-<span class="t-cmt">// Progress — determinate</span>
-<span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"progress-linear"</span><span class="t-tag">&gt;</span>
-  <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"progress-linear-track"</span>
-       <span class="t-attr">style</span>=<span class="t-str">"width: 65%"</span><span class="t-tag">&gt;&lt;/div&gt;</span>
-<span class="t-tag">&lt;/div&gt;</span>
-
-<span class="t-cmt">// Progress — indeterminate</span>
-<span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"progress-linear</span>
-            <span class="t-str">progress-linear-indeterminate"</span><span class="t-tag">&gt;</span>
-  <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"progress-linear-track"</span><span class="t-tag">&gt;&lt;/div&gt;</span>
-<span class="t-tag">&lt;/div&gt;</span>
-
-<span class="t-cmt">// Tooltip</span>
-<span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"tooltip-anchor"</span><span class="t-tag">&gt;</span>
-  <span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"icon-btn"</span><span class="t-tag">&gt;</span>...<span class="t-tag">&lt;/button&gt;</span>
-  <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-str">"tooltip"</span><span class="t-tag">&gt;</span>Help<span class="t-tag">&lt;/span&gt;</span>
-<span class="t-tag">&lt;/div&gt;</span></pre></div>
+          <button class="btn btn-tonal btn-sm ripple" data-ripple onclick="triggerProgress()">
+            <span class="material-symbols-rounded">play_arrow</span>
+            Animate progress
+          </button>
         </div>
       </div>
+
     </div>
-
-    <!-- TABS + LISTS -->
-    <div style="margin-bottom:var(--md-spacing-12);">
-      <div style="display:flex;align-items:center;gap:var(--md-spacing-3);margin-bottom:var(--md-spacing-4);">
-        <h3 class="title-large">Tabs &amp; Lists</h3>
-      </div>
-      <div class="component-showcase">
-        <div class="preview-panel" style="gap:var(--md-spacing-5);">
-          <div class="preview-label">Live preview</div>
-          <div class="tabs-demo" id="tabsDemo">
-            <button class="tab-d active ripple" data-ripple><span class="material-symbols-rounded" style="font-size:20px;">home</span>Home</button>
-            <button class="tab-d ripple" data-ripple><span class="material-symbols-rounded" style="font-size:20px;">explore</span>Explore</button>
-            <button class="tab-d ripple" data-ripple><span class="material-symbols-rounded" style="font-size:20px;">favorite</span>Saved</button>
-            <button class="tab-d ripple" data-ripple><span class="material-symbols-rounded" style="font-size:20px;">person</span>Profile</button>
-          </div>
-          <div class="card card-outlined" style="overflow:hidden;">
-            <div class="list-item ripple" data-ripple style="display:flex;align-items:center;gap:var(--md-spacing-4);padding:var(--md-spacing-3) var(--md-spacing-4);min-height:56px;cursor:pointer;position:relative;overflow:hidden;">
-              <div style="width:40px;height:40px;border-radius:50%;background:var(--md-primary-container);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="material-symbols-rounded" style="color:var(--md-on-primary-container);font-size:20px;">person</span></div>
-              <div style="flex:1;min-width:0;"><div class="body-large">Alex Johnson</div><div class="body-medium text-on-surface-variant">Hey, are you free tonight?</div></div>
-              <div class="label-small text-on-surface-variant">2 min</div>
-            </div>
-            <div class="divider divider-inset"></div>
-            <div class="list-item ripple" data-ripple style="display:flex;align-items:center;gap:var(--md-spacing-4);padding:var(--md-spacing-3) var(--md-spacing-4);min-height:56px;cursor:pointer;position:relative;overflow:hidden;">
-              <div style="width:40px;height:40px;border-radius:50%;background:var(--md-secondary-container);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="material-symbols-rounded" style="color:var(--md-on-secondary-container);font-size:20px;">person</span></div>
-              <div style="flex:1;min-width:0;"><div class="body-large">Sam Rivera</div><div class="body-medium text-on-surface-variant">Check out this M3 update!</div></div>
-              <div class="label-small text-on-surface-variant">1 hr</div>
-            </div>
-            <div class="divider divider-inset"></div>
-            <div class="list-item ripple" data-ripple style="display:flex;align-items:center;gap:var(--md-spacing-4);padding:var(--md-spacing-3) var(--md-spacing-4);min-height:56px;cursor:pointer;position:relative;overflow:hidden;">
-              <div style="width:40px;height:40px;border-radius:50%;background:var(--md-tertiary-container);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="material-symbols-rounded" style="color:var(--md-on-tertiary-container);font-size:20px;">person</span></div>
-              <div style="flex:1;min-width:0;"><div class="body-large">Jordan Patel</div><div class="body-medium text-on-surface-variant">Sounds great, see you then!</div></div>
-              <div class="label-small text-on-surface-variant">3 hr</div>
-            </div>
-          </div>
-        </div>
-        <div class="code-card">
-          <div class="code-bar">
-            <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
-            <span class="code-bar-lang">HTML</span>
-            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
-          </div>
-          <div class="code-body"><pre><span class="t-cmt">&lt;!-- Tabs --&gt;</span>
-<span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"tabs-list"</span><span class="t-tag">&gt;</span>
-  <span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"tab active"</span>
-          <span class="t-attr">data-tab</span>=<span class="t-str">"panel-home"</span><span class="t-tag">&gt;</span>Home<span class="t-tag">&lt;/button&gt;</span>
-  <span class="t-tag">&lt;button</span> <span class="t-attr">class</span>=<span class="t-str">"tab"</span>
-          <span class="t-attr">data-tab</span>=<span class="t-str">"panel-explore"</span><span class="t-tag">&gt;</span>Explore<span class="t-tag">&lt;/button&gt;</span>
-<span class="t-tag">&lt;/div&gt;</span>
-
-<span class="t-cmt">&lt;!-- List --&gt;</span>
-<span class="t-tag">&lt;ul</span> <span class="t-attr">class</span>=<span class="t-str">"list"</span><span class="t-tag">&gt;</span>
-  <span class="t-tag">&lt;li</span> <span class="t-attr">class</span>=<span class="t-str">"list-item list-item-interactive"</span><span class="t-tag">&gt;</span>
-    <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"list-item-leading-avatar"</span><span class="t-tag">&gt;</span>
-      AJ
-    <span class="t-tag">&lt;/div&gt;</span>
-    <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"list-item-content"</span><span class="t-tag">&gt;</span>
-      <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"list-item-headline"</span><span class="t-tag">&gt;</span>Alex<span class="t-tag">&lt;/div&gt;</span>
-      <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"list-item-supporting"</span><span class="t-tag">&gt;</span>
-        Hey, free tonight?
-      <span class="t-tag">&lt;/div&gt;</span>
-    <span class="t-tag">&lt;/div&gt;</span>
-    <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-str">"list-item-trailing"</span><span class="t-tag">&gt;</span>2 min<span class="t-tag">&lt;/div&gt;</span>
-  <span class="t-tag">&lt;/li&gt;</span>
-<span class="t-tag">&lt;/ul&gt;</span></pre></div>
-        </div>
-      </div>
-    </div>
-
   </div>
 </section>
 
 
-<!-- ================================================================
+<!-- ============================================================
      DESIGN TOKENS
-================================================================ -->
+============================================================ -->
 <section class="section" id="tokens">
-  <div class="section-inner">
-    <div class="section-eyebrow">Design Tokens</div>
-    <h2 class="section-title">Every value is a CSS variable.</h2>
-    <p class="section-desc">Access the full M3 token system directly. Override anything with one line of CSS. No configuration files required.</p>
+  <div class="page-wrap">
+    <div class="sec-eyebrow">Design Tokens</div>
+    <h2 class="sec-title">Every value is a CSS variable.</h2>
+    <p class="sec-desc">Override any token with a single line. Theme the entire page by changing the seed color.</p>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:var(--md-spacing-6);">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:var(--md-spacing-6);">
 
-      <!-- Color tokens -->
-      <div class="code-card">
-        <div class="code-bar">
-          <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
-          <span class="code-bar-lang">Color Tokens</span>
+      <!-- Color palette -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Color palette (light)</span>
+          <span class="showcase-card-tag">30+ roles</span>
         </div>
-        <div class="code-body"><pre><span class="t-prop">--md-primary</span><span class="t-punc">:           </span><span class="t-str">#1B6EF3</span><span class="t-punc">;</span>
-<span class="t-prop">--md-on-primary</span><span class="t-punc">:        </span><span class="t-str">#FFFFFF</span><span class="t-punc">;</span>
-<span class="t-prop">--md-primary-container</span><span class="t-punc">: </span><span class="t-str">#D8E3FF</span><span class="t-punc">;</span>
-<span class="t-prop">--md-secondary</span><span class="t-punc">:         </span><span class="t-str">#565F71</span><span class="t-punc">;</span>
-<span class="t-prop">--md-surface</span><span class="t-punc">:           </span><span class="t-str">#F9F9FF</span><span class="t-punc">;</span>
-<span class="t-prop">--md-surface-container</span><span class="t-punc">: </span><span class="t-str">#EDEDF4</span><span class="t-punc">;</span>
-<span class="t-prop">--md-outline</span><span class="t-punc">:           </span><span class="t-str">#74777F</span><span class="t-punc">;</span>
-<span class="t-prop">--md-error</span><span class="t-punc">:             </span><span class="t-str">#BA1A1A</span><span class="t-punc">;</span>
-
-<span class="t-cmt">/* Usage */</span>
-<span class="t-fn">.my-button</span> <span class="t-punc">{</span>
-  <span class="t-prop">background</span><span class="t-punc">:</span> <span class="t-fn">var</span><span class="t-punc">(</span><span class="t-val">--md-primary</span><span class="t-punc">);</span>
-  <span class="t-prop">color</span><span class="t-punc">:</span> <span class="t-fn">var</span><span class="t-punc">(</span><span class="t-val">--md-on-primary</span><span class="t-punc">);</span>
-<span class="t-punc">}</span></pre></div>
+        <div class="showcase-card-body">
+          <div class="swatch-row">
+            <div class="swatch" style="background:var(--md-primary);color:var(--md-on-primary);">Primary</div>
+            <div class="swatch" style="background:var(--md-primary-container);color:var(--md-on-primary-container);">P.Container</div>
+            <div class="swatch" style="background:var(--md-secondary);color:var(--md-on-secondary);">Secondary</div>
+            <div class="swatch" style="background:var(--md-secondary-container);color:var(--md-on-secondary-container);">S.Container</div>
+            <div class="swatch" style="background:var(--md-tertiary);color:var(--md-on-tertiary);">Tertiary</div>
+            <div class="swatch" style="background:var(--md-tertiary-container);color:var(--md-on-tertiary-container);">T.Container</div>
+            <div class="swatch" style="background:var(--md-error);color:var(--md-on-error);">Error</div>
+            <div class="swatch" style="background:var(--md-error-container);color:var(--md-on-error-container);">E.Container</div>
+          </div>
+          <div style="margin-top:var(--md-spacing-4);display:flex;flex-direction:column;gap:var(--md-spacing-1);">
+            <div class="swatch swatch-wide" style="background:var(--md-surface-container-lowest);color:var(--md-on-surface);"><span>surface-container-lowest</span></div>
+            <div class="swatch swatch-wide" style="background:var(--md-surface-container-low);color:var(--md-on-surface);"><span>surface-container-low</span></div>
+            <div class="swatch swatch-wide" style="background:var(--md-surface-container);color:var(--md-on-surface);"><span>surface-container</span></div>
+            <div class="swatch swatch-wide" style="background:var(--md-surface-container-high);color:var(--md-on-surface);"><span>surface-container-high</span></div>
+            <div class="swatch swatch-wide" style="background:var(--md-surface-container-highest);color:var(--md-on-surface);"><span>surface-container-highest</span></div>
+          </div>
+        </div>
       </div>
 
-      <!-- Motion tokens -->
-      <div class="code-card">
-        <div class="code-bar">
-          <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
-          <span class="code-bar-lang">Motion Tokens</span>
+      <!-- Typography -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Typography scale</span>
+          <span class="showcase-card-tag">15 roles</span>
         </div>
-        <div class="code-body"><pre><span class="t-prop">--md-duration-short-4</span><span class="t-punc">:  </span><span class="t-val">200ms</span><span class="t-punc">;</span>
-<span class="t-prop">--md-duration-medium-2</span><span class="t-punc">: </span><span class="t-val">300ms</span><span class="t-punc">;</span>
-<span class="t-prop">--md-duration-long-2</span><span class="t-punc">:   </span><span class="t-val">500ms</span><span class="t-punc">;</span>
-
-<span class="t-prop">--md-easing-standard</span><span class="t-punc">:</span>
-  <span class="t-fn">cubic-bezier</span><span class="t-punc">(</span><span class="t-val">0.2</span><span class="t-punc">, </span><span class="t-val">0</span><span class="t-punc">, </span><span class="t-val">0</span><span class="t-punc">, </span><span class="t-val">1</span><span class="t-punc">);</span>
-<span class="t-prop">--md-easing-emphasized-decel</span><span class="t-punc">:</span>
-  <span class="t-fn">cubic-bezier</span><span class="t-punc">(</span><span class="t-val">0.05</span><span class="t-punc">, </span><span class="t-val">0.7</span><span class="t-punc">, </span><span class="t-val">0.1</span><span class="t-punc">, </span><span class="t-val">1</span><span class="t-punc">);</span>
-<span class="t-prop">--md-easing-spring</span><span class="t-punc">:</span>
-  <span class="t-fn">cubic-bezier</span><span class="t-punc">(</span><span class="t-val">0.34</span><span class="t-punc">, </span><span class="t-val">1.56</span><span class="t-punc">, </span><span class="t-val">0.64</span><span class="t-punc">, </span><span class="t-val">1</span><span class="t-punc">);</span>
-
-<span class="t-cmt">/* Usage */</span>
-<span class="t-fn">.panel</span> <span class="t-punc">{</span>
-  <span class="t-prop">transition</span><span class="t-punc">: transform</span>
-    <span class="t-fn">var</span><span class="t-punc">(</span><span class="t-val">--md-duration-medium-2</span><span class="t-punc">)</span>
-    <span class="t-fn">var</span><span class="t-punc">(</span><span class="t-val">--md-easing-emphasized-decel</span><span class="t-punc">);</span>
-<span class="t-punc">}</span></pre></div>
+        <div class="showcase-card-body" style="padding-inline:0;">
+          <div style="padding-inline:var(--md-spacing-5);">
+            <div class="type-row"><span class="type-meta">display/large</span><span class="display-small">Display</span></div>
+            <div class="type-row"><span class="type-meta">headline/large</span><span class="headline-large">Headline Lg</span></div>
+            <div class="type-row"><span class="type-meta">headline/medium</span><span class="headline-medium">Headline Md</span></div>
+            <div class="type-row"><span class="type-meta">headline/small</span><span class="headline-small">Headline Sm</span></div>
+            <div class="type-row"><span class="type-meta">title/large</span><span class="title-large">Title Large</span></div>
+            <div class="type-row"><span class="type-meta">title/medium</span><span class="title-medium">Title Medium</span></div>
+            <div class="type-row"><span class="type-meta">title/small</span><span class="title-small">Title Small</span></div>
+            <div class="type-row"><span class="type-meta">body/large</span><span class="body-large">Body Large — The quick brown fox.</span></div>
+            <div class="type-row"><span class="type-meta">body/medium</span><span class="body-medium">Body Medium — The quick brown fox.</span></div>
+            <div class="type-row"><span class="type-meta">label/large</span><span class="label-large">Label Large</span></div>
+            <div class="type-row"><span class="type-meta">label/medium</span><span class="label-medium">Label Medium</span></div>
+            <div class="type-row"><span class="type-meta">label/small</span><span class="label-small">Label Small</span></div>
+          </div>
+        </div>
       </div>
 
-      <!-- Dynamic color JS -->
-      <div class="code-card">
-        <div class="code-bar">
-          <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
-          <span class="code-bar-lang">Dynamic Color</span>
+      <!-- Motion -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Motion tokens</span>
+          <span class="showcase-card-tag">16 durations · 9 easings</span>
         </div>
-        <div class="code-body"><pre><span class="t-cmt">// Generate full M3 palette</span>
-<span class="t-cmt">// from any seed hex color</span>
-<span class="t-fn">KENAI</span><span class="t-punc">.</span><span class="t-fn">Color</span><span class="t-punc">.</span><span class="t-fn">applyPalette</span><span class="t-punc">(</span><span class="t-str">'#4CAF50'</span><span class="t-punc">);</span>
-
-<span class="t-cmt">// Reset to KENAI defaults</span>
-<span class="t-fn">KENAI</span><span class="t-punc">.</span><span class="t-fn">Color</span><span class="t-punc">.</span><span class="t-fn">reset</span><span class="t-punc">();</span>
-
-<span class="t-cmt">// Theme management</span>
-<span class="t-fn">KENAI</span><span class="t-punc">.</span><span class="t-fn">Theme</span><span class="t-punc">.</span><span class="t-fn">toggle</span><span class="t-punc">();</span>
-<span class="t-fn">KENAI</span><span class="t-punc">.</span><span class="t-fn">Theme</span><span class="t-punc">.</span><span class="t-fn">apply</span><span class="t-punc">(</span><span class="t-str">'dark'</span><span class="t-punc">);</span>
-<span class="t-fn">KENAI</span><span class="t-punc">.</span><span class="t-fn">Theme</span><span class="t-punc">.</span><span class="t-fn">current</span><span class="t-punc">();</span> <span class="t-cmt">// → 'dark'</span>
-
-<span class="t-cmt">// Listen for changes</span>
-<span class="t-kw">document</span><span class="t-punc">.</span>documentElement
-  <span class="t-punc">.</span><span class="t-fn">addEventListener</span><span class="t-punc">(</span>
-    <span class="t-str">'kenai:themechange'</span><span class="t-punc">,</span>
-    <span class="t-punc">e =&gt; </span><span class="t-fn">console</span><span class="t-punc">.</span><span class="t-fn">log</span><span class="t-punc">(</span>e<span class="t-punc">.</span>detail<span class="t-punc">.</span>theme<span class="t-punc">)</span>
-  <span class="t-punc">);</span></pre></div>
+        <div class="showcase-card-body">
+          <div class="token-list">
+            <div class="token-row"><span class="t-name">--md-duration-short-4</span><span class="t-val">200ms</span></div>
+            <div class="token-row"><span class="t-name">--md-duration-medium-2</span><span class="t-val">300ms</span></div>
+            <div class="token-row"><span class="t-name">--md-duration-medium-4</span><span class="t-val">400ms</span></div>
+            <div class="token-row"><span class="t-name">--md-duration-long-2</span><span class="t-val">500ms</span></div>
+            <div class="token-row"><span class="t-name">--md-easing-standard</span><span class="t-val">cubic-bezier(.2,0,0,1)</span></div>
+            <div class="token-row"><span class="t-name">--md-easing-emphasized</span><span class="t-val">cubic-bezier(.2,0,0,1)</span></div>
+            <div class="token-row"><span class="t-name">--md-easing-emphasized-decel</span><span class="t-val">(.05,.7,.1,1)</span></div>
+            <div class="token-row"><span class="t-name">--md-easing-emphasized-accel</span><span class="t-val">(.3,0,.8,.15)</span></div>
+            <div class="token-row"><span class="t-name">--md-easing-spring</span><span class="t-val">(.34,1.56,.64,1)</span></div>
+          </div>
+        </div>
       </div>
 
-      <!-- Shape tokens -->
-      <div class="code-card">
-        <div class="code-bar">
-          <div class="code-bar-dots"><div class="code-bar-dot dot-red"></div><div class="code-bar-dot dot-yellow"></div><div class="code-bar-dot dot-green"></div></div>
-          <span class="code-bar-lang">Shape + Elevation</span>
+      <!-- Shape + Elevation -->
+      <div class="showcase-card">
+        <div class="showcase-card-header">
+          <span class="showcase-card-title">Shape &amp; elevation</span>
+          <span class="showcase-card-tag">7 shapes · 6 levels</span>
         </div>
-        <div class="code-body"><pre><span class="t-cmt">/* Shape scale */</span>
-<span class="t-prop">--md-shape-extra-small</span><span class="t-punc">: </span><span class="t-val">4px</span><span class="t-punc">;</span>
-<span class="t-prop">--md-shape-small</span><span class="t-punc">:       </span><span class="t-val">8px</span><span class="t-punc">;</span>
-<span class="t-prop">--md-shape-medium</span><span class="t-punc">:      </span><span class="t-val">12px</span><span class="t-punc">;</span>
-<span class="t-prop">--md-shape-large</span><span class="t-punc">:       </span><span class="t-val">16px</span><span class="t-punc">;</span>
-<span class="t-prop">--md-shape-extra-large</span><span class="t-punc">: </span><span class="t-val">28px</span><span class="t-punc">;</span>
-<span class="t-prop">--md-shape-full</span><span class="t-punc">:        </span><span class="t-val">9999px</span><span class="t-punc">;</span>
-
-<span class="t-cmt">/* Elevation */</span>
-<span class="t-prop">--md-elevation-1</span><span class="t-punc">: </span>
-  <span class="t-val">0px 1px 2px rgba(0,0,0,.3)</span><span class="t-punc">,</span>
-  <span class="t-val">0px 1px 3px 1px rgba(0,0,0,.15)</span><span class="t-punc">;</span>
-
-<span class="t-cmt">/* Utility classes */</span>
-<span class="t-fn">.rounded-lg</span>  <span class="t-cmt">→ border-radius: 16px</span>
-<span class="t-fn">.elevation-2</span> <span class="t-cmt">→ shadow + tinted bg</span>
-<span class="t-fn">.p-4</span>         <span class="t-cmt">→ padding: 16px</span>
-<span class="t-fn">.gap-3</span>       <span class="t-cmt">→ gap: 12px</span></pre></div>
+        <div class="showcase-card-body" style="gap:var(--md-spacing-6);">
+          <div>
+            <div class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Shape scale</div>
+            <div style="display:flex;flex-wrap:wrap;gap:var(--md-spacing-2);">
+              <div style="width:52px;height:52px;background:var(--md-primary-container);border-radius:0;display:flex;align-items:center;justify-content:center;"><span class="label-small">None</span></div>
+              <div style="width:52px;height:52px;background:var(--md-primary-container);border-radius:var(--md-shape-extra-small);display:flex;align-items:center;justify-content:center;"><span class="label-small">XS</span></div>
+              <div style="width:52px;height:52px;background:var(--md-primary-container);border-radius:var(--md-shape-small);display:flex;align-items:center;justify-content:center;"><span class="label-small">SM</span></div>
+              <div style="width:52px;height:52px;background:var(--md-primary-container);border-radius:var(--md-shape-medium);display:flex;align-items:center;justify-content:center;"><span class="label-small">MD</span></div>
+              <div style="width:52px;height:52px;background:var(--md-primary-container);border-radius:var(--md-shape-large);display:flex;align-items:center;justify-content:center;"><span class="label-small">LG</span></div>
+              <div style="width:52px;height:52px;background:var(--md-primary-container);border-radius:var(--md-shape-extra-large);display:flex;align-items:center;justify-content:center;"><span class="label-small">XL</span></div>
+              <div style="width:52px;height:52px;background:var(--md-primary-container);border-radius:var(--md-shape-full);display:flex;align-items:center;justify-content:center;"><span class="label-small">Full</span></div>
+            </div>
+          </div>
+          <div>
+            <div class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Elevation levels</div>
+            <div style="display:flex;flex-wrap:wrap;gap:var(--md-spacing-3);">
+              <div style="width:56px;height:56px;box-shadow:var(--md-elevation-0);background:var(--md-surface);border-radius:var(--md-shape-medium);border:1px solid var(--md-outline-variant);display:flex;align-items:center;justify-content:center;"><span class="label-small">0</span></div>
+              <div class="elevation-1" style="width:56px;height:56px;border-radius:var(--md-shape-medium);display:flex;align-items:center;justify-content:center;"><span class="label-small">1</span></div>
+              <div class="elevation-2" style="width:56px;height:56px;border-radius:var(--md-shape-medium);display:flex;align-items:center;justify-content:center;"><span class="label-small">2</span></div>
+              <div class="elevation-3" style="width:56px;height:56px;border-radius:var(--md-shape-medium);display:flex;align-items:center;justify-content:center;"><span class="label-small">3</span></div>
+              <div class="elevation-4" style="width:56px;height:56px;border-radius:var(--md-shape-medium);display:flex;align-items:center;justify-content:center;"><span class="label-small">4</span></div>
+              <div class="elevation-5" style="width:56px;height:56px;border-radius:var(--md-shape-medium);display:flex;align-items:center;justify-content:center;"><span class="label-small">5</span></div>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
 
-    <!-- Dynamic color picker -->
-    <div style="margin-top:var(--md-spacing-12);background:var(--md-surface-container-low);border-radius:var(--md-shape-extra-large);padding:var(--md-spacing-8);border:1px solid var(--md-outline-variant);">
-      <h3 class="title-large" style="margin-bottom:var(--md-spacing-2);">Dynamic Color Seed</h3>
-      <p class="body-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-6);">Pick any color and KENAI generates the full M3 tonal palette in real time.</p>
-      <div style="display:flex;align-items:center;gap:var(--md-spacing-4);flex-wrap:wrap;">
-        <input type="color" id="colorSeed" value="#1B6EF3" style="width:56px;height:56px;border:none;border-radius:var(--md-shape-medium);cursor:pointer;background:none;padding:0;" />
-        <div>
-          <p class="title-medium" id="seedLabel">Seed: #1B6EF3</p>
-          <p class="body-small text-on-surface-variant">Click color swatch to change</p>
+    <!-- Dynamic Color Seed -->
+    <div style="margin-top:var(--md-spacing-8);">
+      <div class="card card-elevated">
+        <div class="card-header">
+          <span class="material-symbols-rounded text-primary">colorize</span>
+          <div class="card-header-text">
+            <p class="card-title">Dynamic Color Seed</p>
+            <p class="card-subtitle">KENAI.Color.applyPalette(hex) — generates the full M3 tonal palette from any color</p>
+          </div>
         </div>
-        <button class="btn btn-tonal ripple" data-ripple onclick="applySeed()">Apply Palette</button>
-        <button class="btn btn-outlined ripple" data-ripple onclick="resetSeed()">Reset to Default</button>
-      </div>
-      <div style="display:flex;gap:var(--md-spacing-3);margin-top:var(--md-spacing-6);flex-wrap:wrap;">
-        <div style="width:80px;height:80px;border-radius:var(--md-shape-medium);background:var(--md-primary);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;">
-          <span style="font-size:10px;font-weight:500;color:var(--md-on-primary);">Primary</span>
-        </div>
-        <div style="width:80px;height:80px;border-radius:var(--md-shape-medium);background:var(--md-primary-container);display:flex;align-items:center;justify-content:center;">
-          <span style="font-size:10px;font-weight:500;color:var(--md-on-primary-container);">Container</span>
-        </div>
-        <div style="width:80px;height:80px;border-radius:var(--md-shape-medium);background:var(--md-secondary-container);display:flex;align-items:center;justify-content:center;">
-          <span style="font-size:10px;font-weight:500;color:var(--md-on-secondary-container);">Secondary</span>
-        </div>
-        <div style="width:80px;height:80px;border-radius:var(--md-shape-medium);background:var(--md-surface);border:1px solid var(--md-outline-variant);display:flex;align-items:center;justify-content:center;">
-          <span style="font-size:10px;font-weight:500;color:var(--md-on-surface);">Surface</span>
-        </div>
-        <div style="width:80px;height:80px;border-radius:var(--md-shape-medium);background:var(--md-surface-container-highest);display:flex;align-items:center;justify-content:center;">
-          <span style="font-size:10px;font-weight:500;color:var(--md-on-surface);">S-Highest</span>
+        <div class="card-body">
+          <div style="display:flex;align-items:center;gap:var(--md-spacing-4);flex-wrap:wrap;margin-bottom:var(--md-spacing-5);">
+            <input type="color" id="colorSeed" value="#1B6EF3"
+              style="width:52px;height:52px;border:none;border-radius:var(--md-shape-medium);cursor:pointer;padding:0;background:none;" />
+            <div>
+              <p class="title-medium" id="seedLabel">Seed: #1B6EF3</p>
+              <p class="body-small text-on-surface-variant">Pick any color to regenerate the palette</p>
+            </div>
+            <button class="btn btn-tonal ripple" data-ripple onclick="applySeed()">Apply</button>
+            <button class="btn btn-outlined ripple" data-ripple onclick="resetSeed()">Reset</button>
+          </div>
+          <div class="swatch-row">
+            <div class="swatch" style="background:var(--md-primary);color:var(--md-on-primary);">Primary</div>
+            <div class="swatch" style="background:var(--md-primary-container);color:var(--md-on-primary-container);">Container</div>
+            <div class="swatch" style="background:var(--md-secondary-container);color:var(--md-on-secondary-container);">Secondary</div>
+            <div class="swatch" style="background:var(--md-surface-container-high);color:var(--md-on-surface);">Surface</div>
+            <div class="swatch" style="background:var(--md-inverse-surface);color:var(--md-inverse-on-surface);">Inverse</div>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 </section>
 
 
-<!-- ================================================================
+<!-- ============================================================
      CTA
-================================================================ -->
-<section class="cta-section">
+============================================================ -->
+<div class="cta-wrap">
   <div class="cta-inner">
-    <h2 class="cta-title">Start building with KENAI today.</h2>
-    <p class="cta-desc">Two files. Zero build step. Full Material Design 3. Link it, use it, ship it.</p>
+    <h2 class="cta-h2">Start building<br>with KENAI.</h2>
+    <p class="cta-sub">Two files. Zero build step. Full Material Design 3.<br>Link it, use it, ship it.</p>
     <div style="display:flex;gap:var(--md-spacing-3);justify-content:center;flex-wrap:wrap;">
-      <button class="btn-cta-primary ripple" data-ripple onclick="copyInstall()">
+      <button class="btn-cta ripple" data-ripple onclick="copyInstall()">
         <span class="material-symbols-rounded">download</span>
         Download kenai.css
       </button>
-      <button class="btn btn-outlined ripple" data-ripple style="height:48px;padding:0 var(--md-spacing-8);color:var(--md-on-primary);border-color:rgba(255,255,255,0.4);font-size:var(--md-title-small-size);" onclick="KENAI.Snackbar.show('Docs coming soon 📄')">
+      <button class="btn btn-text ripple" data-ripple
+        style="color:var(--md-on-primary);height:48px;padding:0 var(--md-spacing-6);font-size:var(--md-title-small-size);"
+        onclick="KENAI.Snackbar.show('Docs are being written — coming soon 📄')">
         Read the docs →
       </button>
     </div>
   </div>
-</section>
+</div>
 
 
-<!-- ================================================================
+<!-- ============================================================
      FOOTER
-================================================================ -->
+============================================================ -->
 <footer>
   <div class="footer-inner">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:var(--md-spacing-8);">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--md-spacing-8);align-items:flex-start;">
       <div>
-        <div class="footer-logo">
-          <div class="app-bar-logo-mark" style="width:28px;height:28px;font-size:15px;">K</div>
+        <div class="footer-brand">
+          <div class="bar-logo-mark">K</div>
           KENAI
         </div>
-        <p class="footer-tagline">Material Design 3 · Stock Android / Pixel aesthetic<br>MIT License · v0.2.0</p>
+        <p class="body-small text-on-surface-variant" style="margin-top:4px;">Material Design 3 · Stock Android / Pixel aesthetic</p>
+        <p class="body-small text-on-surface-variant">MIT License · v0.2.0</p>
       </div>
       <div style="display:flex;gap:var(--md-spacing-12);flex-wrap:wrap;">
         <div>
           <p class="label-medium text-on-surface-variant" style="margin-bottom:var(--md-spacing-3);">Framework</p>
           <div class="flex flex-col gap-2 footer-links">
-            <a href="#">Components</a>
-            <a href="#">Tokens</a>
-            <a href="#">Utilities</a>
+            <a href="#components">Components</a>
+            <a href="#tokens">Tokens</a>
+            <a href="#navigation">Navigation</a>
             <a href="#">JavaScript API</a>
           </div>
         </div>
@@ -1299,9 +1920,9 @@
       </div>
     </div>
     <div class="divider" style="margin:var(--md-spacing-8) 0 var(--md-spacing-4);"></div>
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--md-spacing-4);">
-      <p class="body-small text-on-surface-variant">© 2025 KENAI Framework. MIT License. Built with ❤️ for the Android design community.</p>
-      <p class="body-small text-on-surface-variant">Not affiliated with Google LLC or Material Design.</p>
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--md-spacing-3);">
+      <p class="body-small text-on-surface-variant">© 2025 KENAI Framework. MIT License. Built for the Android design community.</p>
+      <p class="body-small text-on-surface-variant">Not affiliated with Google LLC.</p>
     </div>
   </div>
 </footer>
@@ -1309,41 +1930,105 @@
 
 <!-- Fixed FAB -->
 <div style="position:fixed;bottom:24px;right:24px;z-index:var(--md-z-fixed);">
-  <button class="fab ripple" data-ripple aria-label="Compose" onclick="KENAI.Snackbar.show('KENAI v0.2.0 — 20 components, zero deps 🚀')">
+  <button class="fab ripple" data-ripple aria-label="About KENAI"
+    onclick="KENAI.Snackbar.show('KENAI v0.2.0 — 20 components, zero dependencies 🚀')">
     <span class="material-symbols-rounded">rocket_launch</span>
   </button>
 </div>
 
-<!-- Dialog -->
-<div id="demoDialog" class="dialog-backdrop" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
-  <div class="dialog">
+
+<!-- Dialog 1 — Delete -->
+<div id="dlg1" class="dialog-backdrop" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
+  <div class="demo-dialog">
     <div style="display:flex;justify-content:center;margin-bottom:var(--md-spacing-4);">
       <span class="material-symbols-rounded text-error" style="font-size:40px;">delete_forever</span>
     </div>
-    <h3 class="dialog-title" style="text-align:center;">Permanently delete?</h3>
-    <p class="dialog-body" style="text-align:center;">Deleting "Work documents" will also remove all contents. This cannot be undone.</p>
-    <div class="dialog-actions">
-      <button class="btn btn-text ripple" data-ripple onclick="document.getElementById('demoDialog').style.display='none'">Cancel</button>
-      <button class="btn btn-filled btn-error ripple" data-ripple onclick="document.getElementById('demoDialog').style.display='none';KENAI.Snackbar.show('Folder deleted',{action:'Undo'})">Delete</button>
+    <h3 style="font-family:var(--md-font-brand);font-size:var(--md-headline-small-size);font-weight:400;color:var(--md-on-surface);margin-bottom:var(--md-spacing-4);text-align:center;">Permanently delete?</h3>
+    <p style="color:var(--md-on-surface-variant);font-size:var(--md-body-medium-size);line-height:1.5;margin-bottom:var(--md-spacing-6);text-align:center;">Deleting "Work documents" will also remove all contents. This cannot be undone.</p>
+    <div style="display:flex;justify-content:flex-end;gap:var(--md-spacing-2);">
+      <button class="btn btn-text ripple" data-ripple onclick="document.getElementById('dlg1').style.display='none'">Cancel</button>
+      <button class="btn btn-filled btn-error ripple" data-ripple onclick="document.getElementById('dlg1').style.display='none';KENAI.Snackbar.show('Folder deleted',{action:'Undo'})">Delete</button>
     </div>
   </div>
 </div>
 
-<!-- KENAI runtime -->
-<script src="kenai0.2.0.js"></script>
+<!-- Dialog 2 — Location -->
+<div id="dlg2" class="dialog-backdrop" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
+  <div class="demo-dialog">
+    <div style="display:flex;justify-content:center;margin-bottom:var(--md-spacing-4);">
+      <span class="material-symbols-rounded text-primary" style="font-size:40px;">location_on</span>
+    </div>
+    <h3 style="font-family:var(--md-font-brand);font-size:var(--md-headline-small-size);font-weight:400;color:var(--md-on-surface);margin-bottom:var(--md-spacing-4);text-align:center;">Allow location access?</h3>
+    <p style="color:var(--md-on-surface-variant);font-size:var(--md-body-medium-size);line-height:1.5;margin-bottom:var(--md-spacing-6);text-align:center;">Allow KENAI to access your location while using the app? Your location will be used to show relevant content.</p>
+    <div style="display:flex;justify-content:flex-end;gap:var(--md-spacing-2);">
+      <button class="btn btn-text ripple" data-ripple onclick="document.getElementById('dlg2').style.display='none'">Deny</button>
+      <button class="btn btn-tonal ripple" data-ripple onclick="document.getElementById('dlg2').style.display='none';KENAI.Snackbar.show('Location access granted')">Allow</button>
+    </div>
+  </div>
+</div>
 
+
+<script src="kenai0.2.0.js"></script>
 <script>
   // App bar scroll
   window.addEventListener('scroll', () => {
-    document.getElementById('appBar').classList.toggle('scrolled', window.scrollY > 8);
+    document.getElementById('topBar').classList.toggle('scrolled', window.scrollY > 8);
   }, { passive: true });
 
   // Tabs
   document.getElementById('tabsDemo').addEventListener('click', e => {
-    const t = e.target.closest('.tab-d');
+    const t = e.target.closest('.tab-btn');
     if (!t) return;
-    document.querySelectorAll('#tabsDemo .tab-d').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('#tabsDemo .tab-btn').forEach(x => x.classList.remove('active'));
     t.classList.add('active');
+  });
+
+  // Filter chips toggle
+  document.getElementById('filterChips').addEventListener('click', e => {
+    const chip = e.target.closest('.chip-filter');
+    if (!chip) return;
+    const isSelected = chip.classList.contains('selected');
+    chip.classList.toggle('selected', !isSelected);
+    chip.setAttribute('aria-pressed', String(!isSelected));
+    if (!isSelected) {
+      if (!chip.querySelector('.chip-icon')) {
+        const ic = document.createElement('span');
+        ic.className = 'material-symbols-rounded chip-icon';
+        ic.style.fontSize = '18px';
+        ic.textContent = 'check';
+        chip.prepend(ic);
+      }
+    } else {
+      const ic = chip.querySelector('.chip-icon');
+      if (ic) ic.remove();
+    }
+  });
+
+  // Nav bar
+  function setNavBar(el) {
+    document.querySelectorAll('#navBarDemo .nb-item').forEach(x => x.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Drawer
+  function setDrawer(el) {
+    el.closest('.drawer-demo').querySelectorAll('.dr-item').forEach(x => x.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Accordion
+  function toggleAcc(btn) {
+    const item = btn.closest('.acc-item');
+    const isOpen = item.classList.contains('open');
+    item.classList.toggle('open', !isOpen);
+  }
+
+  // Sliders
+  document.getElementById('volSlider').addEventListener('input', function() {
+    document.getElementById('volVal').textContent = this.value;
+  });
+  document.getElementById('briSlider').addEventListener('input', function() {
+    document.getElementById('briVal').textContent = this.value;
   });
 
   // Color seed
@@ -1353,9 +2038,8 @@
     seedLabel.textContent = 'Seed: ' + seedInput.value.toUpperCase();
   });
   function applySeed() {
-    const hex = seedInput.value;
-    KENAI.Color.applyPalette(hex);
-    KENAI.Snackbar.show('Palette applied from ' + hex.toUpperCase());
+    KENAI.Color.applyPalette(seedInput.value);
+    KENAI.Snackbar.show('Palette applied from ' + seedInput.value.toUpperCase());
   }
   function resetSeed() {
     KENAI.Color.reset();
@@ -1364,15 +2048,15 @@
     KENAI.Snackbar.show('Palette reset to Pixel Blue');
   }
 
-  // Progress animation
+  // Progress
   function triggerProgress() {
     const bar = document.getElementById('demoProgress');
     bar.style.transition = 'none';
     bar.style.width = '0%';
     requestAnimationFrame(() => setTimeout(() => {
       bar.style.transition = 'width 500ms var(--md-easing-standard)';
-      bar.style.width = '35%';
-      setTimeout(() => { bar.style.width = '70%';
+      bar.style.width = '30%';
+      setTimeout(() => { bar.style.width = '65%';
         setTimeout(() => { bar.style.width = '100%';
           setTimeout(() => { bar.style.width = '65%'; }, 700);
         }, 500);
@@ -1380,24 +2064,13 @@
     }, 16));
   }
 
-  // Copy install snippet
+  // Copy install
   function copyInstall() {
-    const code = `<link rel="stylesheet" href="kenai.css" />\n<script src="kenai.js"><\/script>`;
+    const code = '<link rel="stylesheet" href="kenai.css" />\n<script src="kenai.js"><\/script>';
     navigator.clipboard.writeText(code).then(() => {
-      KENAI.Snackbar.show('Install snippet copied to clipboard!');
+      KENAI.Snackbar.show('Install snippet copied!');
     }).catch(() => {
-      KENAI.Snackbar.show('Copy from the code card above');
-    });
-  }
-
-  // Copy code block
-  function copyCode(btn) {
-    const pre = btn.closest('.code-card').querySelector('pre');
-    const text = pre.innerText;
-    navigator.clipboard.writeText(text).then(() => {
-      btn.textContent = 'Copied!';
-      setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
-      KENAI.Snackbar.show('Code copied to clipboard');
+      KENAI.Snackbar.show('Copy the snippet from the hero card');
     });
   }
 </script>
